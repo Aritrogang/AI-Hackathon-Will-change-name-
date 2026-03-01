@@ -3,3 +3,5 @@ Cornell AI Hackathon Project
 
 # Collaborators
 - Adi Prathapa
+- Aritro Ganguly
+- 
