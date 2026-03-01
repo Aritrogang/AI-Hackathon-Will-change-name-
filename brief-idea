@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Katabatic</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f3f1fa;
+    --surface: #ffffff;
+    --accent: #7a6db5;
+    --text: #2c2841;
+    --accent-10: rgba(122, 109, 181, 0.10);
+    --accent-15: rgba(122, 109, 181, 0.15);
+    --accent-25: rgba(122, 109, 181, 0.25);
+    --accent-40: rgba(122, 109, 181, 0.40);
+    --accent-06: rgba(122, 109, 181, 0.06);
+    --text-60: rgba(44, 40, 65, 0.60);
+    --text-35: rgba(44, 40, 65, 0.35);
+    --text-20: rgba(44, 40, 65, 0.20);
+    --text-08: rgba(44, 40, 65, 0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Grotesk', sans-serif;
+    line-height: 1.7;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 0 2rem;
+  }
+
+  /* ─── WORDMARK LOGO ─── */
+  .wordmark-hero {
+    font-size: clamp(2.8rem, 7vw, 4.2rem);
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: lowercase;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+  }
+
+  .wordmark {
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: lowercase;
+    color: var(--accent);
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    padding: 5rem 0 3.5rem;
+    text-align: center;
+  }
+
+  .badge {
+    display: inline-block;
+    background: var(--accent-10);
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    font-size: 0.6rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.8rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: -0.01em;
+    margin-bottom: 1rem;
+    line-height: 1.35;
+  }
+
+  .hero-sub {
+    font-size: 0.9rem;
+    color: var(--text-60);
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  .hero-meta {
+    display: flex;
+    justify-content: center;
+    gap: 2.8rem;
+    margin-top: 2.4rem;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.05rem;
+  }
+
+  .meta-item .label {
+    font-size: 0.54rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-35);
+    font-weight: 500;
+  }
+
+  .meta-item .value {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ─── DIVIDER ─── */
+  .divider { height: 1px; background: var(--text-08); margin: 0; }
+
+  /* ─── SECTIONS ─── */
+  section { padding: 3rem 0; }
+
+  .section-label {
+    font-size: 0.54rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.015em;
+  }
+
+  .section-desc {
+    color: var(--text-60);
+    font-size: 0.86rem;
+    max-width: 500px;
+    margin-bottom: 2rem;
+    line-height: 1.8;
+    font-weight: 300;
+  }
+
+  /* ─── PROBLEM CARDS ─── */
+  .thesis-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .thesis-card {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 14px;
+    padding: 1.5rem;
+    transition: all 0.2s ease;
+  }
+
+  .thesis-card:hover {
+    border-color: var(--accent-25);
+    transform: translateY(-1px);
+  }
+
+  .thesis-card .stat {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+    letter-spacing: -0.02em;
+  }
+
+  .thesis-card h3 {
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .thesis-card p {
+    font-size: 0.74rem;
+    color: var(--text-60);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ─── SIGNAL CARDS ─── */
+  .signals-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.8rem;
+  }
+
+  .signal-card {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 14px;
+    padding: 1.3rem;
+    transition: all 0.2s ease;
+  }
+
+  .signal-card:hover {
+    border-color: var(--accent-25);
+    transform: translateY(-1px);
+  }
+
+  .signal-icon-wrap {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--accent-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.7rem;
+  }
+
+  .signal-icon-wrap svg {
+    width: 16px; height: 16px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .signal-card h4 {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .signal-card p {
+    font-size: 0.72rem;
+    color: var(--text-60);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  .signal-card .source {
+    font-size: 0.56rem;
+    color: var(--text-35);
+    margin-top: 0.55rem;
+    letter-spacing: 0.04em;
+    font-weight: 500;
+  }
+
+  /* ─── ARCHITECTURE ─── */
+  .arch-pipeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .arch-layer {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 14px;
+    padding: 1.4rem 1.6rem;
+  }
+
+  .arch-layer .layer-label {
+    font-size: 0.52rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-35);
+    font-weight: 600;
+    margin-bottom: 0.45rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .layer-num {
+    background: var(--accent);
+    color: white;
+    width: 17px; height: 17px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.5rem;
+    font-weight: 700;
+  }
+
+  .arch-layer h3 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.3rem;
+  }
+
+  .arch-layer p {
+    font-size: 0.78rem;
+    color: var(--text-60);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .arch-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.7rem;
+  }
+
+  .arch-tag {
+    background: var(--accent-06);
+    border: 1px solid var(--accent-15);
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-size: 0.62rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  /* ─── TIMELINE ─── */
+  .timeline {
+    position: relative;
+    padding-left: 2rem;
+  }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 4.5px;
+    top: 6px;
+    bottom: 6px;
+    width: 1.5px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent-25), var(--text-08));
+    border-radius: 2px;
+  }
+
+  .tl-block {
+    position: relative;
+    margin-bottom: 1.8rem;
+  }
+
+  .tl-block:last-child { margin-bottom: 0; }
+
+  .tl-dot {
+    position: absolute;
+    left: -1.72rem;
+    top: 5px;
+    width: 11px; height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+
+  .tl-block:nth-child(2) .tl-dot { border-color: var(--accent-40); }
+  .tl-block:nth-child(3) .tl-dot { border-color: var(--accent-40); }
+  .tl-block:nth-child(4) .tl-dot { border-color: var(--accent-25); }
+  .tl-block:nth-child(5) .tl-dot { border-color: var(--text-20); }
+
+  .tl-time {
+    font-size: 0.56rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .tl-block h3 {
+    font-size: 0.88rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .tl-block p {
+    font-size: 0.74rem;
+    color: var(--text-60);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .tl-tasks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: 0.5rem;
+  }
+
+  .tl-chip {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    padding: 0.16rem 0.5rem;
+    border-radius: 6px;
+    font-size: 0.62rem;
+    color: var(--text-60);
+    font-weight: 400;
+  }
+
+  /* ─── TEAM ─── */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.8rem;
+  }
+
+  .team-card {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 14px;
+    padding: 1.3rem 1rem;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .team-card:hover { border-color: var(--accent-25); }
+
+  .team-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    margin: 0 auto 0.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--accent-10);
+  }
+
+  .team-icon svg {
+    width: 18px; height: 18px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .team-card h4 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .team-card .role-desc {
+    font-size: 0.66rem;
+    color: var(--text-60);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ─── DEMO BOX ─── */
+  .demo-box {
+    background: var(--surface);
+    border: 1.5px solid var(--accent-25);
+    border-radius: 16px;
+    padding: 2rem;
+  }
+
+  .demo-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .demo-header-icon {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--accent-10);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .demo-header-icon svg {
+    width: 15px; height: 15px;
+    stroke: var(--accent);
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .demo-box h3 {
+    font-size: 1.02rem;
+    font-weight: 600;
+  }
+
+  .demo-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.65rem;
+  }
+
+  .demo-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+
+  .step-num {
+    font-size: 0.56rem;
+    font-weight: 700;
+    color: white;
+    background: var(--accent);
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0.2rem;
+  }
+
+  .demo-step p {
+    font-size: 0.8rem;
+    color: var(--text-60);
+    line-height: 1.7;
+    font-weight: 300;
+  }
+
+  .demo-step p strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .demo-step p em {
+    color: var(--accent);
+    font-style: normal;
+    font-weight: 400;
+  }
+
+  /* ─── IMPACT ─── */
+  .impact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.8rem;
+  }
+
+  .impact-card {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 14px;
+    padding: 1.6rem 1.2rem;
+    text-align: center;
+    transition: all 0.2s ease;
+  }
+
+  .impact-card:hover { border-color: var(--accent-25); transform: translateY(-1px); }
+
+  .impact-num {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 0.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .impact-card h4 {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .impact-card p {
+    font-size: 0.68rem;
+    color: var(--text-60);
+    line-height: 1.55;
+    font-weight: 300;
+  }
+
+  /* ─── PITCH ─── */
+  .pitch-flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+  }
+
+  .pitch-step {
+    background: var(--surface);
+    border: 1px solid var(--text-08);
+    border-radius: 12px;
+    padding: 1rem 0.8rem;
+    text-align: center;
+    position: relative;
+  }
+
+  .pitch-step::after {
+    content: '›';
+    position: absolute;
+    right: -0.4rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent-40);
+    font-size: 1rem;
+    font-weight: 300;
+  }
+
+  .pitch-step:last-child::after { display: none; }
+
+  .pitch-step .time {
+    font-size: 0.5rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .pitch-step h4 {
+    font-size: 0.74rem;
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+  }
+
+  .pitch-step p {
+    font-size: 0.6rem;
+    color: var(--text-60);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  /* ─── FOOTER ─── */
+  footer {
+    padding: 2.5rem 0 3.5rem;
+    text-align: center;
+  }
+
+  .footer-line {
+    height: 1px;
+    background: var(--text-08);
+    margin-bottom: 2rem;
+  }
+
+  .footer-wordmark {
+    font-size: 0.95rem;
+    font-weight: 300;
+    letter-spacing: 0.22em;
+    text-transform: lowercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  footer p {
+    font-size: 0.6rem;
+    color: var(--text-35);
+    letter-spacing: 0.03em;
+    font-weight: 400;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .thesis-grid, .signals-grid, .impact-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    .pitch-flow { grid-template-columns: 1fr; }
+    .pitch-step::after { display: none; }
+    .hero-meta { gap: 1.5rem; }
+    .container { padding: 0 1.2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ════ HERO ════ -->
+  <div class="hero">
+    <div class="badge">Cornell AI Hackathon 2026 · Programmable Capital</div>
+    <div class="wordmark-hero">katabatic</div>
+    <div class="hero-subtitle">Climate-Aware Stablecoin<br>Risk Intelligence</div>
+    <p class="hero-sub">The first stablecoin risk scoring system that models real-world exposure: weather, macro, and regulatory, not just on-chain metrics.</p>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="label">Track</span>
+        <span class="value">Programmable Capital</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Team</span>
+        <span class="value">4 to 5 Engineers</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Build Window</span>
+        <span class="value">36 Hours</span>
+      </div>
+      <div class="meta-item">
+        <span class="label">Core Skill</span>
+        <span class="value">ML / Data Science</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ════ PROBLEM ════ -->
+  <section>
+    <div class="section-label">01 The Problem</div>
+    <div class="section-title">Stablecoin risk is real. Current tools are blind.</div>
+    <p class="section-desc">$150B+ sits in stablecoins. Existing risk tools only look at on-chain data. Nobody's modeling the real-world exposure that actually causes depegs.</p>
+    <div class="thesis-grid">
+      <div class="thesis-card">
+        <div class="stat">$150B+</div>
+        <h3>Stablecoin Market Cap</h3>
+        <p>Massive capital in assets whose risk profiles are poorly understood by holders and protocols alike.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="stat">UST → $0</div>
+        <h3>Precedent: Terra Collapse</h3>
+        <p>$60B wiped out. On-chain metrics looked healthy until they didn't. Existing tools missed it entirely.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="stat">70%</div>
+        <h3>Backed by Real-World Assets</h3>
+        <p>Treasuries, commodities, and bonds exposed to macro forces like interest rates, weather, and geopolitics. All invisible on-chain.</p>
+      </div>
+      <div class="thesis-card">
+        <div class="stat">0</div>
+        <h3>Tools Modeling This</h3>
+        <p>No one scores stablecoins against climate exposure, macro stress, or real-world collateral risk. We're the first.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ RISK SIGNALS ════ -->
+  <section>
+    <div class="section-label">02 Risk Signal Architecture</div>
+    <div class="section-title">Six dimensions. One composite score.</div>
+    <p class="section-desc">We go beyond on-chain by ingesting weather, macro, and regulatory data to build a multi-dimensional risk profile per stablecoin.</p>
+    <div class="signals-grid">
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4m-2.64-7.36l-2.83 2.83m-8.49 8.49l-2.83 2.83m0-14.14l2.83 2.83m8.49 8.49l2.83 2.83"/></svg>
+        </div>
+        <h4>Peg Stability</h4>
+        <p>Historical deviation from $1.00, volatility clustering, recovery speed after shocks, max drawdown events.</p>
+        <div class="source">CoinGecko · DeFiLlama</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+        </div>
+        <h4>Reserve Health</h4>
+        <p>Audit frequency, collateral composition, counterparty concentration, asset-liability duration mismatch.</p>
+        <div class="source">Issuer reports · SEC filings</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 14.9A7 7 0 1 1 15.7 8h1.8a4.5 4.5 0 0 1 .5 8.97"/><path d="M8 19h.01M12 17h.01M8 13h.01M16 15h.01M12 21h.01"/></svg>
+        </div>
+        <h4>Climate Exposure</h4>
+        <p>Weather events affecting commodity collateral, insurance-linked reserves, energy market stress, regional banking.</p>
+        <div class="source">NOAA · OpenMeteo · NHC</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8m8-4h-8"/></svg>
+        </div>
+        <h4>Sentiment & News</h4>
+        <p>LLM-scored sentiment on regulatory actions, team changes, exploit reports, and market commentary.</p>
+        <div class="source">News APIs · LLM analysis</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+        </div>
+        <h4>On-Chain Concentration</h4>
+        <p>Whale wallet concentration, smart contract age, audit status, recent large transfers, DEX liquidity depth.</p>
+        <div class="source">Etherscan · Dune Analytics</div>
+      </div>
+      <div class="signal-card">
+        <div class="signal-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h4>Regulatory Exposure</h4>
+        <p>Issuer jurisdiction risk, pending enforcement actions, licensing status, compliance framework maturity.</p>
+        <div class="source">Public filings · LLM extraction</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ ARCHITECTURE ════ -->
+  <section>
+    <div class="section-label">03 Technical Architecture</div>
+    <div class="section-title">From raw signals to explainable risk.</div>
+    <p class="section-desc">A four-layer pipeline: ingest multi-source data, engineer features, score with ML, and explain in plain English.</p>
+    <div class="arch-pipeline">
+      <div class="arch-layer">
+        <div class="layer-label"><span class="layer-num">1</span> Data Ingestion</div>
+        <h3>Multi-Source Real-Time Feeds</h3>
+        <p>Pull from on-chain APIs, weather services, news feeds, and regulatory databases. Normalize into a unified schema.</p>
+        <div class="arch-tags">
+          <span class="arch-tag">CoinGecko API</span>
+          <span class="arch-tag">DeFiLlama</span>
+          <span class="arch-tag">NOAA / OpenMeteo</span>
+          <span class="arch-tag">News API</span>
+          <span class="arch-tag">Etherscan</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="layer-label"><span class="layer-num">2</span> Feature Engineering</div>
+        <h3>Multi-Dimensional Risk Features</h3>
+        <p>Peg deviation z-scores, reserve adequacy ratios, climate-commodity correlation indices, sentiment momentum, concentration Gini coefficients.</p>
+        <div class="arch-tags">
+          <span class="arch-tag">pandas</span>
+          <span class="arch-tag">scikit-learn</span>
+          <span class="arch-tag">scipy</span>
+          <span class="arch-tag">custom correlation engine</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="layer-label"><span class="layer-num">3</span> Scoring Model</div>
+        <h3>Weighted Ensemble into Gradient Boosted Upgrade</h3>
+        <p>Interpretable weighted average baseline. Upgrade to XGBoost with historical depeg events as labels. Output: 0 to 100 risk score per stablecoin, per dimension.</p>
+        <div class="arch-tags">
+          <span class="arch-tag">XGBoost</span>
+          <span class="arch-tag">SHAP explainability</span>
+          <span class="arch-tag">weighted ensemble baseline</span>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="layer-label"><span class="layer-num">4</span> Explainability + UI</div>
+        <h3>LLM Narratives + Traffic Light Dashboard</h3>
+        <p>Raw scores fed to an LLM for human-readable risk narratives. Dashboard shows traffic lights, per-factor drill-downs, weather overlay, and a what-if simulator.</p>
+        <div class="arch-tags">
+          <span class="arch-tag">Claude API</span>
+          <span class="arch-tag">React + Recharts</span>
+          <span class="arch-tag">Mapbox / Leaflet</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ ROADMAP ════ -->
+  <section>
+    <div class="section-label">04 36-Hour Build Roadmap</div>
+    <div class="section-title">Hour-by-hour execution plan.</div>
+    <p class="section-desc">Optimized for a 4 to 5 person ML-heavy team. Milestone-locked with clear handoffs.</p>
+    <div class="timeline">
+      <div class="tl-block">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Friday Evening, Hours 0 to 4</div>
+        <h3>Foundation & Data Pipelines</h3>
+        <p>Stand up all data feeds. Verify API access. Agree on 8 to 10 stablecoins. Scaffold project and React shell. Define scoring schema.</p>
+        <div class="tl-tasks">
+          <span class="tl-chip">CoinGecko integration</span>
+          <span class="tl-chip">NOAA weather feed</span>
+          <span class="tl-chip">React scaffold</span>
+          <span class="tl-chip">Schema design</span>
+          <span class="tl-chip">News API setup</span>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Saturday Morning, Hours 4 to 12</div>
+        <h3>Feature Engineering & Core ML</h3>
+        <p>Build feature pipelines for all 6 dimensions. Implement weighted ensemble baseline. Begin LLM explainability. Wire up traffic light UI.</p>
+        <div class="tl-tasks">
+          <span class="tl-chip">peg deviation features</span>
+          <span class="tl-chip">climate-commodity index</span>
+          <span class="tl-chip">sentiment scoring</span>
+          <span class="tl-chip">weighted ensemble</span>
+          <span class="tl-chip">traffic light cards</span>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Saturday Afternoon, Hours 12 to 20</div>
+        <h3>Integration & Scenario Engine</h3>
+        <p>Connect ML to frontend. Build what-if simulator. Add drill-down views. Attempt XGBoost upgrade with SHAP values.</p>
+        <div class="tl-tasks">
+          <span class="tl-chip">API to frontend</span>
+          <span class="tl-chip">what-if simulator</span>
+          <span class="tl-chip">drill-down views</span>
+          <span class="tl-chip">XGBoost upgrade</span>
+          <span class="tl-chip">weather map overlay</span>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Saturday Night, Hours 20 to 26</div>
+        <h3>Polish, Edge Cases & Backtesting</h3>
+        <p>Add UST historical backtest. Handle API failures gracefully. Polish UI transitions. Draft pitch deck.</p>
+        <div class="tl-tasks">
+          <span class="tl-chip">UST backtest</span>
+          <span class="tl-chip">error handling</span>
+          <span class="tl-chip">UI polish</span>
+          <span class="tl-chip">pitch deck draft</span>
+        </div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-dot"></div>
+        <div class="tl-time">Sunday Morning, Hours 26 to 36</div>
+        <h3>Lock, Rehearse & Deliver</h3>
+        <p>Code freeze at hour 30. Rehearse pitch five times. Prepare the live hurricane demo. Final deploy and sanity check.</p>
+        <div class="tl-tasks">
+          <span class="tl-chip">code freeze</span>
+          <span class="tl-chip">pitch rehearsal</span>
+          <span class="tl-chip">live demo prep</span>
+          <span class="tl-chip">deploy</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ TEAM ════ -->
+  <section>
+    <div class="section-label">05 Team Allocation</div>
+    <div class="section-title">Parallel workstreams. Clear ownership.</div>
+    <div style="height: 0.6rem"></div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <h4>Data Engineer</h4>
+        <p class="role-desc">API integrations, normalization, pipeline reliability, caching</p>
+      </div>
+      <div class="team-card">
+        <div class="team-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h4>ML Engineer(s)</h4>
+        <p class="role-desc">Feature engineering, scoring model, XGBoost, SHAP, backtesting</p>
+      </div>
+      <div class="team-card">
+        <div class="team-icon">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <h4>LLM / NLP Lead</h4>
+        <p class="role-desc">Sentiment pipeline, explainability narratives, scenario prompts</p>
+      </div>
+      <div class="team-card">
+        <div class="team-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <h4>Frontend Lead</h4>
+        <p class="role-desc">Dashboard, traffic lights, drill-downs, weather map, demo polish</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ DEMO ════ -->
+  <section>
+    <div class="section-label">06 The Killer Demo Moment</div>
+    <div class="section-title">One scenario that sells the entire product.</div>
+    <div style="height: 1rem"></div>
+    <div class="demo-box">
+      <div class="demo-header">
+        <div class="demo-header-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2v6m0 0a4 4 0 1 0 0 8m0-8a4 4 0 1 1 0 8m0 0v6"/><path d="M4.93 4.93l4.24 4.24m5.66 5.66l4.24 4.24m0-14.14l-4.24 4.24m-5.66 5.66l-4.24 4.24"/></svg>
+        </div>
+        <h3>"What if a Cat 4 hurricane hits Miami next week?"</h3>
+      </div>
+      <div class="demo-steps">
+        <div class="demo-step">
+          <span class="step-num">1</span>
+          <p><strong>Show the baseline dashboard.</strong> All stablecoins scored, traffic lights green and yellow. "This is today's risk landscape."</p>
+        </div>
+        <div class="demo-step">
+          <span class="step-num">2</span>
+          <p><strong>Trigger the scenario.</strong> Select "Category 4 Hurricane, Miami" in the what-if simulator. The system recalculates in real-time.</p>
+        </div>
+        <div class="demo-step">
+          <span class="step-num">3</span>
+          <p><strong>Watch the scores shift.</strong> Insurance-linked reserves stressed, regional banking risk rises, commodity collateral repriced. Two stablecoins flip green to yellow.</p>
+        </div>
+        <div class="demo-step">
+          <span class="step-num">4</span>
+          <p><strong>Read the explanation.</strong> The LLM generates: <em>"USDC climate exposure elevated. Projected $4.2B insurance liability in Florida increases counterparty stress on Circle's banking partners."</em></p>
+        </div>
+        <div class="demo-step">
+          <span class="step-num">5</span>
+          <p><strong>Show the backtest.</strong> "Here's how our model would have scored UST 72 hours before collapse." Red flag visible. No existing tool caught it.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ IMPACT ════ -->
+  <section>
+    <div class="section-label">07 Impact & Market Opportunity</div>
+    <div class="section-title">Why this becomes a company.</div>
+    <div style="height: 0.5rem"></div>
+    <div class="impact-grid">
+      <div class="impact-card">
+        <div class="impact-num">$150B+</div>
+        <h4>Assets at Risk</h4>
+        <p>Total stablecoin market cap with no real-world risk scoring today</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-num">4,000+</div>
+        <h4>DeFi Protocols</h4>
+        <p>Every protocol with stablecoin treasury exposure needs this</p>
+      </div>
+      <div class="impact-card">
+        <div class="impact-num">$0</div>
+        <h4>Competition</h4>
+        <p>Nobody combines weather, macro, and regulatory into stablecoin risk scoring</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- ════ PITCH ════ -->
+  <section>
+    <div class="section-label">08 Pitch Flow</div>
+    <div class="section-title">4 minutes. 5 beats.</div>
+    <div style="height: 0.5rem"></div>
+    <div class="pitch-flow">
+      <div class="pitch-step">
+        <div class="time">0:00 to 0:30</div>
+        <h4>Problem</h4>
+        <p>$150B, zero real-world risk visibility</p>
+      </div>
+      <div class="pitch-step">
+        <div class="time">0:30 to 0:50</div>
+        <h4>Insight</h4>
+        <p>Real assets = real-world risk</p>
+      </div>
+      <div class="pitch-step">
+        <div class="time">0:50 to 3:00</div>
+        <h4>Live Demo</h4>
+        <p>Hurricane scenario, scores shift, LLM explains</p>
+      </div>
+      <div class="pitch-step">
+        <div class="time">3:00 to 3:30</div>
+        <h4>Architecture</h4>
+        <p>6 signals, ML, LLM, traffic lights</p>
+      </div>
+      <div class="pitch-step">
+        <div class="time">3:30 to 4:00</div>
+        <h4>Business</h4>
+        <p>Every treasury manager needs this</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════ FOOTER ════ -->
+  <footer>
+    <div class="footer-line"></div>
+    <div class="footer-wordmark">katabatic</div>
+    <p>Cornell AI Hackathon 2026 · Programmable Capital · Built in 36 hours</p>
+  </footer>
+
+</div>
+
+</body>
+</html>
