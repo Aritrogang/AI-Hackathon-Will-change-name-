@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Katabatic — The Rating Agency for Stablecoin Reserves</title>
+<title>katabatic. — The Rating Agency for Stablecoin Reserves</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
@@ -75,7 +75,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.65rem 0;
   transform:translateY(-100%);animation:slideIn .4s ease .15s forwards}
 @keyframes slideIn{to{transform:translateY(0)}}
 .nav-in{max-width:1400px;margin:0 auto;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between}
-.nav-brand{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);text-decoration:none;cursor:pointer}
+/* Logo — lowercase Outfit at 500 weight with tight tracking.
+   The period is accent-colored, acts as a visual anchor.
+   Lowercase reads as modern/confident vs uppercase which felt generic. */
+.nav-brand{font-family:var(--sans);font-size:.95rem;font-weight:500;letter-spacing:-.02em;color:var(--text);text-decoration:none;cursor:pointer}
+.nav-brand span{color:var(--accent);font-weight:600}
 .nav-links{display:flex;gap:1.6rem}
 .nav-links a{font-family:var(--mono);font-size:.65rem;color:var(--text-3);text-decoration:none;font-weight:400;letter-spacing:.04em;transition:color .2s;cursor:pointer}
 .nav-links a:hover{color:var(--accent)}
@@ -160,8 +164,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.65rem 0;
 @keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-.hero-brand{font-family:var(--mono);font-size:clamp(3.2rem,7vw,5.5rem);font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--text);line-height:1;margin-bottom:1.2rem;opacity:0;animation:fu .7s ease .3s forwards;position:relative;z-index:2}
-.hero-brand span{color:var(--accent)}
+.hero-brand{font-family:var(--sans);font-size:clamp(3.6rem,8vw,6.5rem);font-weight:300;letter-spacing:-.04em;color:var(--text);line-height:1;margin-bottom:1.2rem;opacity:0;animation:fu .7s ease .3s forwards;position:relative;z-index:2}
+.hero-brand span{color:var(--accent);font-weight:500}
 .hero-sub{font-size:clamp(1.15rem,2.2vw,1.5rem);font-weight:300;color:var(--text-2);line-height:1.45;max-width:520px;margin:0 auto 1.6rem;opacity:0;animation:fu .7s ease .5s forwards;position:relative;z-index:2}
 .hero-sub strong{font-weight:500;color:var(--text)}
 .hero-tag{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.65rem;color:var(--accent);border:1px solid var(--border-strong);padding:.3rem .7rem;border-radius:4px;margin-bottom:2rem;opacity:0;animation:fu .6s ease .2s forwards;position:relative;z-index:2}
@@ -383,7 +387,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.65rem 0;
    ═══════════════════════════════════════════════════════════ */
 footer{padding:2rem 0;border-top:1px solid var(--border)}
 .foot-in{display:flex;justify-content:space-between;align-items:center}
-.foot-brand{font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)}
+.foot-brand{font-family:var(--sans);font-size:.88rem;font-weight:500;letter-spacing:-.02em;color:var(--text)}
+.foot-brand span{color:var(--accent);font-weight:600}
 .foot-links{display:flex;gap:1.4rem}
 .foot-links a{font-family:var(--mono);font-size:.65rem;color:var(--text-4);text-decoration:none;transition:color .2s;cursor:pointer}
 .foot-links a:hover{color:var(--accent)}
@@ -396,7 +401,7 @@ footer{padding:2rem 0;border-top:1px solid var(--border)}
   .hero{min-height:auto;padding:7rem 0 3rem}
   .hero-radar{width:400px;height:400px}
   .hero-card{max-width:360px}
-  .hero-brand{font-size:clamp(2.4rem,8vw,3.2rem)}
+  .hero-brand{font-size:clamp(2.8rem,10vw,3.6rem)}
   .problem-grid{grid-template-columns:1fr}
   .chain-track{grid-template-columns:1fr;gap:.4rem}
   .chain-cell,.chain-cell:first-child,.chain-cell:last-child{border-radius:var(--r-s)}
@@ -431,7 +436,7 @@ footer{padding:2rem 0;border-top:1px solid var(--border)}
 
 <nav>
   <div class="nav-in">
-    <a class="nav-brand" data-scroll="#hero">Katabatic</a>
+    <a class="nav-brand" data-scroll="#hero">katabatic<span>.</span></a>
     <div class="nav-links">
       <a data-scroll="#problem">Problem</a>
       <a data-scroll="#method">Methodology</a>
@@ -455,7 +460,7 @@ footer{padding:2rem 0;border-top:1px solid var(--border)}
   <div class="w">
     <div class="w-inner">
       <div class="hero-tag"><span class="pulse"></span> Programmable Capital Track · Mar 13-15</div>
-      <div class="hero-brand">Katabatic<span>.</span></div>
+      <div class="hero-brand">katabatic<span>.</span></div>
       <p class="hero-sub">The <strong>Moody's for stablecoin reserve risk.</strong><br>Continuous counterparty ratings, proven with the signal nobody else is watching: weather.</p>
       <div class="hero-meta">
         <span class="hm-chip">4-5 Engineers</span>
@@ -670,7 +675,7 @@ footer{padding:2rem 0;border-top:1px solid var(--border)}
   <div class="w">
     <div class="w-wide">
       <div class="foot-in">
-        <span class="foot-brand">Katabatic</span>
+        <span class="foot-brand">katabatic<span>.</span></span>
         <div class="foot-links">
           <a data-scroll="#problem">Problem</a>
           <a data-scroll="#method">Methodology</a>
