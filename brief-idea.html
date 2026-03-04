@@ -4,599 +4,825 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>katabatic. — The Rating Agency for Stablecoin Reserves</title>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════
-   DESIGN TOKENS
+   TOKENS
    ═══════════════════════════════════════════════════════════ */
 :root {
-  --bg: #f4f3fa;
-  --bg-deep: #eae8f4;
-  --bg-card: rgba(255,255,255,0.6);
-  --bg-card-hover: rgba(255,255,255,0.85);
-  --bg-solid: #fff;
-  --border: rgba(123,111,196,0.11);
-  --border-strong: rgba(123,111,196,0.22);
-  --accent: #7b6fc4;
-  --accent-bright: #8b7fd4;
-  --accent-soft: #a599e9;
-  --accent-deep: #524399;
-  --accent-muted: #c5bef0;
-  --accent-faint: rgba(123,111,196,0.06);
-  --text: #18132e;
-  --text-2: #443d60;
-  --text-3: rgba(46,42,61,0.45);
-  --text-4: rgba(46,42,61,0.22);
-  --white: #fff;
-  --mono: 'IBM Plex Mono', monospace;
-  --sans: 'Outfit', sans-serif;
-  --shadow-s: 0 1px 3px rgba(82,67,153,0.04);
-  --shadow-m: 0 4px 20px rgba(82,67,153,0.06);
-  --shadow-l: 0 12px 48px rgba(82,67,153,0.08);
-  --shadow-glow: 0 0 60px rgba(139,127,212,0.06);
-  --r-s: 8px; --r-m: 14px; --r-l: 22px;
+  --bg: #fafafa;
+  --bg-alt: #f3f2f7;
+  --bg-card: #ffffff;
+  --bg-dark: #0c0a14;
+  --bg-dark-card: rgba(255,255,255,0.04);
+  --border: rgba(0,0,0,0.06);
+  --border-hover: rgba(0,0,0,0.12);
+  --border-dark: rgba(255,255,255,0.08);
+  --accent: #6c5ce7;
+  --accent-light: #a29bfe;
+  --accent-lighter: rgba(108,92,231,0.08);
+  --accent-deep: #4834d4;
+  --text: #0f0f0f;
+  --text-2: #555;
+  --text-3: #999;
+  --text-dark: rgba(255,255,255,0.92);
+  --text-dark-2: rgba(255,255,255,0.55);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --r: 16px;
+  --r-lg: 24px;
+  --r-xl: 32px;
+  --shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03);
+  --shadow-lg: 0 8px 32px rgba(0,0,0,0.06);
+  --shadow-xl: 0 16px 64px rgba(0,0,0,0.08);
+  --transition: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 /* ═══════════════════════════════════════════════════════════
-   RESET & BASE
+   RESET
    ═══════════════════════════════════════════════════════════ */
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-padding-top:4.5rem;scroll-behavior:smooth}
-body{background:var(--bg);color:var(--text-2);font-family:var(--sans);font-size:15px;line-height:1.7;font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-::selection{background:rgba(123,111,196,0.15);color:var(--text)}
-
-/* Film grain — mimics printed financial reports / rating agency documents.
-   Barely visible, adds analog texture to the digital surface. */
-body::after{content:'';position:fixed;inset:0;z-index:9999;pointer-events:none;
-  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E")}
-
-/* ═══════════════════════════════════════════════════════════
-   BACKGROUND — Topo contours (geographic mapping motif)
-   Only decoration that spans the full page. Reinforces
-   the geographic/cartographic identity of the product.
-   ═══════════════════════════════════════════════════════════ */
-.topo-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.25;
-  background-image:url("data:image/svg+xml,%3Csvg width='600' height='600' viewBox='0 0 600 600' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%237b6fc4' stroke-width='0.5' opacity='0.1'%3E%3Cellipse cx='300' cy='300' rx='280' ry='260'/%3E%3Cellipse cx='300' cy='300' rx='240' ry='220'/%3E%3Cellipse cx='300' cy='300' rx='200' ry='185'/%3E%3Cellipse cx='300' cy='300' rx='160' ry='148'/%3E%3Cellipse cx='300' cy='300' rx='120' ry='112'/%3E%3Cellipse cx='300' cy='300' rx='80' ry='76'/%3E%3Cellipse cx='300' cy='300' rx='40' ry='38'/%3E%3Cellipse cx='150' cy='450' rx='140' ry='120' transform='rotate(-15 150 450)'/%3E%3Cellipse cx='150' cy='450' rx='100' ry='85' transform='rotate(-15 150 450)'/%3E%3Cellipse cx='150' cy='450' rx='60' ry='50' transform='rotate(-15 150 450)'/%3E%3Cellipse cx='480' cy='150' rx='110' ry='95' transform='rotate(20 480 150)'/%3E%3Cellipse cx='480' cy='150' rx='70' ry='60' transform='rotate(20 480 150)'/%3E%3Cellipse cx='480' cy='150' rx='30' ry='25' transform='rotate(20 480 150)'/%3E%3C/g%3E%3C/svg%3E");
-  background-size:600px 600px}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-padding-top: 5rem; scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--text-2);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+::selection { background: rgba(108,92,231,0.15); color: var(--text); }
 
 /* ═══════════════════════════════════════════════════════════
    LAYOUT
    ═══════════════════════════════════════════════════════════ */
-.w{width:100%;padding:0 2.5rem;position:relative;z-index:2}
-.w-inner{max-width:1100px;margin:0 auto}
-.w-wide{max-width:1400px;margin:0 auto}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+.container-sm { max-width: 800px; margin: 0 auto; padding: 0 2rem; }
 
 /* ═══════════════════════════════════════════════════════════
    NAV
    ═══════════════════════════════════════════════════════════ */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:.65rem 0;
-  backdrop-filter:blur(30px) saturate(1.5);-webkit-backdrop-filter:blur(30px) saturate(1.5);
-  background:rgba(244,243,250,0.72);border-bottom:1px solid var(--border);
-  transform:translateY(-100%);animation:slideIn .4s ease .15s forwards}
-@keyframes slideIn{to{transform:translateY(0)}}
-.nav-in{max-width:1400px;margin:0 auto;padding:0 2.5rem;display:flex;align-items:center;justify-content:space-between}
-/* Logo — lowercase Outfit at 500 weight with tight tracking.
-   The period is accent-colored, acts as a visual anchor.
-   Lowercase reads as modern/confident vs uppercase which felt generic. */
-.nav-brand{font-family:var(--sans);font-size:.95rem;font-weight:500;letter-spacing:-.02em;color:var(--text);text-decoration:none;cursor:pointer}
-.nav-brand span{color:var(--accent);font-weight:600}
-.nav-links{display:flex;gap:1.6rem}
-.nav-links a{font-family:var(--mono);font-size:.65rem;color:var(--text-3);text-decoration:none;font-weight:400;letter-spacing:.04em;transition:color .2s;cursor:pointer}
-.nav-links a:hover{color:var(--accent)}
-.nav-chip{font-family:var(--mono);font-size:.6rem;color:var(--text-3);letter-spacing:.06em;border:1px solid var(--border);padding:.2rem .55rem;border-radius:4px}
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  padding: 0.75rem 0;
+  background: rgba(250,250,250,0.8);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  transform: translateY(-100%);
+  animation: nav-in 0.5s var(--transition) 0.1s forwards;
+}
+@keyframes nav-in { to { transform: translateY(0); } }
+.nav-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0 2rem;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-brand {
+  font-size: 1.05rem; font-weight: 600; color: var(--text);
+  text-decoration: none; letter-spacing: -0.02em; cursor: pointer;
+}
+.nav-brand span { color: var(--accent); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a {
+  font-size: 0.82rem; color: var(--text-3); text-decoration: none;
+  font-weight: 400; transition: color 0.2s; cursor: pointer;
+}
+.nav-links a:hover { color: var(--text); }
+.nav-badge {
+  font-size: 0.72rem; color: var(--text-3); letter-spacing: 0.02em;
+  background: var(--accent-lighter); color: var(--accent);
+  padding: 0.25rem 0.7rem; border-radius: 100px; font-weight: 500;
+}
 
 /* ═══════════════════════════════════════════════════════════
    SCROLL REVEALS
    ═══════════════════════════════════════════════════════════ */
-.r{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
-.r.v{opacity:1;transform:translateY(0)}
-.rs{opacity:0;transform:scale(.97);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1)}
-.rs.v{opacity:1;transform:scale(1)}
-.d1{transition-delay:.06s}.d2{transition-delay:.12s}.d3{transition-delay:.18s}.d4{transition-delay:.24s}.d5{transition-delay:.30s}.d6{transition-delay:.36s}
+.reveal {
+  opacity: 0; transform: translateY(28px);
+  transition: opacity 0.8s var(--transition), transform 0.8s var(--transition);
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.d1{transition-delay:.05s} .d2{transition-delay:.1s} .d3{transition-delay:.15s}
+.d4{transition-delay:.2s} .d5{transition-delay:.25s} .d6{transition-delay:.3s}
 
 /* ═══════════════════════════════════════════════════════════
-   TYPE SCALE
-
-   Harmonious scale — 4 heading sizes, 2 body sizes, 2 mono sizes.
-   Weights: 300 (light body), 400 (regular body/labels),
-            500 (headings/emphasis), 600 (stat numbers only).
+   TYPOGRAPHY
    ═══════════════════════════════════════════════════════════ */
-.h-xl{font-size:clamp(2.8rem,5.5vw,4.2rem);font-weight:300;line-height:1.06;letter-spacing:-.03em;color:var(--text)}
-.h-lg{font-size:clamp(1.7rem,3.2vw,2.3rem);font-weight:300;line-height:1.18;letter-spacing:-.02em;color:var(--text)}
-.h-md{font-size:1.1rem;font-weight:500;line-height:1.3;color:var(--text)}
-.h-sm{font-size:.88rem;font-weight:500;color:var(--text);line-height:1.3}
-.em{color:var(--accent-deep)}
-.eyebrow{font-family:var(--mono);font-size:.65rem;text-transform:uppercase;letter-spacing:.14em;color:var(--accent);font-weight:500;margin-bottom:.6rem;display:flex;align-items:center;justify-content:center;gap:.6rem}
-.eyebrow::before{content:'';width:20px;height:1px;background:var(--accent-muted)}
-.body-lg{font-size:.95rem;color:var(--text-2);line-height:1.75;font-weight:300;max-width:540px;margin:0 auto}
-.body-sm{font-size:.8rem;color:var(--text-2);line-height:1.65;font-weight:400}
-.mono-sm{font-family:var(--mono);font-size:.65rem;color:var(--text-3);letter-spacing:.02em}
-.mono-xs{font-family:var(--mono);font-size:.55rem;color:var(--text-4);letter-spacing:.04em}
+.eyebrow {
+  font-size: 0.78rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--accent); margin-bottom: 0.75rem;
+}
+.h-display {
+  font-size: clamp(3rem, 6vw, 4.8rem); font-weight: 700;
+  line-height: 1.05; letter-spacing: -0.035em; color: var(--text);
+}
+.h-lg {
+  font-size: clamp(2rem, 3.5vw, 2.8rem); font-weight: 600;
+  line-height: 1.15; letter-spacing: -0.025em; color: var(--text);
+}
+.h-md { font-size: 1.15rem; font-weight: 600; line-height: 1.3; color: var(--text); }
+.h-sm { font-size: 0.95rem; font-weight: 600; color: var(--text); line-height: 1.35; }
+.body-lg {
+  font-size: 1.15rem; color: var(--text-2); line-height: 1.7;
+  font-weight: 400; max-width: 560px;
+}
+.body-md { font-size: 0.95rem; color: var(--text-2); line-height: 1.7; }
+.body-sm { font-size: 0.87rem; color: var(--text-3); line-height: 1.65; }
+.em { color: var(--accent); }
 
 /* ═══════════════════════════════════════════════════════════
    SECTIONS
    ═══════════════════════════════════════════════════════════ */
-.sec{padding:5.5rem 0;position:relative;overflow:hidden}
-.sec-alt{background:linear-gradient(180deg,var(--bg) 0%,var(--bg-deep) 50%,var(--bg) 100%)}
-.sec-header{text-align:center;max-width:640px;margin:0 auto 3rem}
-.sec-header .body-lg{margin-top:.6rem}
+.section { padding: 7rem 0; }
+.section-alt { background: var(--bg-alt); }
+.section-dark {
+  background: var(--bg-dark);
+  color: var(--text-dark-2);
+}
+.section-dark .eyebrow { color: var(--accent-light); }
+.section-dark .h-lg { color: var(--text-dark); }
+.section-header { text-align: center; max-width: 680px; margin: 0 auto 4rem; }
+.section-header .body-lg { margin: 0.8rem auto 0; }
 
 /* ═══════════════════════════════════════════════════════════
-   GLASS CARD
+   CARD
    ═══════════════════════════════════════════════════════════ */
-.gc{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--r-m);
-  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:var(--shadow-s);
-  transition:all .35s cubic-bezier(.16,1,.3,1);position:relative;overflow:hidden}
-.gc:hover{background:var(--bg-card-hover);border-color:var(--border-strong);transform:translateY(-2px);box-shadow:var(--shadow-m)}
+.card {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-lg); box-shadow: var(--shadow);
+  transition: all 0.3s var(--transition);
+}
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
 
 /* ═══════════════════════════════════════════════════════════
    HERO
-
-   Radar sweep = the only animated decoration. It reinforces
-   "continuous monitoring" — the core product concept.
    ═══════════════════════════════════════════════════════════ */
-.hero{padding:0;text-align:center;position:relative;overflow:hidden;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-.hero::after{content:'';position:absolute;inset:0;z-index:0;
-  background:radial-gradient(ellipse 70% 55% at 50% 45%, rgba(139,127,212,0.07) 0%, transparent 70%);pointer-events:none}
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  text-align: center; position: relative; overflow: hidden;
+  padding: 8rem 0 6rem;
+}
+.hero::after {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(108,92,231,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
 
-/* Radar — continuous monitoring visual metaphor */
-@keyframes radar-sweep{from{transform:translate(-50%,-50%) rotate(0deg)}to{transform:translate(-50%,-50%) rotate(360deg)}}
-.hero-radar{position:absolute;top:48%;left:50%;width:640px;height:640px;border-radius:50%;z-index:0;pointer-events:none;opacity:.06}
-.hero-radar::before{content:'';position:absolute;inset:0;border-radius:50%;border:1px solid var(--accent-muted)}
-.hero-radar::after{content:'';position:absolute;top:0;left:50%;width:50%;height:50%;transform-origin:bottom left;
-  background:conic-gradient(from 0deg,transparent,rgba(123,111,196,0.3));border-radius:100% 0 0 0;animation:radar-sweep 6s linear infinite}
-.hero-radar-ring{position:absolute;border-radius:50%;border:1px solid rgba(123,111,196,0.12);pointer-events:none}
-.hero-radar-ring:nth-child(1){inset:20%}.hero-radar-ring:nth-child(2){inset:40%}.hero-radar-ring:nth-child(3){inset:60%}
+@keyframes hero-up { from { opacity:0; transform:translateY(20px) } to { opacity:1; transform:translateY(0) } }
 
-/* Signal particles — data points rising into the monitoring system.
-   Confined to the hero to represent incoming risk signals (weather,
-   bank data, attestations) feeding the engine. */
-@keyframes signal-rise{0%{transform:translateY(0) scale(1);opacity:0}10%{opacity:.6}90%{opacity:.6}100%{transform:translateY(-100vh) scale(0.4);opacity:0}}
-.signal-particles{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:0}
-.signal-particles span{position:absolute;width:3px;height:3px;border-radius:50%;background:var(--accent-muted);opacity:0;animation:signal-rise linear infinite}
-.signal-particles span:nth-child(1){left:12%;animation-duration:14s;animation-delay:0s;bottom:-10px}
-.signal-particles span:nth-child(2){left:28%;animation-duration:18s;animation-delay:3s;bottom:-10px;width:2px;height:2px}
-.signal-particles span:nth-child(3){left:50%;animation-duration:16s;animation-delay:6s;bottom:-10px;width:4px;height:4px}
-.signal-particles span:nth-child(4){left:72%;animation-duration:20s;animation-delay:2s;bottom:-10px}
-.signal-particles span:nth-child(5){left:88%;animation-duration:15s;animation-delay:5s;bottom:-10px;width:2px;height:2px}
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 0.5rem;
+  font-size: 0.82rem; color: var(--accent); font-weight: 500;
+  background: var(--accent-lighter); padding: 0.35rem 0.9rem;
+  border-radius: 100px; margin-bottom: 2rem;
+  opacity: 0; animation: hero-up 0.6s var(--transition) 0.2s forwards;
+  position: relative; z-index: 1;
+}
+.hero-tag .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-/* Hero content */
-@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.hero-title {
+  font-size: clamp(3.2rem, 7vw, 5.5rem); font-weight: 700;
+  line-height: 1.02; letter-spacing: -0.04em; color: var(--text);
+  margin-bottom: 1.5rem; position: relative; z-index: 1;
+  opacity: 0; animation: hero-up 0.7s var(--transition) 0.35s forwards;
+}
+.hero-title span { color: var(--accent); }
 
-.hero-brand{font-family:var(--sans);font-size:clamp(3.6rem,8vw,6.5rem);font-weight:300;letter-spacing:-.04em;color:var(--text);line-height:1;margin-bottom:1.2rem;opacity:0;animation:fu .7s ease .3s forwards;position:relative;z-index:2}
-.hero-brand span{color:var(--accent);font-weight:500}
-.hero-sub{font-size:clamp(1.15rem,2.2vw,1.5rem);font-weight:300;color:var(--text-2);line-height:1.45;max-width:520px;margin:0 auto 1.6rem;opacity:0;animation:fu .7s ease .5s forwards;position:relative;z-index:2}
-.hero-sub strong{font-weight:500;color:var(--text)}
-.hero-tag{display:inline-flex;align-items:center;gap:.45rem;font-family:var(--mono);font-size:.65rem;color:var(--accent);border:1px solid var(--border-strong);padding:.3rem .7rem;border-radius:4px;margin-bottom:2rem;opacity:0;animation:fu .6s ease .2s forwards;position:relative;z-index:2}
-.hero-tag .pulse{width:5px;height:5px;border-radius:50%;background:var(--accent-bright);animation:blink 2.2s ease-in-out infinite}
-.hero-meta{display:flex;gap:.4rem;flex-wrap:wrap;justify-content:center;margin-bottom:2.5rem;opacity:0;animation:fu .7s ease .7s forwards;position:relative;z-index:2}
-.hm-chip{font-family:var(--mono);font-size:.6rem;color:var(--text-3);border:1px solid var(--border);padding:.22rem .55rem;border-radius:4px}
+.hero-sub {
+  font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 400;
+  color: var(--text-2); line-height: 1.6; max-width: 520px;
+  margin: 0 auto 2.5rem; position: relative; z-index: 1;
+  opacity: 0; animation: hero-up 0.7s var(--transition) 0.5s forwards;
+}
+.hero-sub strong { font-weight: 600; color: var(--text); }
 
-/* Hero ratings card */
-.hero-card{max-width:420px;margin:0 auto;text-align:left;background:var(--bg-solid);border:1px solid var(--border);border-radius:var(--r-l);box-shadow:var(--shadow-l),var(--shadow-glow);overflow:hidden;opacity:0;animation:fu .8s ease .9s forwards;position:relative;z-index:2}
-.hc-header{padding:.6rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:rgba(244,243,250,0.5)}
-.hc-header span{font-family:var(--mono);font-size:.6rem;color:var(--text-3);letter-spacing:.08em}
-.hc-live{display:flex;align-items:center;gap:.3rem;font-family:var(--mono);font-size:.55rem;color:var(--accent);font-weight:500;letter-spacing:.08em}
-.hc-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--accent-bright);box-shadow:0 0 6px rgba(139,127,212,.4)}
-.hc-body{padding:.8rem 1.1rem}
-.hc-row{display:flex;align-items:baseline;padding:.38rem 0;border-bottom:1px solid rgba(123,111,196,0.06)}
-.hc-row:last-child{border:none}
-.hc-label{font-family:var(--mono);font-size:.65rem;color:var(--text-3);width:52px}
-.hc-grade{font-size:.95rem;color:var(--accent);font-weight:600;width:34px}
-.hc-sub{font-family:var(--mono);font-size:.55rem;color:var(--text-4);flex:1}
-.hc-divider{border:none;border-top:1px solid var(--border);margin:.3rem 0}
-.hc-footer{display:flex;align-items:baseline;padding:.4rem 0}
+.hero-chips {
+  display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+  margin-bottom: 3.5rem; position: relative; z-index: 1;
+  opacity: 0; animation: hero-up 0.6s var(--transition) 0.6s forwards;
+}
+.hero-chip {
+  font-size: 0.78rem; color: var(--text-3);
+  border: 1px solid var(--border); padding: 0.3rem 0.8rem;
+  border-radius: 100px;
+}
+
+/* Hero product card */
+.hero-product {
+  max-width: 440px; margin: 0 auto; text-align: left;
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); box-shadow: var(--shadow-xl);
+  overflow: hidden; position: relative; z-index: 1;
+  opacity: 0; animation: hero-up 0.8s var(--transition) 0.75s forwards;
+}
+.hp-header {
+  padding: 0.65rem 1.2rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg-alt);
+}
+.hp-header-title { font-size: 0.7rem; color: var(--text-3); font-weight: 500; letter-spacing: 0.06em; }
+.hp-live {
+  display: flex; align-items: center; gap: 0.35rem;
+  font-size: 0.7rem; color: var(--accent); font-weight: 600; letter-spacing: 0.04em;
+}
+.hp-live::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--accent); box-shadow: 0 0 8px rgba(108,92,231,0.4);
+}
+.hp-body { padding: 0.6rem 1.2rem; }
+.hp-row {
+  display: flex; align-items: center; padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.03);
+}
+.hp-row:last-child { border: none; }
+.hp-label { font-size: 0.78rem; color: var(--text-3); font-weight: 500; width: 56px; }
+.hp-grade { font-size: 1rem; color: var(--accent); font-weight: 700; width: 36px; }
+.hp-detail { font-size: 0.78rem; color: var(--text-3); flex: 1; }
+.hp-divider { border: none; border-top: 1px solid var(--border); margin: 0.2rem 0; }
+.hp-footer { display: flex; align-items: center; padding: 0.5rem 0; }
 
 /* ═══════════════════════════════════════════════════════════
-   PROBLEM SECTION
+   PROBLEM
    ═══════════════════════════════════════════════════════════ */
-
-/* Audit gap bars — vertical bars of varying height represent the
-   fragmented, incomplete view that monthly audits provide. The gaps
-   between bars = the blind spots between attestation reports. */
-@keyframes bar-grow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
-.audit-gaps{position:absolute;right:2.5rem;top:50%;transform:translateY(-50%);display:flex;align-items:flex-end;gap:8px;height:180px;z-index:0;pointer-events:none;opacity:.08}
-.audit-gaps span{width:3px;background:var(--accent);border-radius:2px;transform-origin:bottom;animation:bar-grow 1.2s ease forwards}
-.audit-gaps span:nth-child(1){height:55%}
-.audit-gaps span:nth-child(2){height:80%;animation-delay:.08s}
-.audit-gaps span:nth-child(3){height:35%;animation-delay:.16s}
-.audit-gaps span:nth-child(4){height:90%;animation-delay:.24s}
-.audit-gaps span:nth-child(5){height:25%;animation-delay:.32s}
-.audit-gaps span:nth-child(6){height:65%;animation-delay:.40s}
-.audit-gaps span:nth-child(7){height:45%;animation-delay:.48s}
-.audit-gaps span:nth-child(8){height:75%;animation-delay:.56s}
-
-.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;position:relative;z-index:1}
-.p-card{padding:1.5rem}
-.p-card .p-num{font-size:2.2rem;font-weight:600;color:var(--accent-deep);line-height:1;margin-bottom:.5rem;letter-spacing:-.02em}
-.p-card .h-sm{margin-bottom:.25rem}
-.p-card p{font-size:.8rem;color:var(--text-2);line-height:1.65;font-weight:400}
-.p-card .p-src{font-family:var(--mono);font-size:.55rem;color:var(--text-4);margin-top:.6rem;letter-spacing:.03em}
+.problem-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+.p-card { padding: 2rem; }
+.p-num {
+  font-size: 2.8rem; font-weight: 700; color: var(--text);
+  line-height: 1; margin-bottom: 0.6rem; letter-spacing: -0.03em;
+}
+.p-card .h-sm { margin-bottom: 0.4rem; }
+.p-card .body-sm { line-height: 1.65; }
+.p-source {
+  font-size: 0.75rem; color: var(--text-3); margin-top: 0.8rem;
+  padding-top: 0.8rem; border-top: 1px solid var(--border);
+}
 
 /* ═══════════════════════════════════════════════════════════
-   METHODOLOGY — Pipeline chain
-
-   Subtle grid bg reinforces "structured data pipeline" concept.
+   METHODOLOGY — Pipeline
    ═══════════════════════════════════════════════════════════ */
-.chain-section{position:relative}
-.chain-section::before{content:'';position:absolute;inset:0;z-index:0;pointer-events:none;opacity:.035;
-  background-image:
-    linear-gradient(rgba(123,111,196,0.3) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(123,111,196,0.3) 1px, transparent 1px);
-  background-size:40px 40px}
-.chain-track{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;position:relative;z-index:1}
-.chain-cell{background:var(--bg-card);border:1px solid var(--border);padding:1.3rem 1.1rem;position:relative;transition:all .3s}
-.chain-cell:first-child{border-radius:var(--r-m) 0 0 var(--r-m)}
-.chain-cell:last-child{border-radius:0 var(--r-m) var(--r-m) 0}
-.chain-cell:hover{background:var(--bg-card-hover);border-color:var(--border-strong)}
-.chain-cell::after{content:'';position:absolute;right:-1px;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:5px solid var(--accent-muted);z-index:1}
-.chain-cell:last-child::after{display:none}
-.cc-num{font-family:var(--mono);font-size:.55rem;color:var(--text-4);letter-spacing:.1em;margin-bottom:.3rem}
-.cc-title{font-size:.82rem;font-weight:500;color:var(--text);margin-bottom:.15rem}
-.cc-desc{font-family:var(--mono);font-size:.65rem;color:var(--text-3);line-height:1.5}
+.pipeline {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 0.5rem;
+}
+.pipe-step {
+  padding: 1.8rem 1.2rem; text-align: center;
+  position: relative;
+}
+.pipe-step::after {
+  content: ''; position: absolute; right: -0.3rem; top: 50%;
+  transform: translateY(-50%);
+  width: 0; height: 0;
+  border-top: 6px solid transparent; border-bottom: 6px solid transparent;
+  border-left: 6px solid var(--accent-light); z-index: 1;
+}
+.pipe-step:last-child::after { display: none; }
+.pipe-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 32px; height: 32px; border-radius: 50%;
+  background: var(--accent-lighter); color: var(--accent);
+  font-size: 0.78rem; font-weight: 700; margin-bottom: 0.8rem;
+}
+.pipe-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+.pipe-desc { font-size: 0.8rem; color: var(--text-3); line-height: 1.55; }
 
 /* ═══════════════════════════════════════════════════════════
-   SIX DIMENSIONS — How It Works
+   SIX DIMENSIONS
    ═══════════════════════════════════════════════════════════ */
-
-/* Dimension thread — dashed horizontal line connects the six cards,
-   showing that each dimension feeds into the next in the pipeline.
-   Sits behind the card grid at vertical center. */
-.dim-thread{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
-.dim-thread::before{content:'';position:absolute;top:50%;left:3%;right:3%;height:1px;
-  background:repeating-linear-gradient(90deg,var(--accent-muted) 0 4px,transparent 4px 14px);opacity:.18}
-
-.hiw-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;position:relative;z-index:1}
-.hiw-card{padding:1.6rem 1.4rem}
-.hiw-tag{font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);font-weight:400;margin-bottom:.5rem}
-.hiw-card .h-sm{margin-bottom:.3rem}
-.hiw-card p{font-size:.8rem;color:var(--text-2);line-height:1.65;font-weight:400}
-.hiw-card .hiw-src{font-family:var(--mono);font-size:.55rem;color:var(--text-4);margin-top:.55rem}
-
-/* Star card — demo focus. Subtle accent border + gradient is enough. */
-.hiw-card.star{border-color:var(--border-strong);background:linear-gradient(135deg,rgba(123,111,196,0.04) 0%,var(--bg-card) 100%)}
-.hiw-card.star .hiw-tag{color:var(--accent);font-weight:500}
+.dim-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+.dim-card { padding: 2rem 1.6rem; }
+.dim-tag {
+  font-size: 0.72rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 0.6rem;
+}
+.dim-card .h-sm { margin-bottom: 0.4rem; }
+.dim-card .body-sm { line-height: 1.65; }
+.dim-source { font-size: 0.75rem; color: var(--text-3); margin-top: 0.8rem; }
+.dim-card.featured {
+  border-color: var(--accent);
+  background: linear-gradient(135deg, rgba(108,92,231,0.03) 0%, var(--bg-card) 100%);
+}
+.dim-card.featured .dim-tag { color: var(--accent); font-weight: 600; }
 
 /* ═══════════════════════════════════════════════════════════
    ARCHITECTURE
    ═══════════════════════════════════════════════════════════ */
-
-/* Knowledge graph visual — nodes and edges represent the actual
-   Stablecoin → Bank → City → Jurisdiction graph described in this
-   section. Nodes pulse to show the graph is "live". */
-@keyframes node-pulse{0%,100%{opacity:.4;transform:scale(1)}50%{opacity:.8;transform:scale(1.12)}}
-.graph-visual{position:absolute;right:2rem;top:50%;transform:translateY(-50%);width:260px;height:300px;pointer-events:none;z-index:0;opacity:.08}
-.graph-visual .node{position:absolute;border-radius:50%;background:var(--accent);animation:node-pulse 3s ease-in-out infinite}
-.graph-visual .node:nth-child(1){top:12%;left:30%;width:10px;height:10px}
-.graph-visual .node:nth-child(2){top:32%;left:68%;width:8px;height:8px;animation-delay:.6s}
-.graph-visual .node:nth-child(3){top:52%;left:22%;width:14px;height:14px;animation-delay:1.2s}
-.graph-visual .node:nth-child(4){top:50%;left:56%;width:10px;height:10px;animation-delay:1.8s}
-.graph-visual .node:nth-child(5){top:78%;left:42%;width:8px;height:8px;animation-delay:2.4s}
-.graph-visual .edge{position:absolute;background:var(--accent);height:1px;transform-origin:left center;opacity:.25}
-.graph-visual .edge:nth-child(6){top:18%;left:36%;width:90px;transform:rotate(18deg)}
-.graph-visual .edge:nth-child(7){top:38%;left:28%;width:70px;transform:rotate(45deg)}
-.graph-visual .edge:nth-child(8){top:54%;left:34%;width:65px;transform:rotate(-8deg)}
-.graph-visual .edge:nth-child(9){top:56%;left:62%;width:80px;transform:rotate(38deg)}
-
-.arch-stack{display:flex;flex-direction:column;gap:3px;position:relative;z-index:1}
-.arch-row{display:grid;grid-template-columns:48px 1fr;gap:1rem;padding:1.3rem 1.4rem;align-items:start}
-.arch-num{font-family:var(--mono);font-size:.9rem;font-weight:500;color:var(--accent-deep);line-height:1.2}
-.arch-row .h-sm{margin-bottom:.15rem}
-.arch-row p{font-size:.8rem;color:var(--text-2);line-height:1.65;font-weight:400}
-.arch-pills{display:flex;flex-wrap:wrap;gap:.25rem;margin-top:.5rem}
-.arch-pill{font-family:var(--mono);font-size:.55rem;color:var(--accent);background:var(--accent-faint);border:1px solid rgba(123,111,196,0.1);padding:.15rem .4rem;border-radius:4px}
+.arch-stack { display: flex; flex-direction: column; gap: 0.5rem; }
+.arch-row {
+  display: grid; grid-template-columns: 56px 1fr; gap: 1.2rem;
+  padding: 1.8rem 1.6rem; align-items: start;
+}
+.arch-num {
+  font-size: 1.5rem; font-weight: 700; color: var(--accent);
+  line-height: 1;
+}
+.arch-row .h-sm { margin-bottom: 0.3rem; }
+.arch-row .body-sm { line-height: 1.65; }
+.arch-pills { display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.75rem; }
+.arch-pill {
+  font-size: 0.72rem; font-weight: 500; color: var(--accent);
+  background: var(--accent-lighter); padding: 0.2rem 0.6rem;
+  border-radius: 100px;
+}
 
 /* ═══════════════════════════════════════════════════════════
-   DEMO SECTION
+   DEMO
    ═══════════════════════════════════════════════════════════ */
+.demo-grid {
+  display: grid; grid-template-columns: 1.2fr 0.8fr;
+  gap: 2rem; align-items: start;
+}
+.demo-script {
+  background: var(--bg-card); border: 1px solid var(--border);
+  border-radius: var(--r-xl); padding: 2.5rem; box-shadow: var(--shadow-lg);
+}
+.demo-script .h-md { margin-bottom: 0.2rem; }
+.demo-script > .body-sm { margin-bottom: 1.5rem; }
+.ds-step {
+  display: grid; grid-template-columns: 28px 1fr;
+  gap: 0.6rem; margin-bottom: 0.6rem; padding: 0.5rem;
+  border-radius: var(--r); transition: background 0.15s;
+}
+.ds-step:hover { background: rgba(108,92,231,0.03); }
+.ds-step:last-child { margin: 0; }
+.ds-num {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--accent); color: white;
+  font-size: 0.72rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 0.1rem;
+}
+.ds-step p { font-size: 0.87rem; color: var(--text-2); line-height: 1.65; }
+.ds-step strong { color: var(--text); font-weight: 600; }
+.ds-step em { color: var(--accent); font-style: italic; }
 
-/* "SHOWTIME" watermark — energy for the demo section.
-   This is the climax of the brief, the watermark sells the moment. */
-.demo-section{position:relative}
-.demo-section::after{content:'SHOWTIME';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
-  font-family:var(--sans);font-size:clamp(6rem,12vw,10rem);font-weight:600;color:var(--accent);
-  opacity:.015;pointer-events:none;z-index:0;letter-spacing:-.04em;white-space:nowrap}
-.demo-split{display:grid;grid-template-columns:1.2fr .8fr;gap:2.5rem;align-items:start;position:relative;z-index:1}
-.demo-script{background:var(--bg-solid);border:1px solid var(--border);border-radius:var(--r-l);padding:2rem;box-shadow:var(--shadow-l),var(--shadow-glow);position:relative;overflow:hidden}
-.demo-script .h-md{margin-bottom:.15rem}
-.demo-script>p{font-size:.8rem;color:var(--text-3);margin-bottom:1.3rem;font-weight:400}
-.ds-item{display:grid;grid-template-columns:24px 1fr;gap:.55rem;margin-bottom:.4rem;padding:.45rem;border-radius:var(--r-s);transition:background .15s}
-.ds-item:hover{background:rgba(123,111,196,0.025)}
-.ds-item:last-child{margin:0}
-.ds-n{font-family:var(--mono);font-size:.55rem;font-weight:500;color:var(--white);background:var(--accent);width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;margin-top:.15rem;flex-shrink:0}
-.ds-item p{font-size:.8rem;color:var(--text-2);line-height:1.65;font-weight:400}
-.ds-item p strong{color:var(--text);font-weight:500}
-.ds-item p em{color:var(--accent);font-style:italic;font-weight:400}
-.demo-scenarios{display:flex;flex-direction:column;gap:.6rem}
-.demo-sc{padding:1.4rem}
-.demo-sc .sc-tag{font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);font-weight:500;margin-bottom:.2rem}
-.demo-sc .h-sm{margin-bottom:.2rem}
-.demo-sc p{font-size:.8rem;color:var(--text-2);line-height:1.6;font-weight:400}
+.demo-scenarios { display: flex; flex-direction: column; gap: 0.75rem; }
+.demo-scenario { padding: 1.6rem; }
+.scenario-tag {
+  font-size: 0.72rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 0.3rem;
+}
+.demo-scenario .h-sm { margin-bottom: 0.3rem; }
 
-/* Mock dashboard */
-.demo-mock{position:relative;border:1px solid var(--border);border-radius:var(--r-l);overflow:hidden;background:var(--bg-solid);box-shadow:var(--shadow-m);margin-top:.6rem}
-.demo-mock-header{height:30px;background:rgba(244,243,250,0.8);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:5px;padding:0 12px}
-.demo-mock-header span{width:8px;height:8px;border-radius:50%;background:var(--accent-muted);opacity:.5}
-.demo-mock-body{padding:1rem;display:grid;grid-template-columns:1fr 1fr;gap:.6rem;min-height:140px}
-.demo-mock-chart{background:var(--bg-deep);border-radius:var(--r-s);padding:.5rem;position:relative;overflow:hidden}
-.demo-mock-chart::after{content:'';position:absolute;bottom:.5rem;left:.5rem;right:.5rem;height:40px;
-  background:repeating-linear-gradient(90deg,var(--accent-muted) 0 3px,transparent 3px 8px);
-  opacity:.25;border-radius:2px;mask-image:linear-gradient(to right,black,transparent 80%);-webkit-mask-image:linear-gradient(to right,black,transparent 80%)}
-.demo-mock-map{background:linear-gradient(135deg,rgba(197,190,240,0.2),rgba(234,232,244,0.6));border-radius:var(--r-s);position:relative;overflow:hidden}
-.demo-mock-map::before{content:'';position:absolute;top:30%;left:40%;width:30px;height:30px;border-radius:50%;border:2px solid rgba(123,111,196,0.25);background:rgba(123,111,196,0.04)}
-.demo-mock-map::after{content:'';position:absolute;top:25%;left:35%;width:40px;height:40px;border-radius:50%;border:1px dashed rgba(123,111,196,0.12)}
-.demo-mock-label{font-family:var(--mono);font-size:.55rem;color:var(--text-4);letter-spacing:.06em}
+/* Product mockup */
+.demo-mockup {
+  border: 1px solid var(--border); border-radius: var(--r-xl);
+  overflow: hidden; background: var(--bg-card);
+  box-shadow: var(--shadow); margin-top: 0.75rem;
+}
+.mockup-bar {
+  height: 32px; background: var(--bg-alt);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: 6px; padding: 0 14px;
+}
+.mockup-bar span { width: 8px; height: 8px; border-radius: 50%; background: var(--border-hover); }
+.mockup-body {
+  padding: 1rem; display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0.6rem; min-height: 140px;
+}
+.mockup-chart {
+  background: var(--bg-alt); border-radius: var(--r);
+  padding: 0.6rem; position: relative; overflow: hidden;
+}
+.mockup-chart::after {
+  content: ''; position: absolute; bottom: 0.5rem; left: 0.5rem; right: 0.5rem;
+  height: 40px; border-radius: 4px; opacity: 0.2;
+  background: repeating-linear-gradient(90deg, var(--accent-light) 0 3px, transparent 3px 9px);
+  mask-image: linear-gradient(to right, black, transparent 80%);
+  -webkit-mask-image: linear-gradient(to right, black, transparent 80%);
+}
+.mockup-map {
+  background: linear-gradient(135deg, rgba(162,155,254,0.12), var(--bg-alt));
+  border-radius: var(--r); position: relative; overflow: hidden;
+}
+.mockup-map::before {
+  content: ''; position: absolute; top: 30%; left: 40%;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid rgba(108,92,231,0.2);
+  background: rgba(108,92,231,0.04);
+}
+.mockup-map::after {
+  content: ''; position: absolute; top: 25%; left: 35%;
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px dashed rgba(108,92,231,0.1);
+}
+.mockup-label { font-size: 0.68rem; color: var(--text-3); letter-spacing: 0.05em; font-weight: 500; }
 
 /* ═══════════════════════════════════════════════════════════
    ROADMAP
    ═══════════════════════════════════════════════════════════ */
-.road-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;position:relative}
-.road-bar::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--accent-deep),var(--accent),var(--accent-soft),var(--accent-muted));border-radius:2px;z-index:1}
-.road-cell{background:var(--bg-card);border:1px solid var(--border);border-top:none;padding:1.4rem 1.1rem 1.1rem;transition:all .3s;position:relative}
-.road-cell:first-child{border-radius:0 0 0 var(--r-m)}
-.road-cell:last-child{border-radius:0 0 var(--r-m) 0}
-.road-cell:hover{background:var(--bg-card-hover)}
-.road-cell::before{content:'';position:absolute;top:-2px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--accent-bright);border:2px solid var(--bg);transform:translateX(-50%);z-index:2}
-.rc-time{font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);font-weight:500;margin-bottom:.25rem;margin-top:.3rem}
-.road-cell .h-sm{font-size:.82rem;margin-bottom:.15rem}
-.road-cell p{font-size:.75rem;color:var(--text-3);line-height:1.55;font-weight:400}
+.roadmap {
+  display: grid; grid-template-columns: repeat(5,1fr); gap: 0.5rem;
+  position: relative;
+}
+.roadmap::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px; border-radius: 2px; z-index: 1;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent), var(--accent-light));
+}
+.road-step {
+  padding: 1.8rem 1.2rem 1.4rem; border-top: none;
+  position: relative;
+}
+.road-step::before {
+  content: ''; position: absolute; top: -5px; left: 50%;
+  transform: translateX(-50%);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); border: 2px solid var(--bg); z-index: 2;
+}
+.road-time {
+  font-size: 0.72rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--accent); margin-bottom: 0.35rem;
+  margin-top: 0.3rem;
+}
+.road-step .h-sm { font-size: 0.88rem; margin-bottom: 0.2rem; }
+.road-step .body-sm { font-size: 0.8rem; }
 
 /* ═══════════════════════════════════════════════════════════
    TEAM
    ═══════════════════════════════════════════════════════════ */
-.team-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.65rem}
-.team-card{padding:1.3rem 1rem;text-align:center}
-.tc-label{font-family:var(--mono);font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;color:var(--text-4);margin-bottom:.3rem}
-.team-card .h-sm{margin-bottom:.1rem;font-size:.82rem}
-.team-card p{font-size:.75rem;color:var(--text-3);line-height:1.55;font-weight:400}
+.team-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 1rem; }
+.team-card { padding: 1.6rem; text-align: center; }
+.team-label {
+  font-size: 0.72rem; font-weight: 500; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--text-3); margin-bottom: 0.4rem;
+}
+.team-card .h-sm { margin-bottom: 0.2rem; font-size: 0.88rem; }
 
 /* ═══════════════════════════════════════════════════════════
    IMPACT — Dark section
    ═══════════════════════════════════════════════════════════ */
-.impact-section{background:linear-gradient(135deg,#1e1740 0%,#2a2154 40%,#1e1740 100%);position:relative;overflow:hidden}
-.impact-section::before{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 50% at 30% 50%,rgba(139,127,212,0.1),transparent);pointer-events:none}
-/* Second glow — balances the dark section composition, prevents it
-   from feeling flat on wide screens. */
-.impact-section::after{content:'';position:absolute;inset:0;
-  background:radial-gradient(ellipse 40% 40% at 80% 50%,rgba(82,67,153,0.08),transparent);pointer-events:none}
-.impact-section .eyebrow{color:var(--accent-soft)}
-.impact-section .eyebrow::before{background:var(--accent-soft)}
-.impact-section .h-lg{color:rgba(255,255,255,0.92)}
-.impact-section .h-lg .em{color:var(--accent-bright)}
-.impact-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;position:relative;z-index:1}
-.impact-cell{background:rgba(255,255,255,0.04);border:1px solid rgba(139,127,212,0.15);border-radius:var(--r-l);padding:2.8rem 1.6rem;text-align:center;box-shadow:0 4px 30px rgba(0,0,0,0.1);transition:all .35s;backdrop-filter:blur(10px)}
-.impact-cell:hover{border-color:rgba(139,127,212,0.3);transform:translateY(-2px);box-shadow:0 8px 40px rgba(0,0,0,0.15)}
-.impact-cell .i-num{font-size:3.4rem;font-weight:600;color:var(--accent-bright);line-height:1;margin-bottom:.5rem;letter-spacing:-.02em}
-.impact-cell .h-sm{margin-bottom:.2rem;color:rgba(255,255,255,0.85)}
-.impact-cell p{font-size:.8rem;color:rgba(255,255,255,0.4);line-height:1.55;font-weight:400}
+.impact-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; }
+.impact-card {
+  background: var(--bg-dark-card);
+  border: 1px solid var(--border-dark);
+  border-radius: var(--r-xl); padding: 3rem 2rem;
+  text-align: center; transition: all 0.3s var(--transition);
+}
+.impact-card:hover {
+  border-color: rgba(255,255,255,0.14);
+  transform: translateY(-2px);
+}
+.impact-num {
+  font-size: 3.5rem; font-weight: 700; color: var(--accent-light);
+  line-height: 1; margin-bottom: 0.6rem; letter-spacing: -0.03em;
+}
+.impact-card .h-sm { color: var(--text-dark); margin-bottom: 0.3rem; }
+.impact-card .body-sm { color: var(--text-dark-2); }
+
+/* ═══════════════════════════════════════════════════════════
+   VISION
+   ═══════════════════════════════════════════════════════════ */
+.vision-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.25rem; max-width: 1100px; margin: 0 auto; }
+.vision-card { padding: 2.2rem 1.8rem; text-align: center; position: relative; overflow: hidden; }
+.vision-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.vision-card:nth-child(1)::before { background: var(--accent-light); }
+.vision-card:nth-child(2)::before { background: var(--accent); }
+.vision-card:nth-child(3)::before { background: var(--accent-deep); }
+.vision-label {
+  font-size: 0.72rem; color: var(--text-3); font-weight: 500;
+  letter-spacing: 0.06em; margin-bottom: 0.6rem;
+}
+.vision-card .h-md { margin-bottom: 0.6rem; }
 
 /* ═══════════════════════════════════════════════════════════
    CTA
    ═══════════════════════════════════════════════════════════ */
-.cta-sec{padding:5.5rem 0;text-align:center;position:relative;overflow:hidden}
-.cta-frame{border:1px solid var(--border-strong);border-radius:var(--r-l);padding:4.5rem 3rem;position:relative;overflow:hidden;
-  background:linear-gradient(135deg,rgba(123,111,196,0.03) 0%,rgba(255,255,255,0.4) 50%,rgba(197,190,240,0.03) 100%);z-index:1}
-.cta-frame::before{content:'';position:absolute;top:0;left:50%;width:30%;height:1px;background:linear-gradient(90deg,transparent,var(--accent-muted),transparent);transform:translateX(-50%)}
-.cta-frame .h-lg{margin-bottom:.5rem;font-size:clamp(1.8rem,3.5vw,2.5rem)}
-.cta-frame .body-lg{text-align:center;max-width:560px}
+.cta-section { padding: 7rem 0; text-align: center; }
+.cta-frame {
+  border: 1px solid var(--border); border-radius: var(--r-xl);
+  padding: 5rem 3rem; position: relative; overflow: hidden;
+  background: linear-gradient(135deg, rgba(108,92,231,0.02) 0%, var(--bg-card) 50%, rgba(162,155,254,0.02) 100%);
+}
+.cta-frame::before {
+  content: ''; position: absolute; top: 0; left: 50%;
+  width: 40%; height: 1px; transform: translateX(-50%);
+  background: linear-gradient(90deg, transparent, var(--accent-light), transparent);
+}
+.cta-frame .h-lg { margin-bottom: 0.6rem; }
 
 /* ═══════════════════════════════════════════════════════════
    FOOTER
    ═══════════════════════════════════════════════════════════ */
-footer{padding:2rem 0;border-top:1px solid var(--border)}
-.foot-in{display:flex;justify-content:space-between;align-items:center}
-.foot-brand{font-family:var(--sans);font-size:.88rem;font-weight:500;letter-spacing:-.02em;color:var(--text)}
-.foot-brand span{color:var(--accent);font-weight:600}
-.foot-links{display:flex;gap:1.4rem}
-.foot-links a{font-family:var(--mono);font-size:.65rem;color:var(--text-4);text-decoration:none;transition:color .2s;cursor:pointer}
-.foot-links a:hover{color:var(--accent)}
-.foot-right{font-family:var(--mono);font-size:.6rem;color:var(--text-4)}
+footer { padding: 2rem 0; border-top: 1px solid var(--border); }
+.footer-inner { display: flex; justify-content: space-between; align-items: center; }
+.foot-brand {
+  font-size: 0.95rem; font-weight: 600; color: var(--text);
+  letter-spacing: -0.02em;
+}
+.foot-brand span { color: var(--accent); }
+.foot-links { display: flex; gap: 1.5rem; }
+.foot-links a {
+  font-size: 0.78rem; color: var(--text-3); text-decoration: none;
+  transition: color 0.2s; cursor: pointer;
+}
+.foot-links a:hover { color: var(--text); }
+.foot-right { font-size: 0.78rem; color: var(--text-3); }
 
 /* ═══════════════════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════════════════ */
-@media(max-width:900px){
-  .hero{min-height:auto;padding:7rem 0 3rem}
-  .hero-radar{width:400px;height:400px}
-  .hero-card{max-width:360px}
-  .hero-brand{font-size:clamp(2.8rem,10vw,3.6rem)}
-  .problem-grid{grid-template-columns:1fr}
-  .chain-track{grid-template-columns:1fr;gap:.4rem}
-  .chain-cell,.chain-cell:first-child,.chain-cell:last-child{border-radius:var(--r-s)}
-  .chain-cell::after{display:none}
-  .hiw-grid{grid-template-columns:1fr}
-  .demo-split{grid-template-columns:1fr}
-  .demo-mock{display:none}
-  .road-bar{grid-template-columns:1fr;gap:.4rem}
-  .road-bar::before{display:none}
-  .road-cell,.road-cell:first-child,.road-cell:last-child{border-radius:var(--r-s);border-top:3px solid var(--accent-muted)}
-  .road-cell::before{display:none}.rc-time{margin-top:0}
-  .team-grid,.impact-row{grid-template-columns:1fr 1fr}
-  .impact-cell .i-num{font-size:2.4rem}
-  .impact-cell{padding:2rem 1.2rem}
-  .nav-links{display:none}.foot-links{display:none}
-  .audit-gaps{display:none}
-  .graph-visual{display:none}
-  .dim-thread{display:none}
+@media (max-width: 900px) {
+  .hero { min-height: auto; padding: 8rem 0 4rem; }
+  .hero-title { font-size: clamp(2.4rem, 9vw, 3.2rem); }
+  .hero-product { max-width: 360px; }
+  .problem-grid { grid-template-columns: 1fr; }
+  .pipeline { grid-template-columns: 1fr; gap: 0.5rem; }
+  .pipe-step::after { display: none; }
+  .dim-grid { grid-template-columns: 1fr; }
+  .demo-grid { grid-template-columns: 1fr; }
+  .demo-mockup { display: none; }
+  .roadmap { grid-template-columns: 1fr; gap: 0.5rem; }
+  .roadmap::before { display: none; }
+  .road-step { border-top: 3px solid var(--accent-light); border-radius: var(--r) !important; }
+  .road-step::before { display: none; }
+  .road-time { margin-top: 0; }
+  .team-grid, .impact-grid { grid-template-columns: 1fr 1fr; }
+  .vision-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .foot-links { display: none; }
 }
-@media(max-width:600px){
-  .w{padding:0 1.2rem}
-  .nav-in{padding:0 1.2rem}
-  .team-grid,.impact-row{grid-template-columns:1fr}
-  .demo-script{padding:1.2rem}
-  .cta-frame{padding:3rem 1.5rem}
+@media (max-width: 600px) {
+  .container, .container-sm { padding: 0 1.2rem; }
+  .nav-inner { padding: 0 1.2rem; }
+  .section { padding: 5rem 0; }
+  .team-grid, .impact-grid { grid-template-columns: 1fr; }
+  .demo-script { padding: 1.5rem; }
+  .cta-frame { padding: 3rem 1.5rem; }
 }
 </style>
 </head>
 <body>
 
-<div class="topo-bg"></div>
-
 <nav>
-  <div class="nav-in">
+  <div class="nav-inner">
     <a class="nav-brand" data-scroll="#hero">katabatic<span>.</span></a>
     <div class="nav-links">
       <a data-scroll="#problem">Problem</a>
       <a data-scroll="#method">Methodology</a>
-      <a data-scroll="#how">Dimensions</a>
+      <a data-scroll="#dimensions">Dimensions</a>
       <a data-scroll="#arch">Architecture</a>
       <a data-scroll="#demo">Demo</a>
-      <a data-scroll="#road">Roadmap</a>
+      <a data-scroll="#roadmap">Roadmap</a>
     </div>
-    <span class="nav-chip">Cornell AI Hackathon 2026</span>
+    <span class="nav-badge">Cornell AI Hackathon 2026</span>
   </div>
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
 <section class="hero" id="hero">
-  <div class="hero-radar">
-    <div class="hero-radar-ring"></div>
-    <div class="hero-radar-ring"></div>
-    <div class="hero-radar-ring"></div>
-  </div>
-  <div class="signal-particles"><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="w">
-    <div class="w-inner">
-      <div class="hero-tag"><span class="pulse"></span> Programmable Capital Track · Mar 13-15</div>
-      <div class="hero-brand">katabatic<span>.</span></div>
-      <p class="hero-sub">The <strong>Moody's for stablecoin reserve risk.</strong><br>Continuous counterparty ratings, proven with the signal nobody else is watching: weather.</p>
-      <div class="hero-meta">
-        <span class="hm-chip">4-5 Engineers</span>
-        <span class="hm-chip">36 Hours</span>
-        <span class="hm-chip">ML / Data Science</span>
+  <div class="container">
+    <div class="hero-tag"><span class="dot"></span> Programmable Capital Track &middot; Mar 13-15</div>
+    <h1 class="hero-title">katabatic<span>.</span></h1>
+    <p class="hero-sub">The <strong>rating agency for stablecoin reserves.</strong> Continuous counterparty risk ratings, proven with the signal nobody else is watching: weather.</p>
+    <div class="hero-chips">
+      <span class="hero-chip">4-5 Engineers</span>
+      <span class="hero-chip">36 Hours</span>
+      <span class="hero-chip">ML / Data Science</span>
+    </div>
+    <div class="hero-product">
+      <div class="hp-header">
+        <span class="hp-header-title">KATABATIC RATINGS</span>
+        <span class="hp-live">LIVE</span>
       </div>
-      <div class="hero-card">
-        <div class="hc-header"><span>KATABATIC RATINGS</span><span class="hc-live">LIVE</span></div>
-        <div class="hc-body">
-          <div class="hc-row"><span class="hc-label">USDC</span><span class="hc-grade">B+</span><span class="hc-sub">counterparty conc.</span></div>
-          <div class="hc-row"><span class="hc-label">USDT</span><span class="hc-grade">A-</span><span class="hc-sub">stable</span></div>
-          <div class="hc-row"><span class="hc-label">BUSD</span><span class="hc-grade">A</span><span class="hc-sub">stable</span></div>
-          <div class="hc-row"><span class="hc-label">DAI</span><span class="hc-grade">B+</span><span class="hc-sub">collateral shift</span></div>
-          <div class="hc-row"><span class="hc-label">FRAX</span><span class="hc-grade">B</span><span class="hc-sub">weather exposure</span></div>
-          <hr class="hc-divider">
-          <div class="hc-footer"><span class="hc-label">ALERTS</span><span class="hc-grade" style="color:var(--text)">2</span><span class="hc-sub">SE Florida  ·  Gulf Coast</span></div>
-        </div>
+      <div class="hp-body">
+        <div class="hp-row"><span class="hp-label">USDC</span><span class="hp-grade">B+</span><span class="hp-detail">counterparty conc.</span></div>
+        <div class="hp-row"><span class="hp-label">USDT</span><span class="hp-grade">A-</span><span class="hp-detail">stable</span></div>
+        <div class="hp-row"><span class="hp-label">BUSD</span><span class="hp-grade">A</span><span class="hp-detail">stable</span></div>
+        <div class="hp-row"><span class="hp-label">DAI</span><span class="hp-grade">B+</span><span class="hp-detail">collateral shift</span></div>
+        <div class="hp-row"><span class="hp-label">FRAX</span><span class="hp-grade">B</span><span class="hp-detail">weather exposure</span></div>
+        <hr class="hp-divider">
+        <div class="hp-footer hp-row"><span class="hp-label">ALERTS</span><span class="hp-grade" style="color:var(--text)">2</span><span class="hp-detail">SE Florida &middot; Gulf Coast</span></div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ PROBLEM ═══════ -->
-<section class="sec sec-alt" id="problem" style="position:relative">
-  <div class="audit-gaps"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">The Problem</div>
-        <div class="h-lg r">$150B in stablecoins. No independent <span class="em">risk rating.</span></div>
-        <p class="body-lg r">Moody's rates corporate bonds. S&P rates sovereign debt. Nobody rates the reserve banking risk behind the stablecoins that power DeFi. Monthly attestation reports are the only visibility — and they missed SVB.</p>
+<section class="section section-alt" id="problem">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">The Problem</div>
+      <h2 class="h-lg reveal">$150B in stablecoins. No independent <span class="em">risk rating.</span></h2>
+      <p class="body-lg reveal">Moody's rates corporate bonds. S&P rates sovereign debt. Nobody rates the reserve banking risk behind the stablecoins that power DeFi.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="card p-card reveal d1">
+        <div class="p-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
+        <div class="h-sm">Unrated Reserve Assets</div>
+        <p class="body-sm">Backed by real-world banking relationships that change monthly. No continuous credit rating exists for the counterparties holding these reserves.</p>
+        <div class="p-source">Monthly attestation reports</div>
       </div>
-      <div class="problem-grid">
-        <div class="gc p-card r d1"><div class="p-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div><div class="h-sm">Unrated Reserve Assets</div><p>Backed by real-world banking relationships that change monthly. No continuous credit rating exists for the counterparties holding these reserves.</p><div class="p-src">Monthly attestation reports</div></div>
-        <div class="gc p-card r d2"><div class="p-num" data-count="3.3" data-prefix="$" data-suffix="B">$0</div><div class="h-sm">USDC Held at SVB</div><p>A single bank failure depegged a $40B stablecoin to $0.87. The attestation said everything was fine. A real-time rating would have flagged the concentration risk.</p><div class="p-src">Circle attestation · March 2023</div></div>
-        <div class="gc p-card r d3"><div class="p-num" data-count="30" data-prefix="" data-suffix=" Days">0</div><div class="h-sm">Between Audits</div><p>Attestation reports are monthly snapshots. In between, bank failures, natural disasters, rate shocks, and regulatory actions go completely unmonitored.</p><div class="p-src">Industry standard audit cadence</div></div>
+      <div class="card p-card reveal d2">
+        <div class="p-num" data-count="3.3" data-prefix="$" data-suffix="B">$0</div>
+        <div class="h-sm">USDC Held at SVB</div>
+        <p class="body-sm">A single bank failure depegged a $40B stablecoin to $0.87. The attestation said everything was fine. A real-time rating would have flagged the concentration risk.</p>
+        <div class="p-source">Circle attestation &middot; March 2023</div>
+      </div>
+      <div class="card p-card reveal d3">
+        <div class="p-num" data-count="30" data-suffix=" Days">0</div>
+        <div class="h-sm">Between Audits</div>
+        <p class="body-sm">Attestation reports are monthly snapshots. In between, bank failures, natural disasters, rate shocks, and regulatory actions go completely unmonitored.</p>
+        <div class="p-source">Industry standard audit cadence</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ METHODOLOGY ═══════ -->
-<section class="sec chain-section" id="method">
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">Rating Methodology</div>
-        <div class="h-lg r">From attestation PDF to continuous <span class="em">risk rating.</span></div>
-        <p class="body-lg r">Like a credit rating agency, every score traces to named entities and verifiable data. The chain is explicit and auditable.</p>
+<section class="section" id="method">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Rating Methodology</div>
+      <h2 class="h-lg reveal">From attestation PDF to continuous <span class="em">risk rating.</span></h2>
+      <p class="body-lg reveal">Every score traces to named entities and verifiable data. The chain is explicit and auditable.</p>
+    </div>
+    <div class="pipeline reveal">
+      <div class="card pipe-step d1">
+        <div class="pipe-num">1</div>
+        <div class="pipe-title">Ingest Reports</div>
+        <div class="pipe-desc">LLM extracts banks, percentages, and jurisdictions from PDFs</div>
       </div>
-      <div class="chain-track r">
-        <div class="chain-cell d1"><div class="cc-num">01</div><div class="cc-title">Ingest Reports</div><div class="cc-desc">LLM extracts banks, %, jurisdictions from PDFs</div></div>
-        <div class="chain-cell d2"><div class="cc-num">02</div><div class="cc-title">Build Graph</div><div class="cc-desc">Map counterparties to geography + asset class</div></div>
-        <div class="chain-cell d3"><div class="cc-num">03</div><div class="cc-title">Inject Signals</div><div class="cc-desc">Weather, news, FDIC, rates stress the graph</div></div>
-        <div class="chain-cell d4"><div class="cc-num">04</div><div class="cc-title">Score x 6</div><div class="cc-desc">Rules + LLM reasoning across all dimensions</div></div>
-        <div class="chain-cell d5"><div class="cc-num">05</div><div class="cc-title">Rate + Explain</div><div class="cc-desc">Letter grade with full causal narrative</div></div>
+      <div class="card pipe-step d2">
+        <div class="pipe-num">2</div>
+        <div class="pipe-title">Build Graph</div>
+        <div class="pipe-desc">Map counterparties to geography and asset class</div>
+      </div>
+      <div class="card pipe-step d3">
+        <div class="pipe-num">3</div>
+        <div class="pipe-title">Inject Signals</div>
+        <div class="pipe-desc">Weather, news, FDIC, rates stress the graph</div>
+      </div>
+      <div class="card pipe-step d4">
+        <div class="pipe-num">4</div>
+        <div class="pipe-title">Score &times; 6</div>
+        <div class="pipe-desc">Rules + LLM reasoning across all dimensions</div>
+      </div>
+      <div class="card pipe-step d5">
+        <div class="pipe-num">5</div>
+        <div class="pipe-title">Rate + Explain</div>
+        <div class="pipe-desc">Letter grade with full causal narrative</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════ HOW IT WORKS ═══════ -->
-<section class="sec sec-alt" id="how" style="position:relative">
-  <div class="dim-thread"></div>
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">Six Dimensions of Risk</div>
-        <div class="h-lg r">Continuous intelligence. Weather is the <span class="em">demo focus.</span></div>
-        <p class="body-lg r">The full platform rates stablecoins across six dimensions. For this hackathon, we're building the pipeline end-to-end and proving it with geographic weather exposure — the most novel and defensible signal.</p>
+<!-- ═══════ DIMENSIONS ═══════ -->
+<section class="section section-alt" id="dimensions">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Six Dimensions of Risk</div>
+      <h2 class="h-lg reveal">Continuous intelligence. Weather is the <span class="em">demo focus.</span></h2>
+      <p class="body-lg reveal">The full platform rates stablecoins across six dimensions. For this hackathon, we prove it end-to-end with geographic weather exposure.</p>
+    </div>
+    <div class="dim-grid">
+      <div class="card dim-card reveal d1">
+        <div class="dim-tag">Dimension 01</div>
+        <div class="h-sm">Attestation Extraction</div>
+        <p class="body-sm">LLM reads Circle, Tether, Paxos PDFs. Extracts banks, percentages, asset classes, maturity profiles, jurisdictions.</p>
+        <div class="dim-source">Circle &middot; Tether &middot; Paxos reports</div>
       </div>
-      <div class="hiw-grid">
-        <div class="gc hiw-card r d1"><div class="hiw-tag">Dimension 01</div><div class="h-sm">Attestation Extraction</div><p>LLM reads Circle, Tether, Paxos PDFs. Extracts banks, percentages, asset classes, maturity profiles, jurisdictions.</p><div class="hiw-src">Circle · Tether · Paxos reports</div></div>
-        <div class="gc hiw-card r d2"><div class="hiw-tag">Dimension 02</div><div class="h-sm">Geographic Knowledge Graph</div><p>Stablecoin to Bank to City/State to Asset Class. Geographic anchoring makes every other signal actionable.</p><div class="hiw-src">Extracted data · FDIC · geocoding</div></div>
-        <div class="gc hiw-card star r d3"><div class="hiw-tag">Demo Focus</div><div class="h-sm">Weather as a Risk Signal</div><p>The dimension nobody else rates. NOAA forecasts enter the graph as stress modifiers on custodian bank nodes. $165B/yr in weather damages flows through reserve banking relationships nobody is monitoring.</p><div class="hiw-src">NOAA · NHC · OpenMeteo · FEMA</div></div>
-        <div class="gc hiw-card r d4"><div class="hiw-tag">Dimension 04</div><div class="h-sm">Counterparty Monitoring</div><p>Named banks tracked against news, FDIC watch lists, CDS spreads. Weather stress compounds with financial stress on the same nodes.</p><div class="hiw-src">News APIs · FDIC · financial data</div></div>
-        <div class="gc hiw-card r d5"><div class="hiw-tag">Dimension 05</div><div class="h-sm">Composite Rating Engine</div><p>Six-dimension weighted composite produces a letter grade. Deterministic rules for quantifiable signals, LLM reasoning for qualitative ones.</p><div class="hiw-src">Rule engine · LLM reasoning</div></div>
-        <div class="gc hiw-card r d6"><div class="hiw-tag">Dimension 06</div><div class="h-sm">Rating Narratives</div><p>Every rating comes with a full causal explanation. Not just "B+" but "12% of reserves at First Regional FL, facing $4B in hurricane claims exposure."</p><div class="hiw-src">Claude API · chain tracing</div></div>
+      <div class="card dim-card reveal d2">
+        <div class="dim-tag">Dimension 02</div>
+        <div class="h-sm">Geographic Knowledge Graph</div>
+        <p class="body-sm">Stablecoin to Bank to City/State to Asset Class. Geographic anchoring makes every other signal actionable.</p>
+        <div class="dim-source">Extracted data &middot; FDIC &middot; geocoding</div>
+      </div>
+      <div class="card dim-card featured reveal d3">
+        <div class="dim-tag">Demo Focus</div>
+        <div class="h-sm">Weather as a Risk Signal</div>
+        <p class="body-sm">The dimension nobody else rates. NOAA forecasts enter the graph as stress modifiers on custodian bank nodes. $165B/yr in weather damages flows through reserve banking relationships nobody is monitoring.</p>
+        <div class="dim-source">NOAA &middot; NHC &middot; OpenMeteo &middot; FEMA</div>
+      </div>
+      <div class="card dim-card reveal d4">
+        <div class="dim-tag">Dimension 04</div>
+        <div class="h-sm">Counterparty Monitoring</div>
+        <p class="body-sm">Named banks tracked against news, FDIC watch lists, CDS spreads. Weather stress compounds with financial stress on the same nodes.</p>
+        <div class="dim-source">News APIs &middot; FDIC &middot; financial data</div>
+      </div>
+      <div class="card dim-card reveal d5">
+        <div class="dim-tag">Dimension 05</div>
+        <div class="h-sm">Composite Rating Engine</div>
+        <p class="body-sm">Six-dimension weighted composite produces a letter grade. Deterministic rules for quantifiable signals, LLM reasoning for qualitative ones.</p>
+        <div class="dim-source">Rule engine &middot; LLM reasoning</div>
+      </div>
+      <div class="card dim-card reveal d6">
+        <div class="dim-tag">Dimension 06</div>
+        <div class="h-sm">Rating Narratives</div>
+        <p class="body-sm">Every rating comes with a full causal explanation. Not just "B+" but "12% of reserves at First Regional FL, facing $4B in hurricane claims exposure."</p>
+        <div class="dim-source">Claude API &middot; chain tracing</div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ ARCHITECTURE ═══════ -->
-<section class="sec" id="arch" style="position:relative">
-  <div class="graph-visual">
-    <div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div>
-    <div class="edge"></div><div class="edge"></div><div class="edge"></div><div class="edge"></div>
-  </div>
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">Architecture</div>
-        <div class="h-lg r">Signal-agnostic engine. Weather is the <span class="em">first input.</span></div>
-        <p class="body-lg r">Four layers. The architecture accepts any stress signal — weather is the proof-of-concept, but the knowledge graph generalizes. That's what makes this a platform.</p>
+<section class="section" id="arch">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Architecture</div>
+      <h2 class="h-lg reveal">Signal-agnostic engine. Weather is the <span class="em">first input.</span></h2>
+      <p class="body-lg reveal">Four layers. The architecture accepts any stress signal — weather proves the concept, but the knowledge graph generalizes.</p>
+    </div>
+    <div class="arch-stack">
+      <div class="card arch-row reveal d1">
+        <div class="arch-num">01</div>
+        <div>
+          <div class="h-sm">Document + Weather Ingestion</div>
+          <p class="body-sm">Attestation PDFs fed to Claude for structured extraction. NOAA forecasts, NHC hurricane tracks, and FEMA disaster zones geocoded and normalized.</p>
+          <div class="arch-pills">
+            <span class="arch-pill">Claude API</span><span class="arch-pill">PDF extraction</span>
+            <span class="arch-pill">NOAA / NHC</span><span class="arch-pill">OpenMeteo</span><span class="arch-pill">geocoding</span>
+          </div>
+        </div>
       </div>
-      <div class="arch-stack">
-        <div class="gc arch-row r d1"><div class="arch-num">01</div><div><div class="h-sm">Document + Weather Ingestion</div><p>Attestation PDFs fed to Claude for structured extraction. NOAA forecasts, NHC hurricane tracks, and FEMA disaster zones geocoded and normalized.</p><div class="arch-pills"><span class="arch-pill">Claude API</span><span class="arch-pill">PDF extraction</span><span class="arch-pill">NOAA / NHC</span><span class="arch-pill">OpenMeteo</span><span class="arch-pill">geocoding</span></div></div></div>
-        <div class="gc arch-row r d2"><div class="arch-num">02</div><div><div class="h-sm">Geographic Knowledge Graph</div><p>Stablecoin to Custodian Bank (city, state) to Jurisdiction to Asset Class. Weather events attach as stress modifiers. The graph makes the causal chain queryable.</p><div class="arch-pills"><span class="arch-pill">NetworkX</span><span class="arch-pill">entity resolution</span><span class="arch-pill">geographic indexing</span><span class="arch-pill">weather overlay</span></div></div></div>
-        <div class="gc arch-row r d3"><div class="arch-num">03</div><div><div class="h-sm">Risk Scoring Engine</div><p>Six-dimension weighted composite. Peg deviation and concentration scored by rules. Weather, news, and regulatory posture scored by LLM reasoning over graph context.</p><div class="arch-pills"><span class="arch-pill">rule engine</span><span class="arch-pill">graph propagation</span><span class="arch-pill">LLM-as-judge</span><span class="arch-pill">chain attribution</span></div></div></div>
-        <div class="gc arch-row r d4"><div class="arch-num">04</div><div><div class="h-sm">What-If Simulator + Dashboard</div><p>Drop a hurricane on the map, move a rate slider, trigger a bank failure. Propagates through the graph and recalculates in real-time with LLM narratives.</p><div class="arch-pills"><span class="arch-pill">React + Recharts</span><span class="arch-pill">Leaflet</span><span class="arch-pill">Claude narratives</span></div></div></div>
+      <div class="card arch-row reveal d2">
+        <div class="arch-num">02</div>
+        <div>
+          <div class="h-sm">Geographic Knowledge Graph</div>
+          <p class="body-sm">Stablecoin to Custodian Bank (city, state) to Jurisdiction to Asset Class. Weather events attach as stress modifiers. The graph makes the causal chain queryable.</p>
+          <div class="arch-pills">
+            <span class="arch-pill">NetworkX</span><span class="arch-pill">entity resolution</span>
+            <span class="arch-pill">geographic indexing</span><span class="arch-pill">weather overlay</span>
+          </div>
+        </div>
+      </div>
+      <div class="card arch-row reveal d3">
+        <div class="arch-num">03</div>
+        <div>
+          <div class="h-sm">Risk Scoring Engine</div>
+          <p class="body-sm">Six-dimension weighted composite. Peg deviation and concentration scored by rules. Weather, news, and regulatory posture scored by LLM reasoning over graph context.</p>
+          <div class="arch-pills">
+            <span class="arch-pill">rule engine</span><span class="arch-pill">graph propagation</span>
+            <span class="arch-pill">LLM-as-judge</span><span class="arch-pill">chain attribution</span>
+          </div>
+        </div>
+      </div>
+      <div class="card arch-row reveal d4">
+        <div class="arch-num">04</div>
+        <div>
+          <div class="h-sm">What-If Simulator + Dashboard</div>
+          <p class="body-sm">Drop a hurricane on the map, move a rate slider, trigger a bank failure. Propagates through the graph and recalculates in real-time with LLM narratives.</p>
+          <div class="arch-pills">
+            <span class="arch-pill">React + Recharts</span><span class="arch-pill">Leaflet</span>
+            <span class="arch-pill">Claude narratives</span>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ DEMO ═══════ -->
-<section class="sec sec-alt demo-section" id="demo">
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">The Demo</div>
-        <div class="h-lg r">Weather triggers the downgrade. The engine proves the <span class="em">vision.</span></div>
+<section class="section section-alt" id="demo">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">The Demo</div>
+      <h2 class="h-lg reveal">Weather triggers the downgrade. The engine proves the <span class="em">vision.</span></h2>
+    </div>
+    <div class="demo-grid">
+      <div class="demo-script reveal">
+        <div class="h-md">Demo Script</div>
+        <p class="body-sm">Five beats. Under two minutes.</p>
+        <div class="ds-step"><span class="ds-num">1</span><p><strong>Show the ratings dashboard.</strong> Six stablecoins rated across six dimensions. <em>"We had an LLM read every major attestation report, identify the counterparties, and rate them continuously."</em></p></div>
+        <div class="ds-step"><span class="ds-num">2</span><p><strong>Drop a hurricane on the map.</strong> Banks in the zone highlight. Two stablecoins downgrade from A to B+ as weather stress propagates through the knowledge graph.</p></div>
+        <div class="ds-step"><span class="ds-num">3</span><p><strong>Click into the rating explanation.</strong> LLM generates: <em>"USDC downgraded to B+. 12% of reserves at institutions in SE Florida. $4.2B insurance liability increases deposit stress."</em></p></div>
+        <div class="ds-step"><span class="ds-num">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Rating drops to C+ 48 hours before the depeg. <em>"8.3% of reserves at SVB, elevated deposit outflow signals."</em></p></div>
+        <div class="ds-step"><span class="ds-num">5</span><p><strong>Close the pitch.</strong> "We just showed a hurricane triggering a live downgrade with full causal explanation. That's one signal. The platform handles all of them."</p></div>
       </div>
-      <div class="demo-split">
-        <div class="demo-script rs">
-          <div class="h-md">Demo Script</div>
-          <p>Five beats. Under two minutes.</p>
-          <div class="ds-item"><span class="ds-n">1</span><p><strong>Show the ratings dashboard.</strong> Six stablecoins rated across six dimensions — like a credit rating agency, but for reserve banking risk. <em>"We had an LLM read every major attestation report, identify the counterparties, and rate them continuously."</em></p></div>
-          <div class="ds-item"><span class="ds-n">2</span><p><strong>Drop a hurricane on the map.</strong> The demo's star moment. Banks in the zone highlight. Two stablecoins downgrade from A to B+ as weather stress propagates through the knowledge graph in real-time.</p></div>
-          <div class="ds-item"><span class="ds-n">3</span><p><strong>Click into the rating explanation.</strong> LLM generates: <em>"USDC downgraded to B+. 12% of reserves at institutions in SE Florida. $4.2B insurance liability increases deposit stress."</em></p></div>
-          <div class="ds-item"><span class="ds-n">4</span><p><strong>SVB backtest.</strong> Rewind to March 2023. Rating drops to C+ 48 hours before the depeg. <em>"8.3% of reserves at SVB, elevated deposit outflow signals."</em></p></div>
-          <div class="ds-item"><span class="ds-n">5</span><p><strong>Close the pitch.</strong> "We just showed a hurricane triggering a live downgrade with full causal explanation. That's one signal. The platform handles all of them. Moody's rates bonds. We're building the rating agency for stablecoin reserves."</p></div>
-        </div>
-        <div>
-          <div class="demo-scenarios">
-            <div class="gc demo-sc r d1"><div class="sc-tag">Scenario A · Primary Demo</div><div class="h-sm">Weather-Triggered Downgrade</div><p>Hurricane stresses FL custodian banks, rating engine downgrades affected stablecoins, LLM explains the full causal chain. The end-to-end proof.</p></div>
-            <div class="gc demo-sc r d2"><div class="sc-tag">Scenario B · Same Engine, Different Signal</div><div class="h-sm">SVB Collapse Backtest</div><p>Real March 2023 data. Same rating engine, different stress input. Katabatic's rating drops to C+ 48 hours before USDC depegs.</p></div>
-            <div class="gc demo-sc r d3"><div class="sc-tag">Scenario C · Platform Extensibility</div><div class="h-sm">Rate Hike Stress Test</div><p>Rate to +3%. The engine accepts any macro signal — bond portfolios bleed, collateral quality ratings shift. One architecture, infinite inputs.</p></div>
+      <div>
+        <div class="demo-scenarios">
+          <div class="card demo-scenario reveal d1">
+            <div class="scenario-tag">Scenario A &middot; Primary Demo</div>
+            <div class="h-sm">Weather-Triggered Downgrade</div>
+            <p class="body-sm">Hurricane stresses FL custodian banks, rating engine downgrades affected stablecoins, LLM explains the full causal chain.</p>
           </div>
-          <div class="demo-mock r d4">
-            <div class="demo-mock-header"><span></span><span></span><span></span></div>
-            <div class="demo-mock-body">
-              <div class="demo-mock-chart"><div class="demo-mock-label">RATINGS OVER TIME</div></div>
-              <div class="demo-mock-map"><div class="demo-mock-label" style="padding:.4rem">GEOGRAPHIC EXPOSURE</div></div>
-            </div>
+          <div class="card demo-scenario reveal d2">
+            <div class="scenario-tag">Scenario B &middot; Same Engine, Different Signal</div>
+            <div class="h-sm">SVB Collapse Backtest</div>
+            <p class="body-sm">Real March 2023 data. Same rating engine, different stress input. Rating drops to C+ 48 hours before USDC depegs.</p>
+          </div>
+          <div class="card demo-scenario reveal d3">
+            <div class="scenario-tag">Scenario C &middot; Platform Extensibility</div>
+            <div class="h-sm">Rate Hike Stress Test</div>
+            <p class="body-sm">Rate to +3%. Bond portfolios bleed, collateral quality ratings shift. One architecture, infinite inputs.</p>
+          </div>
+        </div>
+        <div class="demo-mockup reveal d4">
+          <div class="mockup-bar"><span></span><span></span><span></span></div>
+          <div class="mockup-body">
+            <div class="mockup-chart"><div class="mockup-label">RATINGS OVER TIME</div></div>
+            <div class="mockup-map"><div class="mockup-label" style="padding:0.5rem">GEOGRAPHIC EXPOSURE</div></div>
           </div>
         </div>
       </div>
@@ -605,111 +831,176 @@ footer{padding:2rem 0;border-top:1px solid var(--border)}
 </section>
 
 <!-- ═══════ ROADMAP ═══════ -->
-<section class="sec" id="road">
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">36-Hour Roadmap</div>
-        <div class="h-lg r">Build the rating engine. Prove it with <span class="em">weather.</span></div>
-      </div>
-      <div class="road-bar r">
-        <div class="road-cell"><div class="rc-time">Fri Eve · 0-4h</div><div class="h-sm">Foundation</div><p>Attestation PDFs. Hard-coded SVB & Hurricane Ian. React scaffold. JSON schema.</p></div>
-        <div class="road-cell"><div class="rc-time">Sat AM · 4-12h</div><div class="h-sm">Pipeline & Graph</div><p>LLM extraction chain. Geographic graph. NOAA overlay. Scoring rules.</p></div>
-        <div class="road-cell"><div class="rc-time">Sat PM · 12-20h</div><div class="h-sm">Simulator</div><p>Interactive map. Hurricane drop. Rate sliders. Claude narratives.</p></div>
-        <div class="road-cell"><div class="rc-time">Sat Night · 20-26h</div><div class="h-sm">Backtests</div><p>SVB time machine. Hurricane Ian replay. UI polish. Pitch deck.</p></div>
-        <div class="road-cell"><div class="rc-time">Sun AM · 26-36h</div><div class="h-sm">Ship</div><p>Code freeze at hour 30. Rehearse x5. Verify all demo paths. Deploy.</p></div>
-      </div>
+<section class="section" id="roadmap">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">36-Hour Roadmap</div>
+      <h2 class="h-lg reveal">Build the rating engine. Prove it with <span class="em">weather.</span></h2>
+    </div>
+    <div class="roadmap reveal">
+      <div class="card road-step"><div class="road-time">Fri Eve &middot; 0-4h</div><div class="h-sm">Foundation</div><p class="body-sm">Attestation PDFs. Hard-coded SVB & Hurricane Ian. React scaffold. JSON schema.</p></div>
+      <div class="card road-step"><div class="road-time">Sat AM &middot; 4-12h</div><div class="h-sm">Pipeline & Graph</div><p class="body-sm">LLM extraction chain. Geographic graph. NOAA overlay. Scoring rules.</p></div>
+      <div class="card road-step"><div class="road-time">Sat PM &middot; 12-20h</div><div class="h-sm">Simulator</div><p class="body-sm">Interactive map. Hurricane drop. Rate sliders. Claude narratives.</p></div>
+      <div class="card road-step"><div class="road-time">Sat Night &middot; 20-26h</div><div class="h-sm">Backtests</div><p class="body-sm">SVB time machine. Hurricane Ian replay. UI polish. Pitch deck.</p></div>
+      <div class="card road-step"><div class="road-time">Sun AM &middot; 26-36h</div><div class="h-sm">Ship</div><p class="body-sm">Code freeze at hour 30. Rehearse &times;5. Verify all demo paths. Deploy.</p></div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ TEAM ═══════ -->
-<section class="sec sec-alt">
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">Team</div>
-        <div class="h-lg r">Parallel workstreams. Clear ownership.</div>
-      </div>
-      <div class="team-grid">
-        <div class="gc team-card r d1"><div class="tc-label">Role 01</div><div class="h-sm">LLM / Extraction</div><p>PDF prompts, attestation parsing, rating narratives, Claude API</p></div>
-        <div class="gc team-card r d2"><div class="tc-label">Role 02</div><div class="h-sm">Graph / Weather</div><p>Knowledge graph, NOAA ingestion, geographic indexing, propagation</p></div>
-        <div class="gc team-card r d3"><div class="tc-label">Role 03</div><div class="h-sm">Data / Scoring</div><p>APIs, scoring rules, scenarios, caching, error handling</p></div>
-        <div class="gc team-card r d4"><div class="tc-label">Role 04</div><div class="h-sm">Frontend</div><p>Dashboard, map, sliders, backtest views, rating UI</p></div>
-      </div>
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Team</div>
+      <h2 class="h-lg reveal">Parallel workstreams. Clear ownership.</h2>
+    </div>
+    <div class="team-grid">
+      <div class="card team-card reveal d1"><div class="team-label">Role 01</div><div class="h-sm">LLM / Extraction</div><p class="body-sm">PDF prompts, attestation parsing, rating narratives, Claude API</p></div>
+      <div class="card team-card reveal d2"><div class="team-label">Role 02</div><div class="h-sm">Graph / Weather</div><p class="body-sm">Knowledge graph, NOAA ingestion, geographic indexing, propagation</p></div>
+      <div class="card team-card reveal d3"><div class="team-label">Role 03</div><div class="h-sm">Data / Scoring</div><p class="body-sm">APIs, scoring rules, scenarios, caching, error handling</p></div>
+      <div class="card team-card reveal d4"><div class="team-label">Role 04</div><div class="h-sm">Frontend</div><p class="body-sm">Dashboard, map, sliders, backtest views, rating UI</p></div>
     </div>
   </div>
 </section>
 
 <!-- ═══════ IMPACT ═══════ -->
-<section class="sec impact-section">
-  <div class="w">
-    <div class="w-wide">
-      <div class="sec-header">
-        <div class="eyebrow r">Impact & Market</div>
-        <div class="h-lg r">Weather is the wedge. The rating agency is the <span class="em">business.</span></div>
+<section class="section section-dark">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Impact & Market</div>
+      <h2 class="h-lg reveal">Weather is the wedge. The rating agency is the <span class="em">business.</span></h2>
+    </div>
+    <div class="impact-grid">
+      <div class="impact-card reveal d1">
+        <div class="impact-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div>
+        <div class="h-sm">Unrated Reserve Assets</div>
+        <p class="body-sm">No continuous, independent rating exists for stablecoin reserve banking risk</p>
       </div>
-      <div class="impact-row">
-        <div class="impact-cell r d1"><div class="i-num" data-count="150" data-prefix="$" data-suffix="B+">$0</div><div class="h-sm">Unrated Reserve Assets</div><p>No continuous, independent rating exists for stablecoin reserve banking risk</p></div>
-        <div class="impact-cell r d2"><div class="i-num" data-count="4000" data-prefix="" data-suffix="+">0</div><div class="h-sm">DeFi Treasuries</div><p>Every protocol holding stablecoins needs counterparty risk visibility</p></div>
-        <div class="impact-cell r d3"><div class="i-num" data-count="0" data-prefix="" data-suffix="">0</div><div class="h-sm">Competitors</div><p>Nobody combines attestation extraction, geographic mapping, and real-time stress signals into a rating</p></div>
+      <div class="impact-card reveal d2">
+        <div class="impact-num" data-count="4000" data-suffix="+">0</div>
+        <div class="h-sm">DeFi Treasuries</div>
+        <p class="body-sm">Every protocol holding stablecoins needs counterparty risk visibility</p>
+      </div>
+      <div class="impact-card reveal d3">
+        <div class="impact-num" data-count="0">0</div>
+        <div class="h-sm">Competitors</div>
+        <p class="body-sm">Nobody combines attestation extraction, geographic mapping, and real-time stress signals into a rating</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════ CTA ═══════ -->
-<section class="cta-sec">
-  <div class="w">
-    <div class="w-inner">
-      <div class="cta-frame r">
-        <div class="eyebrow">Cornell AI Hackathon 2026</div>
-        <div class="h-lg">Weather proves the engine. The vision is the <span class="em">rating agency.</span></div>
-        <p class="body-lg" style="margin-top:.5rem">If we can trace a hurricane forecast through reserve banking relationships to produce a live downgrade with causal explanation — imagine every signal, every stablecoin, continuously rated.</p>
+<!-- ═══════ VISION ═══════ -->
+<section class="section section-alt" id="vision">
+  <div class="container">
+    <div class="section-header">
+      <div class="eyebrow reveal">Future Vision</div>
+      <h2 class="h-lg reveal">From rating agency to <span class="em">financial infrastructure.</span></h2>
+      <p class="body-lg reveal">Weather is how we prove the engine. The endgame is much bigger — total stablecoin risk intelligence, and ultimately, a stablecoin built from that intelligence.</p>
+    </div>
+    <div class="vision-grid">
+      <div class="card vision-card reveal d1">
+        <div class="vision-label">Phase 1 &middot; Now</div>
+        <div class="h-md">Weather-Driven Ratings</div>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Prove the engine with the most novel signal — hurricane forecasts propagating through reserve banking relationships to produce live downgrades with causal explanation.</p>
       </div>
+      <div class="card vision-card reveal d2">
+        <div class="vision-label">Phase 2 &middot; Next</div>
+        <div class="h-md">All-Factor Risk Intelligence</div>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Expand beyond weather to every factor that affects stablecoin reserves — bank health, interest rate shocks, regulatory changes, geopolitical risk, liquidity events, and real-time news sentiment.</p>
+      </div>
+      <div class="card vision-card reveal d3">
+        <div class="vision-label">Phase 3 &middot; Endgame</div>
+        <div class="h-md">The Katabatic Stablecoin</div>
+        <p class="body-sm" style="max-width:280px; margin:0 auto;">Use our own risk intelligence to design and manage a stablecoin with optimal reserve structure — diversified counterparties, continuously monitored, transparently rated.</p>
+      </div>
+    </div>
+    <p class="body-sm reveal" style="text-align:center; margin-top:2.5rem; max-width:560px; margin-left:auto; margin-right:auto; color:var(--text-3);">Bloomberg started with data terminals and became financial infrastructure. We start with ratings and become the most transparent stablecoin in crypto.</p>
+  </div>
+</section>
+
+<!-- ═══════ CTA ═══════ -->
+<section class="cta-section">
+  <div class="container-sm">
+    <div class="cta-frame reveal">
+      <div class="eyebrow">Cornell AI Hackathon 2026</div>
+      <h2 class="h-lg">Weather proves the engine. The vision is the <span class="em">rating agency — and beyond.</span></h2>
+      <p class="body-lg" style="margin:0.8rem auto 0; text-align:center; max-width:560px;">If we can trace a hurricane forecast through reserve banking relationships to produce a live downgrade with causal explanation — imagine every signal, every stablecoin, continuously rated.</p>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="w">
-    <div class="w-wide">
-      <div class="foot-in">
-        <span class="foot-brand">katabatic<span>.</span></span>
-        <div class="foot-links">
-          <a data-scroll="#problem">Problem</a>
-          <a data-scroll="#method">Methodology</a>
-          <a data-scroll="#how">Dimensions</a>
-          <a data-scroll="#arch">Architecture</a>
-          <a data-scroll="#demo">Demo</a>
-        </div>
-        <span class="foot-right">Programmable Capital · Built in 36 hours</span>
+  <div class="container">
+    <div class="footer-inner">
+      <span class="foot-brand">katabatic<span>.</span></span>
+      <div class="foot-links">
+        <a data-scroll="#problem">Problem</a>
+        <a data-scroll="#method">Methodology</a>
+        <a data-scroll="#dimensions">Dimensions</a>
+        <a data-scroll="#arch">Architecture</a>
+        <a data-scroll="#demo">Demo</a>
       </div>
+      <span class="foot-right">Programmable Capital &middot; Built in 36 hours</span>
     </div>
   </div>
 </footer>
 
 <script>
 /* Smooth scroll */
-document.querySelectorAll('[data-scroll]').forEach(a=>{
-  a.addEventListener('click',e=>{
+document.querySelectorAll('[data-scroll]').forEach(a => {
+  a.addEventListener('click', e => {
     e.preventDefault();
-    const el=document.querySelector(a.getAttribute('data-scroll'));
-    if(el){const y=el.getBoundingClientRect().top+window.scrollY-64;window.scrollTo({top:y,behavior:'smooth'})}
+    const el = document.querySelector(a.getAttribute('data-scroll'));
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 72;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
   });
 });
 
 /* Scroll reveals */
-const ro=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('v')})},{threshold:.06,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.r,.rs').forEach(el=>ro.observe(el));
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 /* Animated counters */
-function animC(el){const t=parseFloat(el.dataset.count),p=el.dataset.prefix||'',s=el.dataset.suffix||'',dur=1600,st=performance.now(),dec=t%1!==0;function u(n){const pr=Math.min((n-st)/dur,1),ea=1-Math.pow(1-pr,3),c=t*ea;el.textContent=dec?p+c.toFixed(1)+s:p+Math.round(c).toLocaleString()+s;if(pr<1)requestAnimationFrame(u)}requestAnimationFrame(u)}
-const co=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&!e.target.dataset.a){e.target.dataset.a='1';animC(e.target)}})},{threshold:.5});
-document.querySelectorAll('[data-count]').forEach(el=>co.observe(el));
+function animateCounter(el) {
+  const target = parseFloat(el.dataset.count);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const duration = 1600;
+  const start = performance.now();
+  const hasDecimal = target % 1 !== 0;
+
+  function update(now) {
+    const progress = Math.min((now - start) / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = target * eased;
+    el.textContent = hasDecimal
+      ? prefix + current.toFixed(1) + suffix
+      : prefix + Math.round(current).toLocaleString() + suffix;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !e.target.dataset.animated) {
+      e.target.dataset.animated = '1';
+      animateCounter(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('[data-count]').forEach(el => counterObserver.observe(el));
 
 /* Nav shadow on scroll */
-window.addEventListener('scroll',()=>{document.querySelector('nav').style.boxShadow=window.scrollY>50?'0 4px 24px rgba(82,67,153,.04)':'none'},{passive:true});
+window.addEventListener('scroll', () => {
+  document.querySelector('nav').style.boxShadow =
+    window.scrollY > 50 ? '0 1px 12px rgba(0,0,0,0.04)' : 'none';
+}, { passive: true });
 </script>
 
 </body>

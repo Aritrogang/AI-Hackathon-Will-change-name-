@@ -1,10 +1,44 @@
-# Katabatic — The Rating Agency for Stablecoin Reserves
+# Katabatic — Liquidity Risk-as-a-Service for Stablecoin Reserves
 
 > Cornell AI Hackathon 2026 · Programmable Capital Track · 36 Hours · Mar 13–15
 
 ## Product Summary
 
-Katabatic builds **continuous counterparty risk ratings** for stablecoins. Like Moody's for bonds, but for the $150B+ in reserve banking risk behind USDC, USDT, DAI, BUSD, and FRAX. The hackathon demo proves the engine using **weather as a novel risk signal** — tracing a hurricane forecast through reserve banking relationships to produce a live downgrade with causal explanation.
+Katabatic is a **Liquidity Risk-as-a-Service (RaaS) simulator** for stablecoin reserve health. Not a rating agency (NRSRO liability avoided) — a stress-testing engine that gives DAO treasuries and DeFi protocols a real-time "What-If" dashboard. Think Bloomberg Terminal for stablecoin reserve risk.
+
+The core insight: stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a credit problem. Weather and geopolitical events are *tail-risk multipliers* on top of an already-fragile balance sheet — they're the catalyst, not the cause. The hackathon demo makes this concrete by tracing a hurricane through reserve banking duration risk to produce a live **Liquidity Stress Score** with causal explanation.
+
+**Output framing (legal-safe):** Instead of letter grades (requires NRSRO status), we output:
+- `Liquidity Stress Score` (0–100)
+- `Projected redemption latency` (e.g., "72 hours under stress")
+- `Liquidity coverage ratio` (e.g., "88% under Cat 4 + 50bps hike")
+
+**Target customers:** DAO Treasuries (MakerDAO, Aave, Compound), DeFi protocols holding stablecoin positions, institutional risk desks.
+
+---
+
+## Strategic Improvements Over Original Brief
+
+### Hole 1: Data Opacity (30+ day PDF lag)
+**Fix:** Under the 2026 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must provide XBRL filings and OCC-standardized API feeds. Ingest these programmatically instead of scraping PDFs. Cross-reference OCC filings with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
+
+### Hole 2: Causal Gap (hurricane → bank → downgrade is too blunt)
+**Fix — two sub-signals:**
+1. **Operational Risk:** Track Data Center Corridors, not bank branches. Treasury ops run on AWS/Azure. A hurricane hitting Northern Virginia (US-East-1) can freeze redemption processing even if the bank is fine.
+2. **Credit Risk:** Use LLM to mine FDIC Call Reports. If a FL bank has high mortgage LTV ratios and a hurricane hits, the risk is a *liquidity squeeze from LTV deterioration*, not the bank physically flooding.
+
+### Hole 3: Weather as Primary Signal (should be a multiplier)
+**Fix:** Primary engine computes **Weighted Average Maturity (WAM)** of the treasury bond portfolio. Weather is a tail-risk multiplier:
+```
+Stress Score = Base Duration Risk × Weather Multiplier × Concentration Factor
+```
+This is why the SVB backtest works: SVB had extreme duration mismatch → weather/rate hike was just the catalyst for a run on an already-fragile balance sheet.
+
+### Hole 4: "Rating Agency" Framing (NRSRO liability)
+**Fix:** "Risk-as-a-Service Simulator." UI output is a What-If dashboard, not a grade. Sell to DAO treasuries who input scenarios and get operational outputs (latency, coverage ratio), not grades they could be sued over.
+
+### Hole 5: Single-Source Trust Problem
+**Fix (aspirational/future state for demo narrative):** Multi-model LLM consensus (Claude + GPT-5 + Gemini) run inside a TEE (Trusted Execution Environment). If all three models agree a stress threshold is crossed, the signal is pushed to a Chainlink oracle — making it grade-A data for DeFi protocols to automatically rebalance. *For the hackathon: demo with Claude + one other model as a "jury"; mock the TEE/Chainlink layer with a verification hash.*
 
 ---
 
@@ -13,43 +47,78 @@ Katabatic builds **continuous counterparty risk ratings** for stablecoins. Like 
 | Layer | Technology | Purpose |
 |-------|-----------|---------|
 | **Frontend** | React 18 + Vite | Dashboard SPA |
-| **Charts** | Recharts | Rating timelines, dimension breakdowns |
-| **Maps** | Leaflet + React-Leaflet (OpenStreetMap) | Geographic exposure map, hurricane overlay |
+| **Charts** | Recharts | Stress score timelines, WAM breakdowns |
+| **Maps** | Leaflet + React-Leaflet (OpenStreetMap) | Geographic exposure map, hurricane overlay, data center corridors |
 | **Styling** | Tailwind CSS | Rapid UI development |
 | **Backend** | FastAPI (Python 3.11+) | REST API, scoring engine, data pipelines |
-| **Knowledge Graph** | NetworkX | Stablecoin → Bank → City → Jurisdiction graph |
-| **LLM** | Claude API (Anthropic SDK) | PDF extraction, rating narratives, LLM-as-judge scoring |
-| **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Real-time weather stress signals |
-| **Bank Data** | FDIC API | Bank health, watch lists, branch locations |
-| **Geocoding** | Nominatim (OpenStreetMap) | Bank → lat/lng resolution |
-| **Database** | SQLite (dev) | Attestation data, rating history, cached API responses |
+| **Knowledge Graph** | NetworkX | Stablecoin → Bank → DataCenter → Jurisdiction graph |
+| **LLM (Primary)** | Claude API (Anthropic SDK) | XBRL/PDF extraction, FDIC Call Report mining, stress narratives |
+| **LLM (Jury)** | OpenAI API | Second model for consensus scoring |
+| **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Tail-risk weather multipliers |
+| **Bank Data** | FDIC API + FDIC Call Reports | WAM proxy, LTV ratios, liquidity data |
+| **On-Chain Data** | Etherscan API / Dune Analytics | Mint/Burn flow cross-reference |
+| **Regulatory Data** | OCC XBRL feeds / PDF fallback | Reserve composition, frequency, custodians |
+| **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
+| **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
 | **Deployment** | Vercel (frontend) + Railway/Render (backend) | Demo hosting |
 
 ---
 
-## Architecture (4 Layers)
+## Architecture (5 Layers)
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Layer 1: INGESTION                                      │
-│  Attestation PDFs → Claude extraction → structured JSON  │
-│  NOAA/NHC forecasts → geocoded weather events            │
-│  FDIC data → bank health signals                         │
-├─────────────────────────────────────────────────────────┤
-│  Layer 2: GEOGRAPHIC KNOWLEDGE GRAPH                     │
-│  Stablecoin → Custodian Bank (city, state) → Jurisdiction│
-│  Weather events attach as stress modifiers on bank nodes │
-│  NetworkX graph with geographic indexing                  │
-├─────────────────────────────────────────────────────────┤
-│  Layer 3: RISK SCORING ENGINE                            │
-│  6 dimensions: Attestation, Geography, Weather,          │
-│  Counterparty, Composite Rating, Narratives              │
-│  Rules for quantifiable + LLM reasoning for qualitative  │
-├─────────────────────────────────────────────────────────┤
-│  Layer 4: DASHBOARD + WHAT-IF SIMULATOR                  │
-│  Interactive map, hurricane drop, rate sliders            │
-│  Real-time re-rating with Claude-generated narratives    │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  Layer 1: INGESTION                                              │
+│  OCC XBRL feeds / Attestation PDFs → Claude extraction → JSON   │
+│  On-chain Mint/Burn flows → cross-reference custodian cash       │
+│  NOAA/NHC forecasts → geocoded weather tail-risk events          │
+│  FDIC Call Reports → WAM proxy, LTV ratios, liquidity signals    │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 2: KNOWLEDGE GRAPH                                        │
+│  Stablecoin → Custodian Bank → City/State → Jurisdiction         │
+│  Bank nodes carry: WAM, LTV, liquidity coverage, health scores   │
+│  Data Center Corridor nodes (AWS/Azure zones) for ops risk       │
+│  Weather events attach as stress multipliers on bank + DC nodes  │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 3: DURATION + STRESS ENGINE                               │
+│  Primary: WAM of treasury portfolio (duration mismatch score)    │
+│  Multiplier: Weather tail-risk × Geographic concentration        │
+│  Operational: Data center corridor overlap with storm track       │
+│  LLM jury: Claude + GPT consensus on qualitative signals         │
+│  Output: Liquidity Stress Score (0–100) + redemption latency     │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 4: WHAT-IF DASHBOARD                                      │
+│  Interactive map: bank markers + data center corridors           │
+│  Hurricane drop + rate hike + bank failure sliders               │
+│  Output: "Redemption latency: 72h. Liquidity coverage: 88%"      │
+├─────────────────────────────────────────────────────────────────┤
+│  Layer 5: TRUST LAYER (demo mock)                                │
+│  Multi-model consensus hash (Claude + OpenAI agree → signal)     │
+│  Mock TEE verification proof for oracle-readiness narrative      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Scoring Engine: 6 Dimensions → Liquidity Stress Score
+
+Each dimension scores 0–100. Weighted composite = final Liquidity Stress Score.
+
+| # | Dimension | Method | Weight |
+|---|-----------|--------|--------|
+| 1 | **Duration Risk (WAM)** | Weighted Average Maturity of portfolio; longer = more fragile | 30% |
+| 2 | **Reserve Transparency** | XBRL/OCC feed freshness + mint/burn cross-reference divergence | 20% |
+| 3 | **Geographic + Operational Concentration** | HHI of bank locations + data center corridor overlap | 15% |
+| 4 | **Weather Tail-Risk Multiplier** | Storm track × bank LTV exposure (FDIC Call Reports) | 15% |
+| 5 | **Counterparty Health** | FDIC watch list status, LTV ratios, liquidity coverage (LLM-as-judge) | 15% |
+| 6 | **Peg Stability** | Historical depeg events, current spread, mint/burn velocity | 5% |
+
+**Final output mapping:**
+```
+Stress Score 0–25   → "Low Stress. Redemption latency: <4h. Coverage: 100%+"
+Stress Score 26–50  → "Moderate Stress. Latency: 4–24h. Coverage: 95–100%"
+Stress Score 51–75  → "Elevated Stress. Latency: 24–72h. Coverage: 85–95%"
+Stress Score 76–100 → "Critical Stress. Latency: 72h+. Coverage: <85%"
 ```
 
 ---
@@ -59,17 +128,17 @@ Katabatic builds **continuous counterparty risk ratings** for stablecoins. Like 
 ### Branch Structure
 
 ```
-main                          ← Production-ready, protected, deploy target
-├── dev                       ← Integration branch, all features merge here first
-│   ├── feat/pdf-extraction   ← LLM attestation PDF parsing pipeline
-│   ├── feat/knowledge-graph  ← NetworkX graph construction + entity resolution
-│   ├── feat/weather-pipeline ← NOAA/NHC/OpenMeteo ingestion + geocoding
-│   ├── feat/scoring-engine   ← 6-dimension risk scoring rules + LLM-as-judge
-│   ├── feat/dashboard        ← React dashboard shell, ratings table, charts
-│   ├── feat/map-simulator    ← Leaflet map, hurricane drop, what-if controls
-│   ├── feat/narratives       ← Claude-generated rating explanations
-│   ├── feat/svb-backtest     ← SVB March 2023 historical replay scenario
-│   └── feat/demo-polish      ← Final UI polish, demo script scenarios, deploy
+main                               ← Production-ready, deploy target
+├── dev                            ← Integration branch
+│   ├── feat/data-ingestion        ← XBRL/PDF extraction + on-chain mint/burn
+│   ├── feat/knowledge-graph       ← NetworkX graph: banks + data centers + jurisdictions
+│   ├── feat/weather-pipeline      ← NOAA/NHC ingestion + FDIC Call Report LTV mining
+│   ├── feat/scoring-engine        ← WAM engine + weather multiplier + LLM jury
+│   ├── feat/dashboard             ← React shell, stress score table, WAM charts
+│   ├── feat/what-if-simulator     ← Leaflet map, hurricane drop, rate/failure sliders
+│   ├── feat/narratives            ← Multi-model causal explanation generation
+│   ├── feat/svb-backtest          ← SVB March 2023 duration mismatch replay
+│   └── feat/demo-polish           ← Final polish, trust layer mock, deploy
 ```
 
 ### Branch Rules
@@ -84,7 +153,7 @@ main                          ← Production-ready, protected, deploy target
 2. Work, commit often with descriptive messages
 3. Open PR to `dev` — at least 1 team member reviews
 4. Squash-merge into `dev`
-5. At demo checkpoints: merge `dev` → `main`, tag release (`v0.1-foundation`, `v0.2-pipeline`, `v0.3-simulator`, `v1.0-demo`)
+5. At demo checkpoints: merge `dev` → `main`, tag release
 
 ---
 
@@ -98,113 +167,135 @@ main                          ← Production-ready, protected, deploy target
   ```
   /backend        ← FastAPI app
   /frontend       ← React + Vite app
-  /data           ← Attestation PDFs, seed data, fixtures
+  /data           ← Seed data, XBRL fixtures, FDIC Call Report samples
   /scripts        ← One-off data processing scripts
   ```
 - [ ] Set up `backend/`: FastAPI skeleton, `/health` endpoint, CORS config, `.env` for API keys
 - [ ] Set up `frontend/`: Vite + React + Tailwind, basic routing, layout shell
 - [ ] Create `dev` branch, push both scaffolds
-- [ ] Collect attestation PDFs: Circle (USDC), Tether (USDT), Paxos (BUSD), MakerDAO (DAI), Frax (FRAX)
-- [ ] Hard-code seed data: SVB scenario (March 2023) + Hurricane Ian (Sept 2022) as JSON fixtures in `/data`
-- [ ] Define JSON schema for extracted attestation data:
+- [ ] Define JSON schema for reserve data (XBRL-first, PDF fallback):
   ```json
   {
     "stablecoin": "USDC",
     "issuer": "Circle",
-    "report_date": "2023-02-28",
+    "report_date": "2026-02-28",
+    "data_source": "occ_xbrl",
     "total_reserves": 42000000000,
+    "weighted_avg_maturity_days": 45,
     "counterparties": [
       {
-        "bank_name": "Silicon Valley Bank",
-        "city": "Santa Clara",
-        "state": "CA",
-        "percentage": 8.3,
-        "asset_class": "cash_deposits"
+        "bank_name": "BNY Mellon",
+        "city": "New York",
+        "state": "NY",
+        "percentage": 35.0,
+        "asset_class": "t_bills",
+        "maturity_days": 30,
+        "fdic_ltv_ratio": 0.62,
+        "data_center_corridor": "us-east-1"
       }
-    ]
+    ],
+    "onchain_cross_check": {
+      "burn_7d_usd": 850000000,
+      "custodian_cash_delta": -840000000,
+      "divergence_pct": 1.2
+    }
   }
   ```
+- [ ] Hard-code seed fixtures: SVB scenario (March 2023) + Hurricane Ian (Sept 2022) + Hurricane scenario hitting Northern Virginia data center corridor
 - [ ] Tag `v0.1-foundation`
 
 ### Phase 2: Pipeline & Knowledge Graph (Sat Morning · Hours 4–12)
 
-**feat/pdf-extraction (LLM/Extraction role)**
-- [ ] Build Claude API prompt chain for attestation PDF parsing
-- [ ] Extract: bank names, deposit percentages, asset classes, maturity profiles, jurisdictions
+**feat/data-ingestion (LLM/Extraction role)**
+- [ ] Build Claude API prompt chain for OCC XBRL feed parsing (primary path)
+- [ ] PDF fallback parser for stablecoins not yet GENIUS Act-compliant (USDT, etc.)
+- [ ] Extract: bank names, deposit percentages, asset classes, WAM per tranche, jurisdictions
+- [ ] On-chain cross-reference: fetch 7-day Mint/Burn volume from Etherscan; compare to custodian cash delta in filing; flag divergences >5% as opacity signal
 - [ ] Output structured JSON per stablecoin, store in `/data/extracted/`
-- [ ] Validate against manually-verified ground truth for Circle + Tether reports
-- [ ] Endpoint: `POST /api/extract` — accepts PDF, returns structured JSON
+- [ ] Endpoint: `POST /api/extract` — accepts XBRL/PDF, returns structured JSON with WAM
 
 **feat/knowledge-graph (Graph/Weather role)**
-- [ ] Build NetworkX graph: nodes = [Stablecoin, Bank, City, State, Jurisdiction]
-- [ ] Edges encode: `holds_reserves_at`, `located_in`, `governed_by`
-- [ ] Geographic indexing: geocode all bank nodes (lat/lng) using Nominatim
-- [ ] Graph query functions: `get_exposed_stablecoins(region)`, `get_bank_concentration(stablecoin)`
-- [ ] Endpoint: `GET /api/graph` — returns serialized graph for frontend visualization
+- [ ] Build NetworkX graph nodes: `[Stablecoin, Bank, DataCenterCorridor, City, State, Jurisdiction]`
+- [ ] Edges: `holds_reserves_at`, `processes_ops_via`, `located_in`, `governed_by`
+- [ ] Bank nodes carry: WAM, FDIC health score, LTV ratio, liquidity coverage
+- [ ] Data Center Corridor nodes: map AWS/Azure regions to lat/lng bounding boxes (us-east-1 = Northern Virginia, etc.)
+- [ ] Geographic indexing: geocode all bank nodes via Nominatim
+- [ ] Graph query functions: `get_exposed_stablecoins(region)`, `get_duration_risk(stablecoin)`, `get_ops_risk(storm_track)`
+- [ ] Endpoint: `GET /api/graph` — returns serialized graph for frontend
 
 **feat/weather-pipeline (Graph/Weather role)**
 - [ ] NOAA API integration: fetch active weather alerts by region
-- [ ] NHC hurricane track parser: extract cone of uncertainty, forecast path, category
-- [ ] OpenMeteo historical weather data for backtest scenarios
-- [ ] Geocode weather events → attach as stress modifiers on bank nodes in the graph
-- [ ] Endpoint: `GET /api/weather/active` — returns current weather stress events
-- [ ] Endpoint: `POST /api/weather/simulate` — accepts hurricane params, returns affected banks
+- [ ] NHC hurricane track parser: cone of uncertainty, forecast path, category
+- [ ] OpenMeteo historical weather for backtest scenarios
+- [ ] FDIC Call Report miner: LLM extracts mortgage LTV ratios and liquidity coverage per bank; attach to bank nodes
+- [ ] Storm overlay logic: for each bank in storm track, compute `ltv_stress = ltv_ratio × storm_intensity_factor`
+- [ ] Operational risk: check if storm track intersects data center corridor bounding boxes
+- [ ] Endpoint: `GET /api/weather/active` — returns current weather stress events with ops impact
+- [ ] Endpoint: `POST /api/weather/simulate` — accepts hurricane params, returns affected banks + data centers + WAM-adjusted stress scores
 
 **feat/scoring-engine (Data/Scoring role)**
-- [ ] Define 6 scoring dimensions (each 0–100, then mapped to letter grade):
-  1. **Attestation Quality** — frequency, detail, auditor reputation (rule-based)
-  2. **Geographic Concentration** — HHI index of bank locations (rule-based)
-  3. **Weather Exposure** — overlap of bank locations with active/simulated weather events (rule-based + LLM)
-  4. **Counterparty Health** — FDIC data, news sentiment, CDS spreads (LLM-as-judge)
-  5. **Asset Composition** — T-bills vs cash vs repo vs commercial paper mix (rule-based)
-  6. **Peg Stability** — historical depeg events, current spread (rule-based)
-- [ ] Weighted composite: `final_score = Σ(weight_i × dimension_i)`
-- [ ] Letter grade mapping: A (90+), A- (85+), B+ (80+), B (70+), C+ (60+), C (50+), D (<50)
-- [ ] Endpoint: `GET /api/ratings` — returns all stablecoin ratings
-- [ ] Endpoint: `POST /api/ratings/stress` — accepts stress scenario, returns re-rated scores
+- [ ] WAM calculator: `duration_score = normalize(weighted_avg_maturity_days, 0, 365)`
+- [ ] Weather multiplier: `weather_stress = ltv_stress × storm_category_factor × concentration_hhi`
+- [ ] Operational risk score: binary flag if storm track hits any data center corridor serving the issuer
+- [ ] LLM jury: call Claude + OpenAI with same FDIC Call Report context; average their 0–100 counterparty health scores; flag if delta > 15 (models disagree)
+- [ ] Composite: `stress_score = Σ(weight_i × dimension_i)` per table above
+- [ ] Output mapping: stress score → redemption latency + liquidity coverage estimate
+- [ ] Endpoint: `GET /api/stress-scores` — returns all stablecoin stress scores
+- [ ] Endpoint: `POST /api/stress-scores/simulate` — accepts scenario params (rate hike bps, hurricane category + location, bank failure), returns re-scored outputs
 
 - [ ] Tag `v0.2-pipeline`
 
-### Phase 3: Dashboard & Simulator (Sat Afternoon · Hours 12–20)
+### Phase 3: Dashboard & What-If Simulator (Sat Afternoon · Hours 12–20)
 
 **feat/dashboard (Frontend role)**
-- [ ] Ratings table: all stablecoins with letter grades, 6-dimension breakdown sparklines
-- [ ] Rating detail view: click a stablecoin → full dimension scores, trend charts (Recharts)
-- [ ] Alert banner: active weather/bank stress events affecting ratings
+- [ ] Stress score table: all stablecoins with Liquidity Stress Score + redemption latency + coverage ratio
+- [ ] Detail view: click a stablecoin → WAM chart, 6-dimension breakdown (Recharts), mint/burn divergence sparkline
+- [ ] Alert banner: active weather events, mint/burn anomalies, FDIC watch list triggers
 - [ ] Responsive layout matching Katabatic design language (purple accent `#7b6fc4`, light bg `#f4f3fa`)
+- [ ] Framing copy: "Liquidity Stress Score" not "Rating" throughout all UI
 
-**feat/map-simulator (Frontend + Graph/Weather roles)**
-- [ ] Leaflet map showing all custodian bank locations as markers
-- [ ] Color markers by stress level (green → yellow → red)
-- [ ] **Hurricane drop interaction**: click map to place hurricane → POST to `/api/weather/simulate` → highlight affected banks → show rating changes in real-time
-- [ ] Rate slider: adjust interest rates → POST to `/api/ratings/stress` → see portfolio impact
-- [ ] Bank failure toggle: simulate a specific bank failing → propagate through graph
+**feat/what-if-simulator (Frontend + Graph/Weather roles)**
+- [ ] Leaflet map layers:
+  - Custodian bank markers (colored by stress contribution)
+  - Data center corridor overlays (shaded regions for AWS/Azure zones)
+  - Hurricane cone of uncertainty
+- [ ] **Hurricane drop interaction**: click map → POST to `/api/stress-scores/simulate` → highlight affected banks + data centers → show updated stress score + "Redemption latency: 72h" in real-time
+- [ ] Rate hike slider (0–200bps): adjusts WAM score → see duration risk change
+- [ ] Bank failure toggle: simulate a specific bank failing → propagate through graph → show coverage ratio drop
+- [ ] Output panel: always shows "Under this scenario: Latency Xh | Coverage Y%"
 
 **feat/narratives (LLM/Extraction role)**
-- [ ] Claude API prompt for rating explanations:
-  - Input: graph context, stress event, old rating, new rating, affected counterparties
-  - Output: 2-3 sentence causal narrative (e.g., "USDC downgraded to B+. 12% of reserves held at institutions in SE Florida facing $4.2B in hurricane insurance liability...")
-- [ ] Endpoint: `POST /api/narratives` — accepts rating change context, returns explanation
-- [ ] Display narratives in dashboard rating detail view
+- [ ] Multi-model narrative generation:
+  - Send same context to Claude + OpenAI
+  - If both models produce consistent causal chains → display narrative with "consensus" badge
+  - If models diverge → surface both interpretations as "Model A / Model B" views
+- [ ] Example output: "USDC stress score elevated to 68. 35% of reserves at BNY Mellon, which processes operations via AWS us-east-1 (Northern Virginia). Hurricane tracking toward the corridor could delay redemption processing. Separately, 22% exposure to FL regional banks shows LTV ratios of 0.71 in FDIC Call Reports — elevated given hurricane-driven property value stress."
+- [ ] Endpoint: `POST /api/narratives` — accepts stress context, returns consensus narrative + model agreement score
+- [ ] Display in dashboard detail view with consensus badge
 
 - [ ] Tag `v0.3-simulator`
 
-### Phase 4: Backtests & Polish (Sat Night · Hours 20–26)
+### Phase 4: Backtests & Trust Layer (Sat Night · Hours 20–26)
 
 **feat/svb-backtest (Data/Scoring + LLM roles)**
-- [ ] SVB time machine: load March 2023 data, replay Katabatic ratings day-by-day
-- [ ] Show rating dropping to C+ ~48 hours before USDC depeg event
-- [ ] Timeline scrubber UI component for backtest view
-- [ ] Hurricane Ian replay: Sept 2022 data, show FL bank stress propagation
+- [ ] SVB time machine: load March 2023 data, replay stress scores day-by-day
+- [ ] Key insight to show: SVB had a 2-year average WAM on treasuries → duration mismatch was the root cause; Fed rate hikes were the multiplier; the bank run was the outcome
+- [ ] Show stress score crossing 75 ("Critical") ~48 hours before USDC depeg
+- [ ] Annotate timeline: "Rate hike + long duration = fragile. Bank run = catalyst."
+- [ ] Hurricane Ian replay (Sept 2022): show FL bank LTV stress propagation via FDIC Call Report data
+- [ ] Timeline scrubber UI component for both backtests
 
 **feat/demo-polish (Everyone)**
+- [ ] Mock Trust Layer for demo narrative:
+  - Show "Model Consensus: Claude 68 | GPT 71 | Delta: 3 → SIGNAL CONFIRMED" badge
+  - Display a mock verification hash: `katabatic-proof-0xabc123` (framing: "TEE-ready for Chainlink")
+  - This narrative positions Katabatic as oracle-grade infrastructure, not just a dashboard
 - [ ] Wire up all 3 demo scenarios end-to-end:
-  - Scenario A: Weather-triggered downgrade (primary demo)
-  - Scenario B: SVB collapse backtest
-  - Scenario C: Rate hike stress test
+  - Scenario A: Hurricane → Northern Virginia data center corridor → ops risk + FL bank LTV stress → stress score spike (primary demo)
+  - Scenario B: SVB collapse backtest — duration mismatch as root cause
+  - Scenario C: 100bps rate hike → WAM sensitivity → show which stablecoins are most exposed
 - [ ] Loading states, error handling, empty states
 - [ ] Demo mode toggle: preload data, skip API latency with cached responses
-- [ ] UI polish: animations, transitions, Katabatic brand consistency
 
 - [ ] Tag `v0.4-backtests`
 
@@ -221,20 +312,26 @@ main                          ← Production-ready, protected, deploy target
 
 ## Demo Script (5 Beats, <2 Minutes)
 
-1. **Show the ratings dashboard.** Six stablecoins rated across six dimensions — "We had an LLM read every major attestation report, identify the counterparties, and rate them continuously."
-2. **Drop a hurricane on the map.** Banks in the zone highlight. Two stablecoins downgrade from A to B+ as weather stress propagates through the knowledge graph in real-time.
-3. **Click into the rating explanation.** LLM generates: "USDC downgraded to B+. 12% of reserves at institutions in SE Florida. $4.2B insurance liability increases deposit stress."
-4. **SVB backtest.** Rewind to March 2023. Rating drops to C+ 48 hours before the depeg.
-5. **Close the pitch.** "We just showed a hurricane triggering a live downgrade with full causal explanation. That's one signal. The platform handles all of them. Moody's rates bonds. We're building the rating agency for stablecoin reserves."
+1. **Show the stress score dashboard.** Six stablecoins with Liquidity Stress Scores and projected redemption latencies. "We ingest OCC regulatory filings, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."
+
+2. **Drop a hurricane on the map.** Two things happen simultaneously: Florida bank markers turn red as their mortgage LTV ratios deteriorate under the storm, and the Northern Virginia data center corridor lights up — because that's where treasury ops run. Stress score spikes. "This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."
+
+3. **Click into the causal explanation.** Two models (Claude + GPT) independently generated the same narrative. "Consensus confirmed. USDC stress score: 68. Redemption latency under this scenario: 72 hours. Liquidity coverage: 88%."
+
+4. **SVB backtest.** Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. "Our engine would have flagged this 48 hours before the depeg."
+
+5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage.' That's what DAO treasuries and DeFi protocols need. That's Katabatic."
 
 ---
 
 ## API Keys Required (.env)
 
 ```
-ANTHROPIC_API_KEY=           # Claude API for extraction + narratives
+ANTHROPIC_API_KEY=           # Claude API for extraction, narratives, LLM jury
+OPENAI_API_KEY=              # GPT for multi-model consensus scoring
 NOAA_API_TOKEN=              # NOAA weather data
 OPENMETEO_API_KEY=           # Historical weather (free tier)
+ETHERSCAN_API_KEY=           # On-chain Mint/Burn cross-reference
 ```
 
 ---
@@ -253,3 +350,4 @@ OPENMETEO_API_KEY=           # Historical weather (free tier)
 - React: Functional components, hooks only, no class components
 - All API responses follow: `{ "data": ..., "error": null, "timestamp": "..." }`
 - Branch names: `feat/short-description`, `fix/short-description`
+- Never use "rating" or "grade" in UI copy — always "Liquidity Stress Score" or "stress level"
