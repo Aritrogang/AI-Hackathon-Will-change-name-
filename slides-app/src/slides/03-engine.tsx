@@ -46,7 +46,7 @@ export function SlideEngine(_props: { subStep?: number }) {
           steps={[
             { num: "01", title: "Resolve Entities", description: "LLM infers counterparties from PDFs + FDIC Call Reports" },
             { num: "02", title: "Build Graph", description: "Banks \u2192 geography, LTV ratios, WAM, data center corridors" },
-            { num: "03", title: "Compute WAM", description: "Weighted Average Maturity \u2014 the primary risk signal" },
+            { num: "03", title: "Compute WAM", description: "Weighted Average Maturity  - the primary risk signal" },
             { num: "04", title: "Apply Stress", description: "Weather, rate shocks, LTV deterioration as force multipliers" },
             { num: "05", title: "Output LCR", description: "Liquidity coverage ratio + redemption latency. Not a grade." },
           ]}

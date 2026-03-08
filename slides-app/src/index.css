@@ -97,6 +97,10 @@
   0%, 100% { opacity: 1; }
   50% { opacity: 0.5; }
 }
+@keyframes logo-scroll {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
 
 .animate-pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
 .animate-float { animation: float 3s ease-in-out infinite; }

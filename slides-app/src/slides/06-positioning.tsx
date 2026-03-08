@@ -24,7 +24,7 @@ const layers = [
     featured: false,
   },
   {
-    num: "\u2605 Layer 2 \u2014 Katabatic",
+    num: "\u2605 Layer 2  - Katabatic",
     numColor: "text-accent",
     borderColor: "border-accent",
     title: "Reserve Risk Infrastructure",

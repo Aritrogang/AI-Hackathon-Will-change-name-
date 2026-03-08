@@ -13,9 +13,9 @@ const dimensions = [
   { pct: 30, tag: "Primary", title: "Duration Risk (WAM)", desc: "Weighted Average Maturity of treasury portfolio. SVB: 730-day WAM vs daily redemptions. Critical mismatch flagged 48h early.", featured: true },
   { pct: 20, tag: null, title: "Reserve Transparency", desc: "XBRL/OCC feed freshness + Mint/Burn cross-reference divergence. Entity resolver: BNY Mellon at 92% confidence.", featured: false },
   { pct: 15, tag: null, title: "Geographic + Ops Concentration", desc: "HHI of bank locations + data center corridor overlap. AWS us-east-1 (NoVA) as treasury ops risk node.", featured: false },
-  { pct: 15, tag: "Demo Focus", title: "Weather Tail Risk", desc: "Storm track \u00D7 bank LTV exposure via FDIC Call Reports. The hurricane doesn\u2019t hit the bank \u2014 it hits the LTV ratio.", featured: true },
+  { pct: 15, tag: "Demo Focus", title: "Weather Tail Risk", desc: "Storm track \u00D7 bank LTV exposure via FDIC Call Reports. The hurricane doesn\u2019t hit the bank  - it hits the LTV ratio.", featured: true },
   { pct: 15, tag: null, title: "Counterparty Health", desc: "FDIC watch list, LTV ratios, liquidity coverage. Multi-model LLM jury: Claude + GPT, flag if delta >15.", featured: false },
-  { pct: 5, tag: null, title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal \u2014 the other 95% is structural.", featured: false },
+  { pct: 5, tag: null, title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal  - the other 95% is structural.", featured: false },
 ]
 
 export function SlideDimensions() {

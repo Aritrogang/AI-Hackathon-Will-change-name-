@@ -19,7 +19,7 @@ const beats = [
 
 const scenarios = [
   { cat: "Scenario A \u00B7 Primary Demo", title: "Hurricane \u2192 Data Center Ops Freeze", desc: "Cat 4 hits Gulf. FL bank LTV stress and Northern Virginia data center corridor simultaneously. Where treasury ops actually run.", borderColor: "border-accent" },
-  { cat: "Scenario B \u00B7 Backtest", title: "SVB Collapse \u00B7 Duration Mismatch", desc: "Rewind to March 2023. WAM chart shows 94% in 2-year bonds \u2014 already critical. Rate hike was just the match. Flagged 48h before $0.87.", borderColor: "border-warn" },
+  { cat: "Scenario B \u00B7 Backtest", title: "SVB Collapse \u00B7 Duration Mismatch", desc: "Rewind to March 2023. WAM chart shows 94% in 2-year bonds  - already critical. Rate hike was just the match. Flagged 48h before $0.87.", borderColor: "border-warn" },
   { cat: "Scenario C \u00B7 Sensitivity", title: "100bps Rate Hike \u2192 WAM Exposure", desc: "Slider shows which stablecoins are most duration-exposed. Score updates in <2 seconds. FRAX worst. USDT best.", borderColor: "border-success" },
 ]
 

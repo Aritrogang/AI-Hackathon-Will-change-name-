@@ -11,8 +11,8 @@ const fadeUp = (delay = 0) => ({
 
 const stats = [
   { value: "$150B+", label: "Unstressed Reserve Assets", desc: "Real banking relationships with hidden duration risk. No one models what breaks under rate shocks or weather events." },
-  { value: "$3.3B", label: "USDC Held at SVB", desc: "SVB held 2-year treasuries when rates spiked \u2014 duration mismatch. A stress test would have flagged the freeze 48h early." },
-  { value: "30 Days", label: "Between Attestations", desc: "Rate shocks, bank failures, hurricanes \u2014 all invisible between monthly snapshots. Zero continuous risk monitors exist today." },
+  { value: "$3.3B", label: "USDC Held at SVB", desc: "SVB held 2-year treasuries when rates spiked  - duration mismatch. A stress test would have flagged the freeze 48h early." },
+  { value: "30 Days", label: "Between Attestations", desc: "Rate shocks, bank failures, hurricanes  - all invisible between monthly snapshots. Zero continuous risk monitors exist today." },
 ]
 
 export function SlideProblem(_props: { subStep?: number }) {
