@@ -1,3 +1,20 @@
+@media (max-width: 768px) {
+  body::before {
+    content: "Switch to laptop";
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    color: #fff;
+    font-size: 2rem;
+    z-index: 9999;
+    text-align: center;
+    padding-top: 40vh;
+  }
+}
 @media (fullscreen), (display-mode: fullscreen) {
   html, body, #root {
     font-size: 120%;
