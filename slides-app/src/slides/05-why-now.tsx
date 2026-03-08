@@ -1,6 +1,5 @@
 import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
-import { Card } from "@/components/ui/card"
 import { Eyebrow } from "@/components/ui/eyebrow"
 
 const fadeUp = (delay = 0) => ({
@@ -13,7 +12,7 @@ const Dot = () => (
   <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 inline-block mt-1" />
 )
 
-export function SlideWhyNow() {
+export function SlideWhyNow(_props: { subStep?: number }) {
   return (
     <SlideLayout>
       <Eyebrow>Why Now</Eyebrow>
@@ -26,71 +25,133 @@ export function SlideWhyNow() {
         just <span className="gradient-text">created this market.</span>
       </motion.h2>
 
-      <div className="flex gap-4 items-start mt-3">
-        {/* Left: Timeline */}
-        <motion.div className="flex-[1.3] flex flex-col gap-3" {...fadeUp(0.1)}>
-          <Card>
-            <div className="text-[0.7rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mb-2">Regulatory Timeline</div>
-            <div className="flex flex-col">
+      <div className="flex gap-6 items-start mt-3">
+        {/* Left: Bare vertical timeline — no card */}
+        <motion.div className="flex-[1.3] relative pl-6" {...fadeUp(0.1)}>
+          <div className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mb-3 -ml-6">Regulatory Timeline</div>
+
+          {/* Vertical connecting line */}
+          <div className="absolute left-[7px] top-[32px] bottom-[4px] w-0.5 bg-accent/15 rounded-full" />
+
+          <div className="flex flex-col">
+            {[
+              { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30 day lag. No programmatic access. Continuous monitoring was technically impossible.</> },
+              { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> All PPSIs must provide XBRL filings + OCC standardized API feeds. Programmatic ingest is now mandated.</> },
+              { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> First time in history that realtime reserve stress monitoring is technically and legally possible.</> },
+            ].map((item, i) => (
+              <div key={i} className={`flex gap-4 items-start py-3 relative ${i < 2 ? "border-b border-black/5" : ""}`}>
+                {/* Timeline dot */}
+                <div className={`absolute -left-6 top-4 w-3 h-3 rounded-full shrink-0 border-2 z-10 ${
+                  item.dot === "active" ? "border-accent bg-accent shadow-[0_0_8px_rgba(108,92,231,0.4)]" :
+                  item.dot === "done" ? "border-success bg-success" :
+                  "border-accent/40 bg-bg"
+                }`} />
+                <div className="text-[0.75rem] text-text-tertiary min-w-[76px] font-medium pt-0.5">{item.date}</div>
+                <div className="text-[0.95rem] text-text-secondary leading-relaxed">{item.text}</div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Right: "Why hasn't someone" — accent border block + inline pills */}
+        <div className="flex-1 flex flex-col gap-4">
+          <motion.div
+            className="border-l-4 border-accent pl-4 bg-accent/[0.03] -mx-2 px-6 py-4 rounded-r-lg"
+            {...fadeUp(0.2)}
+          >
+            <div className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-accent mb-2">Why hasn&apos;t someone done this before?</div>
+            <div className="text-[1.02rem] text-text-primary leading-relaxed mb-3">
+              The data didn&apos;t exist.
+              <br />
+              <span className="text-accent font-semibold">Now it does.</span>
+              <br />
+              We&apos;re first in a regulation mandated market.
+            </div>
+            <div className="flex flex-col gap-1.5">
               {[
-                { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30 day lag. No programmatic access. Continuous monitoring was technically impossible.</> },
-                { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> All PPSIs must provide XBRL filings + OCC standardized API feeds. Programmatic ingest is now mandated.</> },
-                { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> First time in history that realtime reserve stress monitoring is technically and legally possible.</> },
-              ].map((item, i) => (
-                <div key={i} className={`flex gap-3.5 items-start py-2.5 ${i < 2 ? "border-b border-black/7" : ""}`}>
-                  <div className={`w-2.5 h-2.5 rounded-full shrink-0 mt-1 border-2 ${
-                    item.dot === "active" ? "border-accent bg-accent" :
-                    item.dot === "done" ? "border-success bg-success" :
-                    "border-accent"
-                  }`} />
-                  <div className="text-[0.7rem] text-text-tertiary min-w-[72px] font-medium pt-0.5">{item.date}</div>
-                  <div className="text-base text-text-secondary leading-relaxed">{item.text}</div>
+                "GENIUS Act mandates XBRL feeds for all US PPSIs",
+                "OCC APIs enable realtime programmatic ingest",
+                "Onchain Mint/Burn cross reference now automatable",
+                "Multi model LLM for qualitative signal extraction",
+              ].map(t => (
+                <div key={t} className="flex items-center gap-2 py-0.5">
+                  <Dot />
+                  <span className="text-[0.92rem] text-text-secondary">{t}</span>
                 </div>
               ))}
             </div>
-          </Card>
-        </motion.div>
-
-        {/* Right: Why + stats */}
-        <div className="flex-1 flex flex-col gap-3">
-          <motion.div {...fadeUp(0.2)}>
-            <Card variant="featured">
-              <div className="text-[0.7rem] font-medium uppercase tracking-[0.1em] text-accent mb-2">Why hasn&apos;t someone done this before?</div>
-              <div className="text-base text-text-primary leading-relaxed mb-2.5">
-                The data didn&apos;t exist.
-                <br />
-                <span className="text-accent font-semibold">Now it does.</span>
-                <br />
-                We&apos;re first in a regulation mandated market.
-              </div>
-              <div className="flex flex-col gap-1">
-                {[
-                  "GENIUS Act mandates XBRL feeds for all US PPSIs",
-                  "OCC APIs enable realtime programmatic ingest",
-                  "Onchain Mint/Burn cross reference now automatable",
-                  "Multi model LLM for qualitative signal extraction",
-                ].map(t => (
-                  <div key={t} className="flex items-center gap-2 py-1">
-                    <Dot />
-                    <span className="text-base text-text-secondary">{t}</span>
-                  </div>
-                ))}
-              </div>
-            </Card>
           </motion.div>
 
-          <motion.div className="grid grid-cols-2 gap-2.5" {...fadeUp(0.3)}>
-            <Card className="text-center !py-3.5 !px-2.5">
-              <div className="text-[2rem] font-bold text-accent leading-none">6</div>
-              <div className="text-[0.7rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mt-1">Stablecoins tracked</div>
-            </Card>
-            <Card className="text-center !py-3.5 !px-2.5">
-              <div className="text-[2rem] font-bold text-accent leading-none">&lt;2s</div>
-              <div className="text-[0.7rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mt-1">Re-score time</div>
-            </Card>
+          {/* Stats as inline pills */}
+          <motion.div className="flex gap-3 -mt-2" {...fadeUp(0.3)}>
+            <div className="flex items-center gap-2 bg-accent/[0.06] rounded-full px-4 py-2">
+              <span className="text-[1.6rem] font-bold text-accent leading-none">6</span>
+              <span className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-text-tertiary">Stablecoins tracked</span>
+            </div>
+            <div className="flex items-center gap-2 bg-accent/[0.06] rounded-full px-4 py-2">
+              <span className="text-[1.6rem] font-bold text-accent leading-none">&lt;2s</span>
+              <span className="text-[0.75rem] font-medium uppercase tracking-[0.06em] text-text-tertiary">Re-score time</span>
+            </div>
           </motion.div>
         </div>
       </div>
+      {/* Market growth chart — bare, no card */}
+      <motion.div className="border-t border-black/7 pt-2 mt-0" {...fadeUp(0.4)}>
+        <div className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2.5">
+          Stablecoin total supply (TAM) &middot; GENIUS Act creates continuous monitoring market
+        </div>
+        <div className="flex items-end gap-2 h-[72px]">
+          {[
+            { h: 16, opacity: 0.3, delay: 0.2 },
+            { h: 35, opacity: 0.5, delay: 0.4 },
+            { h: 53, opacity: 0.72, delay: 0.6 },
+            { h: 72, opacity: 1, delay: 0.8 },
+          ].map((bar, i) => (
+            <div
+              key={i}
+              className="flex-1 rounded-t-sm origin-bottom"
+              style={{
+                height: bar.h,
+                background: bar.opacity === 1 ? "var(--color-accent)" : `rgba(108,92,231,${bar.opacity})`,
+                transform: "scaleY(0)",
+                animation: `bar-grow-y 0.75s cubic-bezier(0.34,1.56,0.64,1) forwards ${bar.delay}s`,
+              }}
+            />
+          ))}
+          <div className="shrink-0 w-px bg-black/7 h-[72px] mx-1" />
+          <div
+            className="flex-[1.3] h-[72px] rounded-t-sm flex items-center justify-center origin-bottom"
+            style={{
+              background: "repeating-linear-gradient(45deg,rgba(108,92,231,0.07) 0px,rgba(108,92,231,0.07) 4px,transparent 4px,transparent 10px)",
+              border: "1.5px dashed rgba(108,92,231,0.3)",
+              transform: "scaleY(0)",
+              animation: "bar-grow-y 0.75s cubic-bezier(0.34,1.56,0.64,1) forwards 1s",
+            }}
+          >
+            <span className="text-[0.72rem] font-bold text-accent tracking-wider">projected</span>
+          </div>
+        </div>
+        <div className="flex gap-2 mt-1.5">
+          {[
+            { val: "$30B", year: "2021" },
+            { val: "$80B", year: "2023" },
+            { val: "$180B", year: "2025" },
+            { val: "$350B", year: "2027", accent: true },
+          ].map(d => (
+            <div key={d.year} className="flex-1 text-center text-[0.75rem]">
+              <strong className={d.accent ? "text-accent" : "text-text-secondary"}>{d.val}</strong>
+              <br />
+              <span className="text-text-tertiary">{d.year}</span>
+            </div>
+          ))}
+          <div className="shrink-0 w-2.5" />
+          <div className="flex-[1.3] text-center text-[0.75rem]">
+            <strong className="text-accent">$700B+</strong>
+            <br />
+            <span className="text-accent text-[0.62rem]">2030</span>
+          </div>
+        </div>
+      </motion.div>
     </SlideLayout>
   )
 }

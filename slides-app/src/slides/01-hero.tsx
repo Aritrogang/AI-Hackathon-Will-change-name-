@@ -3,7 +3,7 @@ import { SlideLayout } from "./slide-layout"
 import { Badge } from "@/components/ui/badge"
 import { HurricaneRings } from "@/components/ui/hurricane-rings"
 
-export function SlideHero() {
+export function SlideHero(_props: { subStep?: number }) {
   return (
     <SlideLayout variant="hero">
       <HurricaneRings />

@@ -1,3 +1,4 @@
+import { useEffect } from "react"
 import { cn } from "@/lib/utils"
 import type { ReactNode } from "react"
 
@@ -8,6 +9,49 @@ interface SlideLayoutProps {
 }
 
 export function SlideLayout({ children, variant = "default", className }: SlideLayoutProps) {
+      // Cursor auto-hide logic: global singleton
+      useEffect(() => {
+        const root = document.documentElement;
+        if (!window.__katabaticCursorTimer) {
+          let timer: any = null;
+          const hideCursor = () => root.style.cursor = "none";
+          const showCursor = () => root.style.cursor = "";
+          const resetTimer = () => {
+            showCursor();
+            if (timer) clearTimeout(timer);
+            timer = setTimeout(hideCursor, 3000);
+          };
+          window.addEventListener("mousemove", resetTimer);
+          resetTimer();
+          window.__katabaticCursorTimer = { timer, resetTimer, hideCursor, showCursor };
+        }
+        return () => {
+          // Do not remove handler or clear timer on unmount
+        };
+      }, []);
+    useEffect(() => {
+      let wakeLock: any = null;
+      const requestWakeLock = async () => {
+        try {
+          // @ts-ignore
+          if ('wakeLock' in navigator) {
+            wakeLock = await navigator.wakeLock.request('screen');
+          }
+        } catch (err) {}
+      };
+      requestWakeLock();
+      // Re-acquire wake lock if released
+      const handleVisibility = () => {
+        if (wakeLock && document.visibilityState === 'visible') {
+          requestWakeLock();
+        }
+      };
+      document.addEventListener('visibilitychange', handleVisibility);
+      return () => {
+        document.removeEventListener('visibilitychange', handleVisibility);
+        if (wakeLock) wakeLock.release();
+      };
+    }, []);
   return (
     <div
       className={cn(

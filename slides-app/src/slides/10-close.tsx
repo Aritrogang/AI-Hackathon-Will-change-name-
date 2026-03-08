@@ -8,77 +8,95 @@ const fadeUp = (delay = 0) => ({
   transition: { delay, duration: 0.5 },
 })
 
-const Dot = () => (
-  <span className="w-1.5 h-1.5 rounded-full bg-accent-light shrink-0 inline-block" />
-)
-
-export function SlideClose() {
+export function SlideClose(_props: { subStep?: number }) {
   return (
     <SlideLayout variant="dark" className="!justify-center !items-center">
       <HurricaneRings opacity={1} />
 
       <motion.div
-        className="relative z-10 w-full max-w-[680px] flex flex-col gap-4"
+        className="relative z-10 w-full max-w-[760px] flex flex-col items-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
+        {/* Eyebrow */}
+        <motion.div
+          className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-accent-light/70 flex items-center gap-2 mb-5"
+          {...fadeUp(0)}
+        >
+          <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
+          The Close
+          <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
+        </motion.div>
+
         {/* Heading */}
-        <motion.div className="text-center mb-1" {...fadeUp(0)}>
-          <div className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-accent-light/70 flex items-center justify-center gap-2 mb-3.5">
-            <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
-            The Close
-            <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
+        <motion.h2
+          className="text-[clamp(2rem,3.5vw,3rem)] font-bold leading-tight tracking-[-0.028em] text-white/[0.92] text-center mb-2"
+          {...fadeUp(0.05)}
+        >
+          Weather proves <span className="text-accent-light">the engine.</span>
+        </motion.h2>
+
+        <motion.p
+          className="text-[0.95rem] text-white/50 text-center mb-8"
+          {...fadeUp(0.1)}
+        >
+          Not a letter grade you get sued over. Scenarios you act on.
+        </motion.p>
+
+        {/* Hero numbers — glass container, centered */}
+        <motion.div
+          className="glass-dark rounded-2xl px-14 py-6 flex items-center justify-center gap-16 mb-4"
+          {...fadeUp(0.18)}
+        >
+          <div className="text-center">
+            <div className="text-[4.5rem] font-bold leading-none tracking-[-0.04em] text-accent-light">
+              72<span className="text-[2.5rem] text-accent-light/60">h</span>
+            </div>
+            <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-1">
+              Redemption Latency
+            </div>
           </div>
-          <h2 className="text-[clamp(2rem,3.5vw,3rem)] font-bold leading-tight tracking-[-0.028em] text-white/[0.92] mb-3">
-            Weather proves
-            <br />
-            <span className="text-accent-light">the engine.</span>
-          </h2>
-          <p className="text-base text-white/75 leading-relaxed mx-auto">
-            This is the difference between a rating agency and a risk engine.
-            <br />
-            We don&apos;t give you a letter grade you can get sued over.
-          </p>
+          <div className="h-16 w-px bg-white/[0.08]" />
+          <div className="text-center">
+            <div className="text-[4.5rem] font-bold leading-none tracking-[-0.04em] text-accent-light">
+              88<span className="text-[2.5rem] text-accent-light/60">%</span>
+            </div>
+            <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-1">
+              Liquidity Coverage
+            </div>
+          </div>
         </motion.div>
 
-        {/* Quote card */}
-        <motion.div
-          className="glass-dark rounded-2xl p-5"
-          {...fadeUp(0.2)}
+        {/* Context line */}
+        <motion.p
+          className="text-[0.88rem] text-white/50 text-center leading-relaxed max-w-[520px] mb-8"
+          {...fadeUp(0.26)}
         >
-          <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2.5">We give you:</div>
-          <div className="text-base text-white/[0.92] leading-relaxed">
-            &ldquo;Under a Cat 4 hitting the Gulf + 50bps rate hike, your USDC position shows{" "}
-            <span className="text-accent-light font-semibold">72-hour redemption latency</span> and{" "}
-            <span className="text-accent-light font-semibold">88% liquidity coverage.</span>&rdquo;
-          </div>
-          <div className="mt-2.5 text-[0.875rem] text-white/55">
-            That&apos;s what DAO treasuries and DeFi protocols need to make capital decisions. That&apos;s Katabatic.
-          </div>
-        </motion.div>
+          Under a Cat 4 hitting the Gulf + 50bps rate hike on your USDC position.
+          <br />
+          <span className="text-white/80 font-medium">That&apos;s what DAO treasuries need. That&apos;s Katabatic.</span>
+        </motion.p>
 
-        {/* We're looking for */}
+        {/* Separator */}
         <motion.div
-          className="rounded-2xl p-4 px-5"
-          style={{
-            background: "rgba(108,92,231,0.12)",
-            border: "1px solid rgba(108,92,231,0.25)",
-          }}
-          {...fadeUp(0.35)}
-        >
-          <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2.5">We&apos;re Looking For</div>
-          <div className="flex flex-col gap-2">
-            {[
-              "Pilot DAO treasuries (MakerDAO, Aave, Compound)",
-              "Advisors in DeFi risk + regulatory data infrastructure",
-              "Institutional data contracts (risk desks, stablecoin issuers)",
-            ].map(item => (
-              <div key={item} className="flex items-center gap-2.5">
-                <Dot />
-                <span className="text-[0.95rem] text-white/80">{item}</span>
-              </div>
-            ))}
+          className="w-12 h-px bg-accent-light/30 mb-6"
+          initial={{ scaleX: 0 }}
+          animate={{ scaleX: 1 }}
+          transition={{ delay: 0.35, duration: 0.5 }}
+        />
+
+        {/* Looking for — horizontal, no box */}
+        <motion.div className="text-center" {...fadeUp(0.4)}>
+          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-accent-light/50 mb-3">
+            We&apos;re Looking For
+          </div>
+          <div className="flex items-center justify-center gap-3 text-[0.85rem] text-white/60">
+            <span>Pilot DAO treasuries</span>
+            <span className="text-accent-light/30">/</span>
+            <span>DeFi risk advisors</span>
+            <span className="text-accent-light/30">/</span>
+            <span>Institutional data contracts</span>
           </div>
         </motion.div>
       </motion.div>

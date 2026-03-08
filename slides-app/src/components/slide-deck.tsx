@@ -26,25 +26,51 @@ const SLIDES = [
   SlideClose,
 ]
 
+// How many sub-steps each slide has (1 = normal slide, >1 = has internal steps)
+const SUB_STEPS = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
 const PACES = [15, 25, 20, 25, 25, 25, 25, 20, 15, 20]
 
 export function SlideDeck() {
   const [current, setCurrent] = useState(0)
+  const [subStep, setSubStep] = useState(0)
   const [elapsed, setElapsed] = useState(0)
   const [timerRunning, setTimerRunning] = useState(false)
   const [barHidden, setBarHidden] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const total = SLIDES.length
 
   const go = useCallback((idx: number) => {
     if (idx >= 0 && idx < total) {
       setCurrent(idx)
+      setSubStep(0)
       if (!timerRunning) setTimerRunning(true)
     }
   }, [total, timerRunning])
 
-  const next = useCallback(() => go(current + 1), [current, go])
-  const prev = useCallback(() => go(current - 1), [current, go])
+  const next = useCallback(() => {
+    const maxSub = SUB_STEPS[current]
+    if (subStep < maxSub - 1) {
+      // Advance sub-step within current slide
+      setSubStep(s => s + 1)
+    } else {
+      // Advance to next slide
+      go(current + 1)
+    }
+  }, [current, subStep, go])
+
+  const prev = useCallback(() => {
+    if (subStep > 0) {
+      // Go back a sub-step within current slide
+      setSubStep(s => s - 1)
+    } else if (current > 0) {
+      // Go to previous slide, starting at its last sub-step
+      const prevSlide = current - 1
+      setCurrent(prevSlide)
+      setSubStep(SUB_STEPS[prevSlide] - 1)
+    }
+  }, [current, subStep])
 
   // Keyboard nav
   useEffect(() => {
@@ -60,6 +86,13 @@ export function SlideDeck() {
     window.addEventListener("keydown", handler)
     return () => window.removeEventListener("keydown", handler)
   }, [next, prev])
+
+  // Fullscreen detection
+  useEffect(() => {
+    const handler = () => setIsFullscreen(!!document.fullscreenElement)
+    document.addEventListener("fullscreenchange", handler)
+    return () => document.removeEventListener("fullscreenchange", handler)
+  }, [])
 
   // Timer
   useEffect(() => {
@@ -95,7 +128,7 @@ export function SlideDeck() {
           exit={{ opacity: 0, x: -30 }}
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
-          <CurrentSlide />
+          <CurrentSlide subStep={subStep} />
         </motion.div>
       </AnimatePresence>
 
@@ -104,7 +137,7 @@ export function SlideDeck() {
         className={cn(
           "fixed bottom-0 left-0 right-0 z-50 flex items-center justify-between px-4 h-9",
           "glass border-t border-black/7 transition-all duration-300",
-          barHidden && "opacity-0 translate-y-full pointer-events-none"
+          (barHidden || isFullscreen) && "opacity-0 translate-y-full pointer-events-none"
         )}
       >
         <div className="flex items-center gap-2">

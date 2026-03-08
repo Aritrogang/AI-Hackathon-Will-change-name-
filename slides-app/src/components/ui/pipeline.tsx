@@ -10,13 +10,14 @@ interface PipelineStep {
 interface PipelineProps {
   steps: PipelineStep[]
   className?: string
+  dark?: boolean
 }
 
-export function Pipeline({ steps, className }: PipelineProps) {
+export function Pipeline({ steps, className, dark = false }: PipelineProps) {
   return (
     <div className={cn("grid gap-0 relative", className)} style={{ gridTemplateColumns: `repeat(${steps.length}, 1fr)` }}>
       {/* Connection line */}
-      <div className="absolute top-[25px] left-[10%] right-[10%] h-px bg-gradient-to-r from-accent/[0.05] via-accent/20 to-accent/[0.05]" />
+      <div className="absolute top-[28px] left-[10%] right-[10%] h-px bg-gradient-to-r from-accent/[0.05] via-accent/20 to-accent/[0.05]" />
 
       {steps.map((step, i) => (
         <motion.div
@@ -26,13 +27,22 @@ export function Pipeline({ steps, className }: PipelineProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.1, duration: 0.4 }}
         >
-          <div className="w-[50px] h-[50px] rounded-full bg-accent text-white text-sm font-semibold flex items-center justify-center mb-3 relative z-10 shadow-[0_0_0_4px_var(--color-bg)]">
+          <div className={cn(
+            "w-[56px] h-[56px] rounded-full bg-accent text-white text-sm font-semibold flex items-center justify-center mb-3 relative z-10",
+            dark ? "shadow-[0_0_0_4px_var(--color-bg-dark)]" : "shadow-[0_0_0_4px_var(--color-bg)]"
+          )}>
             {step.num}
           </div>
-          <div className="text-base font-semibold text-text-primary mb-1 leading-tight">
+          <div className={cn(
+            "text-base font-semibold mb-1 leading-tight",
+            dark ? "text-white/[0.92]" : "text-text-primary"
+          )}>
             {step.title}
           </div>
-          <div className="text-base text-text-secondary leading-relaxed">
+          <div className={cn(
+            "text-base leading-relaxed",
+            dark ? "text-white/55" : "text-text-secondary"
+          )}>
             {step.description}
           </div>
         </motion.div>
