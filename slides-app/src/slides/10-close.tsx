@@ -37,12 +37,6 @@ export function SlideClose(_props: { subStep?: number }) {
           Weather proves <span className="text-accent-light">the engine.</span>
         </motion.h2>
 
-        <motion.p
-          className="text-[0.95rem] text-white/50 text-center mb-8"
-          {...fadeUp(0.1)}
-        >
-          Not a letter grade you get sued over. Scenarios you act on.
-        </motion.p>
 
         {/* Hero numbers — glass container, centered */}
         <motion.div

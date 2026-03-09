@@ -27,7 +27,7 @@ export function SlideHero(_props: { subStep?: number }) {
         <KatabaticLogo />
 
         <motion.h1
-          className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-normal text-text-secondary leading-relaxed max-w-[520px] mx-auto mb-1.5"
+          className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-normal text-text-secondary leading-relaxed max-w-[520px] mx-auto mb-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.5 }}
@@ -36,19 +36,9 @@ export function SlideHero(_props: { subStep?: number }) {
           <strong className="text-text-primary font-semibold">stablecoin reserves.</strong>
         </motion.h1>
 
-        <motion.p
-          className="text-[0.95rem] text-text-secondary max-w-[460px] mx-auto leading-relaxed"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.6, duration: 0.5 }}
-        >
-          Duration risk meets weather tail risk.
-          <br />
-          Not ratings you get sued over. Scenarios you can act on.
-        </motion.p>
 
         <motion.p
-          className="text-[0.7rem] text-text-tertiary mt-8 tracking-[0.08em]"
+          className="text-[0.7rem] text-text-tertiary mt-10 tracking-[0.08em]"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.8, duration: 0.4 }}
