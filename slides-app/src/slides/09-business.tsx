@@ -95,22 +95,22 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
 export function SlideBusiness(_props: { subStep?: number }) {
   return (
     <SlideLayout>
-      <Eyebrow>Business Model</Eyebrow>
+      <Eyebrow>Go to Market</Eyebrow>
       <motion.h2
         className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
         {...fadeUp(0)}
       >
-        Infrastructure pricing.
+        API first infrastructure.
         <br />
         Not a <span className="gradient-text">consulting fee.</span>
       </motion.h2>
 
-      {/* All pricing tiers */}
+      {/* Tiers — what you get, no prices */}
       <div className="flex flex-col gap-4 mt-6">
         {[
-          { tier: "Starter API", tierColor: "text-text-tertiary", price: "$500", period: "/mo", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
-          { tier: "Enterprise", tierColor: "text-accent", price: "$5K", period: "/mo", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
-          { tier: "Institutional", tierColor: "text-text-tertiary", price: "Custom", period: "", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
+          { tier: "Starter API", tierColor: "text-text-tertiary", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
+          { tier: "Enterprise", tierColor: "text-accent", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
+          { tier: "Institutional", tierColor: "text-text-tertiary", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
         ].map((t, i) => (
           <motion.div
             key={t.tier}
@@ -121,10 +121,6 @@ export function SlideBusiness(_props: { subStep?: number }) {
               {t.tier}
             </span>
             <div className="flex-1 text-[1.15rem] text-text-secondary leading-relaxed">{t.desc}</div>
-            <span className="text-2xl font-bold text-accent tracking-tight shrink-0">
-              {t.price}
-              {t.period && <span className="text-[1rem] font-normal text-text-tertiary">{t.period}</span>}
-            </span>
           </motion.div>
         ))}
       </div>
