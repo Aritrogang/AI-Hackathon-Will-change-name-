@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 import { Badge } from "@/components/ui/badge"
+import { AnimatedNumber } from "@/components/ui/animated-number"
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -10,9 +11,8 @@ const fadeUp = (delay = 0) => ({
 })
 
 const stats = [
-  { value: "$150B+", label: "Unstressed Reserve Assets", desc: "Real banking relationships with hidden duration risk. No one models what breaks under rate shocks or weather events." },
-  { value: "$3.3B", label: "USDC Held at SVB", desc: "SVB held 2-year treasuries when rates spiked. Duration mismatch. A stress test would have flagged the freeze 48h early." },
-  { value: "30 Days", label: "Between Attestations", desc: "Rate shocks, bank failures, hurricanes: all invisible between monthly snapshots. Zero continuous risk monitors exist today." },
+  { value: 150, prefix: "$", suffix: "B+", label: "Unstressed Reserve Assets" },
+  { value: 30, prefix: "", suffix: " Days", label: "Between Attestations" },
 ]
 
 export function SlideProblem(_props: { subStep?: number }) {
@@ -23,9 +23,9 @@ export function SlideProblem(_props: { subStep?: number }) {
         className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
         {...fadeUp(0)}
       >
-        $150B in stablecoins.
+        The attestation said fine.
         <br />
-        No <span className="gradient-text">stress testing.</span>
+        <span className="gradient-text">Then SVB failed.</span>
       </motion.h2>
 
       {/* Two-column: dark SVB card + stacked stats */}
@@ -39,7 +39,7 @@ export function SlideProblem(_props: { subStep?: number }) {
             <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light/60 mb-1.5">
               SVB &middot; March 2023
             </div>
-            <div className="text-[2.8rem] font-bold text-accent-light tracking-tight leading-none">$3.3B</div>
+            <div className="text-[2.8rem] font-bold text-accent-light tracking-tight leading-none tabular-nums">$<AnimatedNumber value={3.3} delay={0.2} decimals={1} />B</div>
             <div className="text-[0.95rem] text-white/55 mt-1">USDC reserves at Silicon Valley Bank</div>
           </div>
 
@@ -72,14 +72,11 @@ export function SlideProblem(_props: { subStep?: number }) {
                 i < stats.length - 1 ? "border-b border-b-black/7" : ""
               }`}
             >
-              <div className="text-[2.2rem] font-bold leading-none tracking-tight text-accent">
-                {s.value}
+              <div className="text-[2.2rem] font-bold leading-none tracking-tight text-accent tabular-nums">
+                {s.prefix}<AnimatedNumber value={s.value} delay={0.3 + i * 0.15} />{s.suffix}
               </div>
               <div className="text-[0.75rem] font-medium uppercase tracking-[0.1em] text-text-tertiary mt-1.5">
                 {s.label}
-              </div>
-              <div className="text-[0.88rem] text-text-secondary leading-relaxed mt-1.5">
-                {s.desc}
               </div>
             </div>
           ))}

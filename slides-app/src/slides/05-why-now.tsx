@@ -8,10 +8,6 @@ const fadeUp = (delay = 0) => ({
   transition: { delay, duration: 0.4 },
 })
 
-const Dot = () => (
-  <span className="w-1.5 h-1.5 rounded-full bg-accent shrink-0 inline-block mt-1" />
-)
-
 export function SlideWhyNow(_props: { subStep?: number }) {
   return (
     <SlideLayout>
@@ -35,9 +31,9 @@ export function SlideWhyNow(_props: { subStep?: number }) {
 
           <div className="flex flex-col">
             {[
-              { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30 day lag. No programmatic access. Continuous monitoring was technically impossible.</> },
-              { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> All PPSIs must provide XBRL filings + OCC standardized API feeds. Programmatic ingest is now mandated.</> },
-              { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> First time in history that realtime reserve stress monitoring is technically and legally possible.</> },
+              { dot: "border", date: "Before 2026", text: <><strong className="text-text-primary">PDF attestations.</strong> 30-day lag. No programmatic access.</> },
+              { dot: "active", date: "Jan 2026", text: <><strong className="text-text-primary">GENIUS Act signed.</strong> XBRL + OCC API feeds mandated for all PPSIs.</> },
+              { dot: "done", date: "Today", text: <><strong className="text-text-primary">We have the pipeline.</strong> Realtime reserve stress monitoring is now possible.</> },
             ].map((item, i) => (
               <div key={i} className={`flex gap-4 items-start py-3 relative ${i < 2 ? "border-b border-black/5" : ""}`}>
                 {/* Timeline dot */}
@@ -46,7 +42,7 @@ export function SlideWhyNow(_props: { subStep?: number }) {
                   item.dot === "done" ? "border-success bg-success" :
                   "border-accent/40 bg-bg"
                 }`} />
-                <div className="text-[0.75rem] text-text-tertiary min-w-[76px] font-medium pt-0.5">{item.date}</div>
+                <div className="text-[0.75rem] text-text-tertiary w-[90px] shrink-0 font-medium pt-0.5">{item.date}</div>
                 <div className="text-[0.95rem] text-text-secondary leading-relaxed">{item.text}</div>
               </div>
             ))}
@@ -67,19 +63,6 @@ export function SlideWhyNow(_props: { subStep?: number }) {
               <br />
               We&apos;re first in a regulation mandated market.
             </div>
-            <div className="flex flex-col gap-1.5">
-              {[
-                "GENIUS Act mandates XBRL feeds for all US PPSIs",
-                "OCC APIs enable realtime programmatic ingest",
-                "Onchain Mint/Burn cross reference now automatable",
-                "Multi model LLM for qualitative signal extraction",
-              ].map(t => (
-                <div key={t} className="flex items-center gap-2 py-0.5">
-                  <Dot />
-                  <span className="text-[0.92rem] text-text-secondary">{t}</span>
-                </div>
-              ))}
-            </div>
           </motion.div>
 
           {/* Stats as inline pills */}
@@ -98,7 +81,7 @@ export function SlideWhyNow(_props: { subStep?: number }) {
       {/* Market growth chart — bare, no card */}
       <motion.div className="border-t border-black/7 pt-2 mt-0" {...fadeUp(0.4)}>
         <div className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2.5">
-          Stablecoin total supply (TAM) &middot; GENIUS Act creates continuous monitoring market
+          Stablecoin Total Supply
         </div>
         <div className="flex items-end gap-2 h-[72px]">
           {[

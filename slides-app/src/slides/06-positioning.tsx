@@ -18,17 +18,17 @@ const layers = [
     numColor: "text-text-tertiary",
     borderColor: "border-black/15",
     title: "Onchain Data Platforms",
-    desc: "Mint/burn flows, wallet balances, transaction history. Authoritative for onchain behavior.",
+    desc: "Mint/burn flows, wallet balances, transaction history.",
     tags: ["Dune", "Nansen", "Chainalysis"],
     tagClass: "bg-bg text-text-secondary",
     featured: false,
   },
   {
-    num: "Layer 2",
+    num: "Layer 2 — Katabatic",
     numColor: "text-accent",
     borderColor: "border-accent",
     title: "Reserve Risk Infrastructure",
-    desc: "WAM duration risk, FDIC health, weather tail risk, LLM consensus. The structural fragility layer onchain can\u2019t see.",
+    desc: "WAM duration, FDIC health, weather tail risk, LLM consensus.",
     tags: ["stress_score", "latency_hours", "coverage_ratio"],
     tagClass: "bg-accent/[0.07] text-accent",
     featured: true,
@@ -38,12 +38,26 @@ const layers = [
     numColor: "text-text-tertiary",
     borderColor: "border-black/15",
     title: "Downstream Consumers",
-    desc: "DAO governance contracts, DeFi protocol rebalancing, institutional risk desks, Chainlink oracle feeds.",
+    desc: "DAOs, DeFi protocols, risk desks, oracle feeds.",
     tags: ["MakerDAO", "Aave", "Risk Desks"],
     tagClass: "bg-bg text-text-secondary",
     featured: false,
   },
 ]
+
+const FlowArrow = ({ delay }: { delay: number }) => (
+  <motion.div
+    className="flex items-center justify-center self-center"
+    initial={{ opacity: 0, x: -6 }}
+    animate={{ opacity: 1, x: 0 }}
+    transition={{ delay, duration: 0.3 }}
+  >
+    <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+      <path d="M4 10 L20 10" stroke="var(--color-accent)" strokeWidth="1.5" strokeDasharray="3 3" strokeOpacity="0.3" />
+      <path d="M17 5 L23 10 L17 15" stroke="var(--color-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.4" />
+    </svg>
+  </motion.div>
+)
 
 export function SlidePositioning(_props: { subStep?: number }) {
   return (
@@ -58,54 +72,66 @@ export function SlidePositioning(_props: { subStep?: number }) {
         Katabatic shows <span className="gradient-text">what&apos;s about to break.</span>
       </motion.h2>
 
-      {/* 3 layers — accent border blocks with arrow flow */}
-      <div className="grid grid-cols-3 gap-5 mt-3 mb-4">
+      {/* 3 layers with arrow flow connectors */}
+      <div className="flex gap-2 mt-3 mb-3">
         {layers.map((layer, i) => (
-          <motion.div
-            key={layer.title}
-            className={`border-l-4 ${layer.borderColor} pl-4 py-2 ${
-              layer.featured ? "bg-accent/[0.04] -mx-2 px-6 rounded-r-lg" : ""
-            }`}
-            {...fadeUp(0.1 + i * 0.08)}
-          >
-            <div className={`text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-1.5 ${layer.numColor}`}>{layer.num}</div>
-            <div className="text-[1.02rem] font-semibold text-text-primary mb-1">{layer.title}</div>
-            <div className="text-[0.92rem] text-text-secondary leading-relaxed">{layer.desc}</div>
-            <div className="flex flex-wrap gap-1.5 mt-2">
-              {layer.tags.map(t => (
-                <span key={t} className={`text-xs font-medium rounded-md px-2 py-0.5 ${layer.tagClass}`}>{t}</span>
-              ))}
-            </div>
-          </motion.div>
+          <div key={layer.title} className="contents">
+            <motion.div
+              className={`flex-1 border-l-4 ${layer.borderColor} pl-5 py-4 ${
+                layer.featured ? "bg-accent/[0.04] px-6 rounded-r-lg shadow-[0_0_0_1px_rgba(108,92,231,0.08)]" : ""
+              }`}
+              {...fadeUp(0.1 + i * 0.08)}
+            >
+              <div className={`text-[0.72rem] font-semibold uppercase tracking-[0.1em] mb-2 ${layer.numColor}`}>{layer.num}</div>
+              <div className="text-[1.1rem] font-semibold text-text-primary mb-1.5">{layer.title}</div>
+              <div className="text-[0.92rem] text-text-secondary leading-relaxed mb-3">{layer.desc}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {layer.tags.map(t => (
+                  <span key={t} className={`text-xs font-medium rounded-md px-2.5 py-1 ${layer.tagClass}`}>{t}</span>
+                ))}
+              </div>
+            </motion.div>
+            {i < layers.length - 1 && <FlowArrow delay={0.15 + i * 0.1} />}
+          </div>
         ))}
       </div>
 
-      {/* Dark analogy section — inner boxes removed, bare text */}
+      {/* Key analogy callout */}
       <motion.div
-        className="bg-bg-dark rounded-2xl p-6 flex gap-6 items-start"
+        className="border-l-4 border-accent/30 bg-accent/[0.03] rounded-r-lg px-5 py-3 mb-2"
+        {...fadeUp(0.3)}
+      >
+        <div className="text-[0.95rem] text-text-secondary leading-relaxed">
+          Onchain data platforms became the single source of truth for on-chain behavior.
+          <br />
+          <span className="text-text-primary font-semibold">Katabatic is the equivalent for off-chain reserve risk.</span>
+        </div>
+      </motion.div>
+
+      {/* Dark section — business model + moat */}
+      <motion.div
+        className="bg-bg-dark rounded-2xl p-6 flex-1 flex flex-col justify-center"
         {...fadeUp(0.35)}
       >
-        <div className="flex-[1.3] border-r border-white/[0.09] pr-5">
-          <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2">The Analogy</div>
-          <div className="text-[0.95rem] text-white/[0.92] leading-relaxed mb-1.5">
-            Onchain data platforms became the system of record for what&apos;s happening onchain: the data layer Visa and a16z integrate into their own systems.
+        <div className="flex gap-10">
+          {/* What onchain can't see */}
+          <div className="flex-1 border-l-2 border-accent-light/40 pl-4">
+            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2">What Onchain Can&apos;t See</div>
+            <div className="flex flex-col gap-1.5">
+              {["WAM duration mismatch", "FDIC bank health signals", "Data center ops exposure", "Weather tail-risk multipliers"].map(t => (
+                <div key={t} className="flex items-center gap-2">
+                  <Dot />
+                  <span className="text-[0.92rem] text-white/55">{t}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <div className="text-[0.95rem] text-white/55 leading-relaxed">
-            The GENIUS Act is creating the same unlock for offchain reserve data. We are first to build the infrastructure layer above it.
-          </div>
-        </div>
-        <div className="flex-1 flex flex-col gap-4">
-          {/* Business model — bare text with accent border */}
-          <div className="border-l-2 border-accent-light/40 pl-3.5">
-            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-1">Business Model</div>
-            <div className="text-[0.92rem] text-white/55 leading-relaxed">API-first &middot; Enterprise contracts<br />Warehouse delivery &middot; Real-time streaming</div>
-          </div>
-          {/* Moat — bare text with accent border */}
-          <div className="border-l-2 border-accent-light/40 pl-3.5">
-            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-1.5">Defensible Moat</div>
-            <div className="flex flex-col gap-0.5">
-              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi model LLM consensus oracle layer", "IPFS pinned score provenance (Pinata)"].map(t => (
-                <div key={t} className="flex items-center gap-2 py-0.5">
+          {/* Moat */}
+          <div className="flex-1 border-l-2 border-accent-light/40 pl-4">
+            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light mb-2">Defensible Moat</div>
+            <div className="flex flex-col gap-1.5">
+              {["WAM duration scoring engine", "Geo knowledge graph + DC ops risk", "Multi-model LLM consensus oracle", "IPFS-pinned score provenance"].map(t => (
+                <div key={t} className="flex items-center gap-2">
                   <Dot />
                   <span className="text-[0.92rem] text-white/55">{t}</span>
                 </div>

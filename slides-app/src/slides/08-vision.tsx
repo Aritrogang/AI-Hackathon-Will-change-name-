@@ -15,7 +15,7 @@ const phases = [
     label: "Now",
     labelColor: "text-text-tertiary",
     title: "Stress Test Playground",
-    desc: "Prove the engine: duration mismatch as the primary signal, weather as the tail risk multiplier, LLM jury for consensus. Output: LCR + redemption latency under any scenario.",
+    desc: "Duration mismatch + weather multiplier + LLM consensus. Output: LCR + latency.",
     badge: <Badge variant="accent">Output: latency + coverage under scenario</Badge>,
     featured: false,
   },
@@ -24,7 +24,7 @@ const phases = [
     label: "Next",
     labelColor: "text-accent",
     title: "Oracle Grade Risk Feed",
-    desc: "Multi model consensus signals pinned to IPFS via Pinata, then pushed to Chainlink oracles inside TEEs. Every score has a verifiable CID. DeFi protocols auto rebalance when stress thresholds are crossed.",
+    desc: "IPFS-pinned consensus scores pushed to Chainlink oracles. DeFi protocols auto-rebalance.",
     badge: <Badge variant="consensus" dot>IPFS verified &middot; Multi SIG for AI &middot; Chainlink ready</Badge>,
     featured: true,
   },
@@ -33,7 +33,7 @@ const phases = [
     label: "Endgame",
     labelColor: "text-text-tertiary",
     title: "The Katabatic Stablecoin",
-    desc: "Use our own risk intelligence to design a stablecoin with optimal reserve structure: diversified counterparties, continuously stress tested, managed by the engine that rates them all.",
+    desc: "Our own stablecoin: diversified, continuously stress-tested, managed by the engine.",
     badge: null,
     featured: false,
   },
@@ -88,21 +88,19 @@ export function SlideVision(_props: { subStep?: number }) {
           &ldquo;
         </span>
         <div className="text-[1.02rem] text-text-tertiary leading-relaxed max-w-[600px] mx-auto italic">
-          Bloomberg started with data terminals and became financial infrastructure.
-          <br />
-          We start with stress simulations and become the most transparent stablecoin in crypto.
+          Bloomberg started with terminals. We start with stress simulations.
         </div>
       </motion.div>
 
-      {/* WAM comparison bars — bare, no card */}
+      {/* WAM comparison bars */}
       <motion.div className="border-t border-black/7 pt-3" {...fadeUp(0.4)}>
         <div className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2.5">
-          WAM duration &middot; the root cause signal &middot; healthy reserve vs SVB failure
+          WAM Duration &middot; Healthy Reserve vs SVB Failure
         </div>
         <div className="flex flex-col gap-2">
           {[
-            { name: "USDC", width: "9%", color: "bg-success", days: "45d", dayColor: "text-success", note: "safe \u00B7 daily redemptions matched", delay: 0.3 },
-            { name: "SVB 2023", width: "100%", color: "bg-accent", days: "730d", dayColor: "text-accent", note: "critical \u00B7 2-yr bonds vs daily redemptions", delay: 0.55 },
+            { name: "USDC", width: "9%", color: "bg-success", days: "45d", dayColor: "text-success", delay: 0.3 },
+            { name: "SVB 2023", width: "100%", color: "bg-accent", days: "730d", dayColor: "text-accent", delay: 0.55 },
           ].map(bar => (
             <div key={bar.name} className="flex items-center gap-3">
               <div className="text-[0.82rem] text-text-secondary w-[68px] text-right font-medium shrink-0">{bar.name}</div>
@@ -117,14 +115,11 @@ export function SlideVision(_props: { subStep?: number }) {
                 />
               </div>
               <div className={`text-[0.82rem] font-bold shrink-0 ${bar.dayColor}`}>{bar.days}</div>
-              <div className={`text-[0.72rem] ${bar.dayColor === "text-accent" ? "text-accent font-semibold" : "text-text-tertiary italic"}`}>{bar.note}</div>
             </div>
           ))}
         </div>
-        <div className="mt-2 text-[0.75rem] text-text-tertiary">
-          Katabatic computes WAM continuously. Flagged SVB critical 48h before the $0.87 depeg.
-        </div>
       </motion.div>
+
     </SlideLayout>
   )
 }

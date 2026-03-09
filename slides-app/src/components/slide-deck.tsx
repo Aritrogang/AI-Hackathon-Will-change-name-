@@ -139,6 +139,7 @@ export function SlideDeck() {
           "glass border-t border-black/7 transition-all duration-300",
           (barHidden || isFullscreen) && "opacity-0 translate-y-full pointer-events-none"
         )}
+        style={{ backdropFilter: "blur(36px)", WebkitBackdropFilter: "blur(36px)" }}
       >
         <div className="flex items-center gap-2">
           <button

@@ -1,6 +1,7 @@
 import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { HurricaneRings } from "@/components/ui/hurricane-rings"
+import { AnimatedNumber } from "@/components/ui/animated-number"
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -19,44 +20,34 @@ export function SlideClose(_props: { subStep?: number }) {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.6 }}
       >
-        {/* Eyebrow */}
-        <motion.div
-          className="text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-accent-light/70 flex items-center gap-2 mb-5"
-          {...fadeUp(0)}
-        >
-          <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
-          The Close
-          <span className="inline-block w-5 h-0.5 bg-accent-light/50 rounded-full" />
-        </motion.div>
-
         {/* Heading */}
         <motion.h2
-          className="text-[clamp(2rem,3.5vw,3rem)] font-bold leading-tight tracking-[-0.028em] text-white/[0.92] text-center mb-2"
+          className="text-[clamp(2.2rem,4vw,3.5rem)] font-bold leading-tight tracking-[-0.028em] text-white/[0.92] text-center mb-6"
           {...fadeUp(0.05)}
         >
           Weather proves <span className="text-accent-light">the engine.</span>
         </motion.h2>
 
-
         {/* Hero numbers — glass container, centered */}
         <motion.div
-          className="glass-dark rounded-2xl px-14 py-6 flex items-center justify-center gap-16 mb-4"
+          className="glass-dark rounded-2xl px-16 py-8 flex items-center justify-center gap-20 mb-6"
+          style={{ backdropFilter: "blur(36px)", WebkitBackdropFilter: "blur(36px)" }}
           {...fadeUp(0.18)}
         >
           <div className="text-center">
-            <div className="text-[4.5rem] font-bold leading-none tracking-[-0.04em] text-accent-light">
-              72<span className="text-[2.5rem] text-accent-light/60">h</span>
+            <div className="text-[5rem] font-bold leading-none tracking-[-0.04em] text-accent-light tabular-nums">
+              <AnimatedNumber value={72} delay={0.3} /><span className="text-[2.8rem] text-accent-light/60">h</span>
             </div>
-            <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-1">
+            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-2">
               Redemption Latency
             </div>
           </div>
-          <div className="h-16 w-px bg-white/[0.08]" />
+          <div className="h-20 w-px bg-white/[0.08]" />
           <div className="text-center">
-            <div className="text-[4.5rem] font-bold leading-none tracking-[-0.04em] text-accent-light">
-              88<span className="text-[2.5rem] text-accent-light/60">%</span>
+            <div className="text-[5rem] font-bold leading-none tracking-[-0.04em] text-accent-light tabular-nums">
+              <AnimatedNumber value={88} delay={0.45} /><span className="text-[2.8rem] text-accent-light/60">%</span>
             </div>
-            <div className="text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-1">
+            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-white/40 mt-2">
               Liquidity Coverage
             </div>
           </div>
@@ -64,35 +55,13 @@ export function SlideClose(_props: { subStep?: number }) {
 
         {/* Context line */}
         <motion.p
-          className="text-[0.88rem] text-white/50 text-center leading-relaxed max-w-[520px] mb-8"
+          className="text-[1rem] text-white/50 text-center leading-relaxed max-w-[560px]"
           {...fadeUp(0.26)}
         >
           Under a Cat 4 hitting the Gulf + 50bps rate hike on your USDC position.
           <br />
           <span className="text-white/80 font-medium">That&apos;s what DAO treasuries need. That&apos;s Katabatic.</span>
         </motion.p>
-
-        {/* Separator */}
-        <motion.div
-          className="w-12 h-px bg-accent-light/30 mb-6"
-          initial={{ scaleX: 0 }}
-          animate={{ scaleX: 1 }}
-          transition={{ delay: 0.35, duration: 0.5 }}
-        />
-
-        {/* Looking for — horizontal, no box */}
-        <motion.div className="text-center" {...fadeUp(0.4)}>
-          <div className="text-[0.65rem] font-semibold uppercase tracking-[0.12em] text-accent-light/50 mb-3">
-            We&apos;re Looking For
-          </div>
-          <div className="flex items-center justify-center gap-3 text-[0.85rem] text-white/60">
-            <span>Pilot DAO treasuries</span>
-            <span className="text-accent-light/30">/</span>
-            <span>DeFi risk advisors</span>
-            <span className="text-accent-light/30">/</span>
-            <span>Institutional data contracts</span>
-          </div>
-        </motion.div>
       </motion.div>
     </SlideLayout>
   )

@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 import { cn } from "@/lib/utils"
+import { AnimatedNumber } from "@/components/ui/animated-number"
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -10,12 +11,12 @@ const fadeUp = (delay = 0) => ({
 })
 
 const dimensions = [
-  { pct: 30, tag: "Primary", title: "Duration Risk (WAM)", desc: "Weighted Average Maturity of treasury portfolio. SVB: 730-day WAM vs daily redemptions. Critical mismatch flagged 48h early.", featured: true },
-  { pct: 20, tag: null, title: "Reserve Transparency", desc: "XBRL/OCC feed freshness + Mint/Burn cross-reference divergence. Entity resolver: BNY Mellon at 92% confidence.", featured: false },
-  { pct: 15, tag: null, title: "Geographic + Ops Concentration", desc: "HHI of bank locations + data center corridor overlap. AWS us-east-1 (NoVA) as treasury ops risk node.", featured: false },
-  { pct: 15, tag: "Demo Focus", title: "Weather Tail Risk", desc: "Storm track \u00D7 bank LTV exposure via FDIC Call Reports. The hurricane doesn\u2019t hit the bank. It hits the LTV ratio.", featured: true },
-  { pct: 15, tag: null, title: "Counterparty Health", desc: "FDIC watch list, LTV ratios, liquidity coverage. Multi-model LLM jury: Claude + Gemini, flag if delta >15.", featured: false },
-  { pct: 5, tag: null, title: "Peg Stability", desc: "Historical depeg events, current spread, Mint/Burn velocity. Lagging signal. The other 95% is structural.", featured: false },
+  { pct: 30, tag: "Primary", title: "Duration Risk (WAM)", featured: true },
+  { pct: 20, tag: null, title: "Reserve Transparency", featured: false },
+  { pct: 15, tag: null, title: "Geographic + Ops Concentration", featured: false },
+  { pct: 15, tag: "Demo Focus", title: "Weather Tail Risk", featured: true },
+  { pct: 15, tag: null, title: "Counterparty Health", featured: false },
+  { pct: 5, tag: null, title: "Peg Stability", featured: false },
 ]
 
 export function SlideDimensions() {
@@ -45,7 +46,7 @@ export function SlideDimensions() {
       </motion.div>
 
       {/* Dimension rows — color-field proportional layout */}
-      <div className="flex-1 flex flex-col justify-start gap-[7px] mt-2">
+      <div className="flex-1 flex flex-col justify-start gap-[10px] mt-2">
         {dimensions.map((d, i) => {
           const delay = 0.14 + i * 0.055
           const fieldWidth = `${Math.max((d.pct / 30) * 85, 12)}%`
@@ -55,7 +56,7 @@ export function SlideDimensions() {
               key={d.title}
               className={cn(
                 "relative rounded-lg overflow-hidden",
-                d.featured ? "py-[0.8rem]" : "py-[0.6rem]",
+                d.featured ? "py-[1.2rem]" : "py-[0.9rem]",
               )}
               {...fadeUp(delay)}
             >
@@ -76,10 +77,10 @@ export function SlideDimensions() {
               <div className="relative z-10 flex items-start gap-6 px-5">
                 {/* Weight number */}
                 <span className={cn(
-                  "text-[2.2rem] font-bold leading-none tracking-[-0.03em] tabular-nums shrink-0 w-[3.5rem] text-right",
+                  "text-[3.3rem] font-bold leading-none tracking-[-0.03em] tabular-nums shrink-0 w-[5rem] text-right",
                   d.featured ? "gradient-text" : "text-black/[0.1]",
                 )}>
-                  {d.pct}
+                  <AnimatedNumber value={d.pct} delay={delay} />
                 </span>
 
                 {/* Vertical accent line */}
@@ -93,7 +94,7 @@ export function SlideDimensions() {
                   <div className="flex items-baseline gap-2 mb-0.5">
                     <span className={cn(
                       "font-semibold tracking-[-0.01em]",
-                      d.featured ? "text-[1.05rem] text-text-primary" : "text-[0.95rem] text-text-primary/70",
+                      d.featured ? "text-[1.25rem] text-text-primary" : "text-[1.1rem] text-text-primary/70",
                     )}>
                       {d.title}
                     </span>
@@ -106,15 +107,9 @@ export function SlideDimensions() {
                       "ml-auto text-[0.78rem] font-bold tabular-nums shrink-0",
                       d.featured ? "text-accent" : "text-text-muted",
                     )}>
-                      {d.pct}%
+                      <AnimatedNumber value={d.pct} delay={delay + 0.1} />%
                     </span>
                   </div>
-                  <p className={cn(
-                    "leading-relaxed",
-                    d.featured ? "text-[0.88rem] text-text-secondary" : "text-[0.84rem] text-text-tertiary",
-                  )}>
-                    {d.desc}
-                  </p>
                 </div>
               </div>
             </motion.div>

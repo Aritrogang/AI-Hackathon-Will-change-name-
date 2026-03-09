@@ -17,6 +17,7 @@ export function Card({ className, variant = "default", children, ...props }: Car
         variant === "glass" && "glass rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.07)]",
         className
       )}
+      style={(variant === "dark" || variant === "glass") ? { backdropFilter: "blur(36px)", WebkitBackdropFilter: "blur(36px)" } : undefined}
       {...props}
     >
       {children}
