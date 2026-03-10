@@ -1,4 +1,5 @@
-import { motion } from "framer-motion"
+import { motion, useMotionValue, useTransform, animate } from "framer-motion"
+import { useEffect, useState } from "react"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 
@@ -7,6 +8,22 @@ const fadeUp = (delay = 0) => ({
   animate: { opacity: 1, y: 0 },
   transition: { delay, duration: 0.4 },
 })
+
+function AnimatedNumber({ target, delay = 0 }: { target: number; delay?: number }) {
+  const count = useMotionValue(0)
+  const rounded = useTransform(count, (v) => Math.round(v))
+  const [display, setDisplay] = useState(0)
+
+  useEffect(() => {
+    const unsubscribe = rounded.on("change", (v) => setDisplay(v))
+    const timeout = setTimeout(() => {
+      animate(count, target, { duration: 1.2, ease: [0.22, 1, 0.36, 1] })
+    }, delay * 1000)
+    return () => { unsubscribe(); clearTimeout(timeout) }
+  }, [count, rounded, target, delay])
+
+  return <>{display}</>
+}
 
 export function SlideWhyNow(_props: { subStep?: number }) {
   return (
@@ -24,8 +41,13 @@ export function SlideWhyNow(_props: { subStep?: number }) {
       <div className="flex gap-6 items-stretch flex-1 mt-1">
         {/* Left: Vertical timeline */}
         <motion.div className="flex-[1.3] relative pl-6 flex flex-col" {...fadeUp(0.1)}>
-          {/* Vertical connecting line */}
-          <div className="absolute left-[7px] top-[6px] bottom-[4px] w-0.5 bg-accent/15 rounded-full" />
+          {/* Vertical connecting line — grows downward */}
+          <motion.div
+            className="absolute left-[7px] top-[6px] w-0.5 bg-accent/15 rounded-full origin-top"
+            initial={{ height: 0 }}
+            animate={{ height: "calc(100% - 10px)" }}
+            transition={{ duration: 1.2, ease: [0.4, 0, 0.2, 1], delay: 0.2 }}
+          />
 
           <div className="flex flex-col flex-1">
             {[
@@ -33,15 +55,26 @@ export function SlideWhyNow(_props: { subStep?: number }) {
               { dot: "active", date: "Jul 2025", text: "GENIUS Act signed into law. XBRL + OCC API feeds mandated for all PPSIs." },
               { dot: "done", date: "Today", text: "We have the pipeline. Realtime reserve stress monitoring is now possible." },
             ].map((item, i) => (
-              <div key={i} className={`flex gap-4 items-start py-5 relative flex-1 ${i < 2 ? "border-b border-black/5" : ""}`}>
-                <div className={`absolute -left-6 top-4 w-3 h-3 rounded-full shrink-0 border-2 z-10 ${
-                  item.dot === "active" ? "border-accent bg-accent shadow-[0_0_8px_rgba(108,92,231,0.4)]" :
-                  item.dot === "done" ? "border-success bg-success" :
-                  "border-accent/40 bg-bg"
-                }`} />
+              <motion.div
+                key={i}
+                className={`flex gap-4 items-start py-5 relative flex-1 ${i < 2 ? "border-b border-black/5" : ""}`}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 + i * 0.35, duration: 0.45, ease: [0.4, 0, 0.2, 1] }}
+              >
+                <motion.div
+                  className={`absolute -left-6 top-4 w-3 h-3 rounded-full shrink-0 border-2 z-10 ${
+                    item.dot === "active" ? "border-accent bg-accent shadow-[0_0_8px_rgba(108,92,231,0.4)]" :
+                    item.dot === "done" ? "border-success bg-success" :
+                    "border-accent/40 bg-bg"
+                  }`}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.4 + i * 0.35, duration: 0.3, ease: [0.34, 1.56, 0.64, 1] }}
+                />
                 <div className="text-[0.75rem] text-text-tertiary w-[90px] shrink-0 font-medium pt-0.5">{item.date}</div>
                 <div className="text-[0.95rem] text-text-secondary leading-snug">{item.text}</div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </motion.div>
@@ -65,14 +98,28 @@ export function SlideWhyNow(_props: { subStep?: number }) {
               </div>
             </div>
             <div className="flex gap-3">
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-[1.6rem] font-bold text-white leading-none">6</span>
+              <motion.div
+                className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2"
+                initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              >
+                <span className="text-[1.6rem] font-bold text-white leading-none">
+                  <AnimatedNumber target={6} delay={0.8} />
+                </span>
                 <span className="text-[0.72rem] font-medium uppercase tracking-[0.06em] text-white/70">Stablecoins tracked</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2">
-                <span className="text-[1.6rem] font-bold text-white leading-none">&lt;2s</span>
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2"
+                initial={{ opacity: 0, scale: 0.5, y: 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.6, ease: [0.34, 1.56, 0.64, 1] }}
+              >
+                <span className="text-[1.6rem] font-bold text-white leading-none">
+                  &lt;<AnimatedNumber target={2} delay={1.0} />s
+                </span>
                 <span className="text-[0.72rem] font-medium uppercase tracking-[0.06em] text-white/70">Re-score time</span>
-              </div>
+              </motion.div>
             </div>
           </div>
         </motion.div>
@@ -85,8 +132,8 @@ export function SlideWhyNow(_props: { subStep?: number }) {
         <div className="flex items-end gap-3 h-[140px]">
           {[
             { pct: 30, opacity: 0.3, delay: 0.2 },
-            { pct: 26, opacity: 0.5, delay: 0.4 },
-            { pct: 46, opacity: 0.72, delay: 0.6 },
+            { pct: 25, opacity: 0.5, delay: 0.4 },
+            { pct: 62, opacity: 0.72, delay: 0.6 },
             { pct: 100, opacity: 1, delay: 0.8 },
           ].map((bar, i) => (
             <div
@@ -116,8 +163,8 @@ export function SlideWhyNow(_props: { subStep?: number }) {
         <div className="flex gap-2 mt-1.5">
           {[
             { val: "$150B", year: "2021" },
-            { val: "$130B", year: "2023" },
-            { val: "$230B", year: "2025" },
+            { val: "$125B", year: "2023" },
+            { val: "$310B", year: "2025" },
             { val: "$500B", year: "2027", accent: true },
           ].map(d => (
             <div key={d.year} className="flex-1 text-center text-[0.75rem]">

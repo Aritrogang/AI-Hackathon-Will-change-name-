@@ -10,7 +10,7 @@ const fadeUp = (delay = 0) => ({
 })
 
 const stats = [
-  { value: 150, prefix: "$", suffix: "B+", label: "Unstressed Reserve Assets" },
+  { value: 300, prefix: "$", suffix: "B+", label: "Unstressed Reserve Assets" },
   { value: 30, prefix: "", suffix: " Days", label: "Between Attestations" },
 ]
 

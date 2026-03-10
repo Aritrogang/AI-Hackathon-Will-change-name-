@@ -52,8 +52,8 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
       <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white/90 to-transparent z-10" />
       <style>{`
         @keyframes conveyor {
-          from { transform: translateX(0); }
-          to { transform: translateX(-${setWidth}px); }
+          from { transform: translateX(-${setWidth}px); }
+          to { transform: translateX(0); }
         }
       `}</style>
       <div
