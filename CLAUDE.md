@@ -421,6 +421,12 @@ All project work is tracked in **`TASKS.md`** at the repo root. This is the mast
 - Branch names: `feat/short-description`, `fix/short-description`
 - Never use "rating" or "grade" in UI copy — always "Liquidity Stress Score" or "stress level"
 
+### Git Commits — No AI Co-Author Tags
+
+- **NEVER** add `Co-Authored-By` lines mentioning Claude, Claude Code, Anthropic, or any AI tool in commit messages
+- **NEVER** reference AI assistance in commit messages, PR descriptions, or any committed file
+- Commit messages should read as if written by a human developer — no AI attribution
+
 ### Security — THIS IS A PUBLIC REPO
 
 **Claude must follow these rules without exception:**
