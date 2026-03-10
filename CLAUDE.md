@@ -6,7 +6,7 @@
 
 Katabatic is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
 
-The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jan 2026) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that made continuous reserve data programmatically accessible for the first time.
+The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that made continuous reserve data programmatically accessible for the first time.
 
 ### Why "System of Record" Framing
 
@@ -21,7 +21,7 @@ On-chain data platforms became the authoritative source for on-chain behavioral 
 
 ### Stack Positioning
 
-Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jan 2026) is the regulatory catalyst that made continuous reserve data programmatically accessible for the first time — the same unlock that blockchain growth provided for on-chain data.
+Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that made continuous reserve data programmatically accessible for the first time — the same unlock that blockchain growth provided for on-chain data.
 
 | Layer | What it does |
 |-------|--------------|
@@ -58,7 +58,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 ## Strategic Improvements Over Original Brief
 
 ### Hole 1: Data Opacity (30+ day PDF lag)
-**Fix:** Under the 2026 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must provide XBRL filings and OCC-standardized API feeds. Ingest these programmatically instead of scraping PDFs. Cross-reference OCC filings with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
+**Fix:** Under the 2025 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must provide XBRL filings and OCC-standardized API feeds. Ingest these programmatically instead of scraping PDFs. Cross-reference OCC filings with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
 
 ### Hole 2: Causal Gap (hurricane → bank → downgrade is too blunt)
 **Fix — two sub-signals:**

@@ -4,6 +4,16 @@
 
 **Legend:** `[ ]` = pending · `[x]` = done · `[~]` = in progress · `[!]` = blocked
 
+### Product Positioning — API-First Infrastructure
+
+Katabatic is an **API-first data infrastructure product**, not a dashboard. The dashboard/simulator is a demo vehicle to showcase the data product in action. The core deliverables are the **REST API** and **MCP server** — the two channels through which risk scores are consumed by downstream systems.
+
+**Comparable models:**
+- **21st.dev** — sells UI components via API + MCP. Developers consume components programmatically through API calls or MCP tool calls from AI agents. Katabatic does the same for risk scores: systems (DAOs, DeFi protocols, AI trading agents) consume scores via REST API or MCP tool calls.
+- **Pinata** — sells IPFS pinning as an API product. Developers integrate Pinata's API to pin and retrieve content. Katabatic integrates Pinata's API to pin score snapshots, and similarly exposes its own scores as an API product for downstream integration.
+
+**Priority order for hackathon:** REST API endpoints → MCP server → IPFS pinning → Chainlink oracle mock → Dashboard UI (demo vehicle)
+
 ---
 
 ## Phase 1: Foundation (Hours 0–4) · Fri Evening
@@ -213,7 +223,9 @@
 
 ---
 
-### feat/mcp-server
+### feat/mcp-server — Core Delivery Channel
+
+> **This is a core delivery channel, equal to REST API — not an afterthought.** Like 21st.dev exposes UI components as MCP tool calls for AI agents, Katabatic exposes risk scores as MCP tool calls. AI trading bots and agent frameworks query `get_stress_scores` or `simulate_scenario` before executing stablecoin positions.
 
 #### MCP Server Implementation
 - [ ] Add `fastmcp` SDK to `requirements.txt`
@@ -232,6 +244,8 @@
 ---
 
 ## Phase 3: Dashboard & What-If Simulator (Hours 12–20) · Sat Afternoon
+
+> **Note:** The dashboard is a **demo vehicle** to showcase the API/MCP data product to judges — not the product itself. Prioritize functional proof-of-concept over UI polish. The real product is the REST API + MCP server built in Phase 2.
 
 ### feat/dashboard
 
@@ -381,9 +395,9 @@
 
 ---
 
-### feat/demo-polish
+### feat/ipfs-pinning — Core Infrastructure (Pinata API)
 
-#### Trust + Verification Layer (Pinata IPFS)
+> **This is core infrastructure, not polish.** Like Pinata is an API product for IPFS pinning, Katabatic pins every score to IPFS for verifiable provenance. Every scoring run produces an immutable CID — this is what makes scores oracle-grade.
 
 **Backend — IPFS Pinning**
 - [ ] Install `pinata-sdk` or use Pinata REST API via `httpx` in `requirements.txt`
@@ -394,6 +408,7 @@
 - [ ] Endpoint: `POST /api/publish-score` — accepts stress score context, pins to Pinata, returns CID + gateway URL
 - [ ] Cache CIDs in SQLite `score_pins` table: `(stablecoin, score, cid, timestamp)`
 - [ ] Endpoint: `GET /api/score-history/{stablecoin}` — returns historical pinned scores with CIDs
+- [ ] Auto-pin after every scoring run (not just on-demand) — scores are always verifiable
 - [ ] Graceful degradation: if `PINATA_API_KEY` missing → skip pinning, return mock CID with warning
 
 **Frontend — IPFS Verification Display**
@@ -404,6 +419,23 @@
   - "IPFS Verified · TEE-Ready" label with lock icon
 - [ ] Integrate TrustBadge into: StablecoinDetail page, ScenarioOutput panel, NarrativeCard
 - [ ] After each scoring run in Simulator, auto-call `POST /api/publish-score` and display returned CID
+
+---
+
+### feat/chainlink-mock — Oracle-Ready Output
+
+> **Positions scores as Chainlink-grade data.** Mock the oracle integration to show scores can flow on-chain.
+
+- [ ] Write `app/services/oracle.py` — `format_for_oracle(score: StressScoreResult, cid: str) -> OraclePayload`
+  - Output: `{ score, latency_hours, coverage_ratio, cid, timestamp, signature_placeholder }`
+  - Format compatible with Chainlink External Adapter spec
+- [ ] Endpoint: `GET /api/oracle/{stablecoin}` — returns oracle-formatted score with IPFS CID
+- [ ] Frontend: "Chainlink Ready" badge next to IPFS CID showing the oracle payload is available
+- [ ] Demo: show the oracle endpoint returning the same score that's pinned to IPFS — proving the data pipeline is end-to-end verifiable
+
+---
+
+### feat/demo-polish
 
 #### Demo Mode
 - [ ] Add `VITE_DEMO_MODE=true` env flag

@@ -20,11 +20,11 @@
 
 **Transition:** "Here's the problem."
 
-**On screen:** SVB headquarters photo with $3.3B overlay. Two stat blocks: $150B+ unstressed, 30 days between attestations. Depeg sparkline $1.00→$0.87. "Katabatic flags critical 48h prior."
+**On screen:** SVB headquarters photo with $3.3B overlay. Two stat blocks: $300B+ unstressed reserve assets, 30 days between attestations. Depeg sparkline $1.00→$0.87. "Katabatic flags critical 48h prior."
 
 - Point to SVB photo: "SVB held $3.3 billion in USDC reserves. The attestation two weeks before said fine."
 - Point to sparkline: "Thirteen cents in 48 hours. USDC hit 87 cents."
-- "150 billion in reserves, nobody stress tests them. This wasn't credit risk — it was duration mismatch."
+- "300 billion in reserves, nobody stress tests them. This wasn't credit risk — it was duration mismatch."
 
 **Key phrase:** "The attestation said fine. SVB failed. That's duration risk — nobody is testing for it."
 
@@ -69,11 +69,11 @@
 
 **Transition:** "Why hasn't anyone built this before?"
 
-**On screen:** Timeline (Before 2025 → Jul 2025 → Today). Photo of Trump signing GENIUS Act. "The data didn't exist. Now it does." Stat pills: 6 stablecoins tracked, <2s re-score. Market chart $150B→$230B→$500B→$700B+ projected.
+**On screen:** Timeline (Before 2025 → Jul 2025 → Today). Photo of Trump signing GENIUS Act. "The data didn't exist. Now it does." Stat pills: 6 stablecoins tracked, <2s re-score. Market chart $150B→$125B→$310B→$500B→$700B+ projected.
 
 - "Before 2025 — PDFs with a 30-day lag. July 2025 — GENIUS Act signed into law. XBRL and OCC API feeds mandated."
 - "For the first time, continuous reserve monitoring is possible. The data didn't exist. Now it does."
-- Gesture at chart: "$230 billion today, $700 billion by 2030. Nobody is stress-testing it."
+- Gesture at chart: "$310 billion in 2025, projected $500 billion by 2027, $700 billion by 2030. Nobody is stress-testing it."
 
 **Key phrase:** "The GENIUS Act created this market. The data didn't exist. Now it does."
 
