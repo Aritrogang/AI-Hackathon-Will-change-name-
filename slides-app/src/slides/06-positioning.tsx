@@ -4,15 +4,6 @@ import { Eyebrow } from "@/components/ui/eyebrow"
 
 const base = import.meta.env.BASE_URL
 
-/* Katabatic wind mark — extracted from katabatic-logo.tsx */
-const KatabaticMark = () => (
-  <svg width="26" height="36" viewBox="0 0 30 44" fill="none">
-    <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.35)" strokeWidth="3.5" strokeLinecap="round" />
-    <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.65)" strokeWidth="3.5" strokeLinecap="round" />
-    <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
-  </svg>
-)
-
 const LINE_DATA = [
   { x1: 3, x2: 9, color: "rgba(108,92,231,0.35)", delay: 0 },
   { x1: 13, x2: 19, color: "rgba(108,92,231,0.65)", delay: 0.1 },
