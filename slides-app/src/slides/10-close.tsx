@@ -2,6 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { HurricaneRings } from "@/components/ui/hurricane-rings"
 import { AnimatedNumber } from "@/components/ui/animated-number"
+import { KatabaticLogo } from "@/components/katabatic-logo"
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -60,7 +61,7 @@ export function SlideClose(_props: { subStep?: number }) {
         >
           Under a Cat 4 hitting the Gulf + 50bps rate hike on your USDC position.
           <br />
-          <span className="text-white/80 font-medium">That&apos;s what DAO treasuries need. That&apos;s Katabatic.</span>
+          <span className="text-white/80 font-medium inline-flex items-center gap-1 justify-center flex-wrap">That&apos;s what DAO treasuries need. That&apos;s <KatabaticLogo size="sm" dark />.</span>
         </motion.p>
       </motion.div>
     </SlideLayout>

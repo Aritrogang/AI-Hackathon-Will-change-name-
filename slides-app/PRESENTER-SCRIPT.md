@@ -6,7 +6,7 @@
 
 ## Slide 01 — Hero (10s)
 
-**On screen:** Hurricane rings, Katabatic logo, team names, hackathon badge.
+**On screen:** Hurricane rings, Katabatic logo (animated letter reveal), subtitle "Liquidity stress testing for stablecoin reserves", hackathon badge, team names (Adi, Aritro, Connor, Krish, Suchit, Vikram).
 
 - "Hey everyone — we're Katabatic. We built a liquidity stress testing engine for stablecoin reserves."
 
@@ -52,7 +52,7 @@
 
 **Transition:** "Six dimensions drive the score."
 
-**On screen:** Formula bar. Six rows with proportional bars: Duration Risk 30%, Reserve Transparency 20%, Geographic 15%, Weather 15%, Counterparty 15%, Peg 5%.
+**On screen:** Formula bar. Six rows with proportional color-field bars: Duration Risk (WAM) 30% [Primary], Reserve Transparency 20%, Geographic + Ops Concentration 15%, Weather Tail Risk 15% [Demo Focus], Counterparty Health 15%, Peg Stability 5%.
 
 - Point to formula: "Stress score equals duration risk times weather multiplier times concentration."
 - Point to Duration Risk: "Duration is 30% — the primary signal. SVB had a 730-day WAM against daily redemptions."
@@ -69,11 +69,11 @@
 
 **Transition:** "Why hasn't anyone built this before?"
 
-**On screen:** Timeline (Before 2026 → Jan 2026 → Today). "The data didn't exist. Now it does." Stat pills. Market chart $30B→$700B+.
+**On screen:** Timeline (Before 2025 → Jul 2025 → Today). Photo of Trump signing GENIUS Act. "The data didn't exist. Now it does." Stat pills: 6 stablecoins tracked, <2s re-score. Market chart $150B→$230B→$500B→$700B+ projected.
 
-- "Before 2026 — PDFs with a 30-day lag. January 2026 — GENIUS Act passed. XBRL and OCC API feeds mandated."
+- "Before 2025 — PDFs with a 30-day lag. July 2025 — GENIUS Act signed into law. XBRL and OCC API feeds mandated."
 - "For the first time, continuous reserve monitoring is possible. The data didn't exist. Now it does."
-- Gesture at chart: "$180 billion today, $700 billion by 2030. Nobody is stress-testing it."
+- Gesture at chart: "$230 billion today, $700 billion by 2030. Nobody is stress-testing it."
 
 **Key phrase:** "The GENIUS Act created this market. The data didn't exist. Now it does."
 
@@ -85,7 +85,7 @@
 
 **Transition:** "Where do we sit?"
 
-**On screen:** Three layers with flow arrows: Onchain (Dune, Nansen) → Katabatic → Downstream (MakerDAO, Aave). Dark panel: What Onchain Can't See / Defensible Moat. Analogy footer.
+**On screen:** Three layers with chevron arrows: Onchain (Dune, Nansen, Chainalysis) → Katabatic (animated logo reveal) → Downstream (MakerDAO, Aave, Risk Desks). Dark panel: "What Onchain Can't See" — Duration mismatch, Bank health signals, Data center ops risk, Weather tail-risk.
 
 - "Layer 1 — onchain platforms see the flows. Layer 2 — us. The structural fragility that onchain can't see. Layer 3 — DAOs, DeFi protocols, risk desks consume our scores."
 - "Onchain data platforms became the source of truth for onchain behavior. We're building the equivalent for offchain reserve risk."
@@ -100,9 +100,9 @@
 
 **Transition:** "Let me show you."
 
-**On screen:** "Three scenarios. One engine." Play button placeholder.
+**On screen:** Full-screen video placeholder with play button. No title — the video speaks for itself.
 
-- "Three scenarios, one engine — hurricane ops freeze, SVB backtest, rate hike sensitivity."
+- "Let's run through three scenarios — hurricane ops freeze, SVB backtest, rate hike sensitivity."
 - Switch to live demo or play video.
 
 **Advance:** Switch to demo.
@@ -122,9 +122,9 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 **Transition:** "Where does this go?"
 
-**On screen:** Three phases: Now (Stress Test Playground) → Next (Oracle Grade Risk Feed, highlighted) → Endgame (The Katabatic Stablecoin). Bloomberg quote. WAM bars: USDC 45d vs SVB 730d.
+**On screen:** Dark background with atmospheric gradients. Three phase cards with connecting line: 01 Now (Stress Test Playground) → 02 Next (Oracle Grade Risk Feed, highlighted with glow) → 03 Endgame (Katabatic logo + "Stablecoin"). Bottom panel: Bloomberg quote left, WAM duration bars right (USDC 45d green vs SVB 730d purple).
 
-- "Phase 1 — prove the engine. Phase 2 — oracle-grade risk feed, scores pinned to IPFS, pushed to Chainlink. Phase 3 — build our own stablecoin, managed by the engine."
+- "Phase 1 — prove the engine. Phase 2 — oracle-grade risk feed, scores pinned to IPFS, pushed to Chainlink. Phase 3 — the Katabatic stablecoin, managed by the engine."
 - Point to WAM bars: "45 days versus 730 days. That's the difference between safe and catastrophic."
 
 **Key phrase:** "Bloomberg started with terminals. We start with stress simulations."
@@ -137,7 +137,7 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 **Transition:** "Business model is simple."
 
-**On screen:** Three tiers: Starter API, Enterprise (highlighted), Institutional. Logo conveyor: MakerDAO, Aave, Compound, Chainlink, etc.
+**On screen:** Heading: "API first infrastructure. Not a consulting fee." Three tiers: Starter API (REST, 6 stablecoins, <2s, 1M calls/mo), Enterprise (highlighted — streaming, custom onboarding, SLA, warehouse), Institutional (FDIC mining, oracle feed, dedicated pipeline). Logo conveyor: MakerDAO, Aave, Compound, Chainlink, USDC, Tether, Uniswap, Ethereum.
 
 - "API-first infrastructure. Starter tier for REST access. Enterprise for streaming and SLA. Institutional for FDIC mining and oracle integration."
 - Gesture at logos: "Anyone holding stablecoin positions needs this data."
@@ -150,12 +150,12 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 ## Slide 10 — The Close (20s)
 
-**On screen:** Dark background, hurricane rings. 72h Redemption Latency | 88% Liquidity Coverage. "That's what DAO treasuries need. That's Katabatic."
+**On screen:** Dark background, hurricane rings. Heading: "Weather proves the engine." Glass card: 72h Redemption Latency | 88% Liquidity Coverage. "That's what DAO treasuries need. That's [Katabatic logo]."
 
 - Pause. Let the numbers count up.
 - "Under a Cat 4 plus 50 basis points — 72-hour latency, 88% coverage."
 - "That's not a letter grade. That's an operational output a DAO treasury can act on."
-- "That's Katabatic."
+- "That's Katabatic." *(logo animates on screen)*
 
 **Key phrase:** "72-hour latency. 88% coverage. That's what DAOs need. That's Katabatic."
 

@@ -10,7 +10,7 @@ const LINE_DATA = [
 const LETTER_STAGGER = 0.055
 const LETTER_START = 0.32
 
-export function KatabaticLogo() {
+export function KatabaticLogo({ size = "lg", dark = false }: { size?: "sm" | "md" | "lg"; dark?: boolean } = {}) {
   const [revealKey, setRevealKey] = useState(0)
 
   // Replay animation on every fullscreen enter
@@ -26,14 +26,20 @@ export function KatabaticLogo() {
 
   const gleamDelay = LETTER_START + LETTERS.length * LETTER_STAGGER + 0.4
 
+  const sizeConfig = {
+    sm: { svgW: "0.6em", svgH: "0.9em", fontSize: "inherit", gap: "gap-[0.12em]", mb: "", gleamW: 20 },
+    md: { svgW: "22px", svgH: "32px", fontSize: "40px", gap: "gap-2.5", mb: "", gleamW: 50 },
+    lg: { svgW: "32px", svgH: "46px", fontSize: "58px", gap: "gap-3.5", mb: "mb-4", gleamW: 70 },
+  }
+  const s = sizeConfig[size]
+
   return (
-    <div className="relative flex items-center justify-center gap-3.5 mb-4">
+    <div className={`relative flex items-end justify-center ${s.gap} ${s.mb}`} style={{ display: "inline-flex", margin: size === "sm" ? "0 0.1em" : undefined, verticalAlign: "baseline" }}>
       {/* Wind mark — stroke-draw animation */}
       <motion.svg
         key={`mark-${revealKey}`}
-        width="32"
-        height="46"
         viewBox="0 0 30 44"
+        style={{ width: s.svgW, height: s.svgH }}
         fill="none"
         className="overflow-visible"
         initial={{ scale: 0.85, opacity: 0 }}
@@ -65,7 +71,8 @@ export function KatabaticLogo() {
         {LETTERS.map((char, i) => (
           <motion.span
             key={`${revealKey}-${i}`}
-            className="text-[58px] font-bold text-text-primary tracking-[-0.04em] leading-none inline-block"
+            className={`font-bold ${dark ? "text-white/90" : "text-text-primary"} tracking-[-0.04em] leading-none inline-block`}
+            style={{ fontSize: s.fontSize }}
             initial={{ opacity: 0, x: -6, y: 10, filter: "blur(8px)" }}
             animate={{ opacity: 1, x: 0, y: 0, filter: "blur(0px)" }}
             transition={{
@@ -84,13 +91,13 @@ export function KatabaticLogo() {
         key={`gleam-${revealKey}`}
         className="absolute inset-y-0 left-0 pointer-events-none"
         style={{
-          width: "70px",
+          width: `${s.gleamW}px`,
           background:
             "linear-gradient(90deg, transparent, rgba(162,155,254,0.22), transparent)",
           filter: "blur(10px)",
         }}
-        initial={{ x: -70, opacity: 0 }}
-        animate={{ x: [- 70, 600], opacity: [0, 0.8, 0] }}
+        initial={{ x: -s.gleamW, opacity: 0 }}
+        animate={{ x: [-s.gleamW, s.gleamW * 8], opacity: [0, 0.8, 0] }}
         transition={{
           duration: 0.7,
           delay: gleamDelay,

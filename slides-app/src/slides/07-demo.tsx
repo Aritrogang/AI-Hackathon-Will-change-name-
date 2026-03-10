@@ -12,16 +12,9 @@ export function SlideDemo(_props: { subStep?: number }) {
   return (
     <SlideLayout>
       <Eyebrow>Live Demo</Eyebrow>
-      <motion.h2
-        className="text-[clamp(1.9rem,3vw,2.6rem)] font-bold leading-tight tracking-[-0.028em]"
-        {...fadeUp(0)}
-      >
-        Three scenarios. <span className="gradient-text">One engine.</span>
-      </motion.h2>
-
-      {/* Placeholder video area */}
+      {/* Video area — full remaining space */}
       <motion.div
-        className="flex-1 rounded-2xl bg-bg-dark flex items-center justify-center relative overflow-hidden"
+        className="flex-1 rounded-2xl bg-bg-dark flex items-center justify-center relative overflow-hidden w-full"
         {...fadeUp(0.1)}
       >
         {/* Play button */}

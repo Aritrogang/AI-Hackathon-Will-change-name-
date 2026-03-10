@@ -2,6 +2,9 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 import { Badge } from "@/components/ui/badge"
+import { KatabaticLogo } from "@/components/katabatic-logo"
+
+const base = import.meta.env.BASE_URL
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -15,27 +18,28 @@ const phases = [
     label: "Now",
     labelColor: "text-text-tertiary",
     title: "Stress Test Playground",
-    desc: "Duration mismatch + weather multiplier + LLM consensus. Output: LCR + latency.",
-    badge: <Badge variant="accent">Output: latency + coverage under scenario</Badge>,
+    badge: null,
     featured: false,
+    bg: false,
   },
   {
     num: "02",
     label: "Next",
-    labelColor: "text-accent",
+    labelColor: "text-white/70",
     title: "Oracle Grade Risk Feed",
-    desc: "IPFS-pinned consensus scores pushed to Chainlink oracles. DeFi protocols auto-rebalance.",
     badge: <Badge variant="consensus" dot>IPFS verified &middot; Multi SIG for AI &middot; Chainlink ready</Badge>,
     featured: true,
+    bg: true,
   },
   {
     num: "03",
     label: "Endgame",
     labelColor: "text-text-tertiary",
-    title: "The Katabatic Stablecoin",
-    desc: "Our own stablecoin: diversified, continuously stress-tested, managed by the engine.",
+    title: null as React.ReactNode,
+    titleComponent: true,
     badge: null,
     featured: false,
+    bg: false,
   },
 ]
 
@@ -51,19 +55,34 @@ export function SlideVision(_props: { subStep?: number }) {
       </motion.h2>
 
       {/* Phases — horizontal pipeline style with connecting line */}
-      <motion.div className="relative" {...fadeUp(0.1)}>
+      <motion.div className="relative flex-1 flex flex-col" {...fadeUp(0.1)}>
         {/* Connecting line behind the numbers */}
-        <div className="absolute top-[28px] left-[36px] right-[36px] h-px bg-accent/15" />
+        <div className="absolute top-[32px] left-[36px] right-[36px] h-px bg-accent/15" />
 
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid grid-cols-3 gap-5 flex-1">
           {phases.map((p, i) => (
             <motion.div
-              key={p.title}
-              className={`relative ${p.featured ? "bg-accent/[0.04] -mx-2 px-5 py-5 rounded-xl border border-accent/10" : "py-5"}`}
+              key={i}
+              className={`relative overflow-hidden flex flex-col ${
+                p.featured
+                  ? "-mx-2 px-6 py-6 rounded-xl border border-accent/10"
+                  : "py-6"
+              }`}
               {...fadeUp(0.12 + i * 0.08)}
             >
+              {/* Background image for featured phase */}
+              {p.bg && (
+                <>
+                  <div
+                    className="absolute inset-0 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${base}oracle-bg.jpg)` }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" />
+                </>
+              )}
+
               {/* Phase number on the line */}
-              <div className={`w-14 h-14 rounded-full flex items-center justify-center text-base font-bold relative z-10 mb-4 ${
+              <div className={`w-16 h-16 rounded-full flex items-center justify-center text-lg font-bold relative z-10 mb-5 ${
                 p.featured
                   ? "bg-accent text-white shadow-[0_0_16px_rgba(108,92,231,0.3)]"
                   : "bg-bg-alt border border-black/10 text-text-secondary"
@@ -71,12 +90,15 @@ export function SlideVision(_props: { subStep?: number }) {
                 {p.num}
               </div>
 
-              <div className={`text-[0.78rem] font-semibold uppercase tracking-[0.1em] mb-2 ${p.labelColor}`}>
+              <div className={`relative z-10 text-[0.85rem] font-semibold uppercase tracking-[0.1em] mb-2.5 ${p.labelColor}`}>
                 Phase {p.num} &middot; {p.label}
               </div>
-              <div className="text-[1.15rem] font-semibold text-text-primary mb-2">{p.title}</div>
-              <div className="text-[0.95rem] text-text-secondary leading-relaxed">{p.desc}</div>
-              {p.badge && <div className="mt-3">{p.badge}</div>}
+              <div className={`relative z-10 text-[1.3rem] font-semibold ${p.featured ? "text-white" : "text-text-primary"}`}>
+                {(p as any).titleComponent ? (
+                  <span className="flex items-center gap-1">The <KatabaticLogo size="sm" /> Stablecoin</span>
+                ) : p.title}
+              </div>
+              {p.badge && <div className="relative z-10 mt-auto pt-4">{p.badge}</div>}
             </motion.div>
           ))}
         </div>
