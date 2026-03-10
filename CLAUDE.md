@@ -396,6 +396,10 @@ PINATA_SECRET_API_KEY=       # Pinata secret key for authenticated pinning
 
 - Adi Prathapa
 - Aritro Ganguly
+- Connor
+- Krish
+- Suchit
+- Vikram
 
 ---
 
