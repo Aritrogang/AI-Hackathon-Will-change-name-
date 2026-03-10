@@ -52,7 +52,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Author `data/fixtures/frax_baseline.json` — FRAX algorithmic component, moderate stress.
 - [ ] Author `data/fixtures/busd_baseline.json` — BUSD with Paxos (regulatory action scenario).
 - [ ] Author `data/fixtures/pyusd_baseline.json` — PayPal USDC-like, newer issuer, moderate transparency.
-- [ ] Author `data/fixtures/svb_march2023.json` — SVB scenario: WAM ~730 days (2-year treasuries), high duration mismatch, $209B assets, Silicon Valley Bank, Santa Clara CA.
+- [ ] Author `data/fixtures/svb_march2023.json` — SVB scenario: WAM ~2,040 days (5.6-year average duration per 10-K filing), high duration mismatch, $209B assets, Silicon Valley Bank, Santa Clara CA.
 - [ ] Author `data/fixtures/hurricane_ian_sept2022.json` — Ian scenario: Cat 4, Gulf coast landfall, FL bank LTV exposure, ops risk to Atlanta data corridor.
 - [ ] Author `data/fixtures/hurricane_nova_scenario.json` — Synthetic Cat 4 hitting Northern Virginia — triggers AWS us-east-1 ops risk for USDC/Circle.
 - [ ] Tag `v0.1-foundation`
@@ -197,6 +197,9 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
   - `mint_burn_velocity > 2× 30d avg` → score 70+
 
 #### Composite Scoring
+
+> **Note:** The pitch slides show a simplified multiplicative formula (`Duration × Weather × Concentration`) for narrative clarity. The actual implementation uses a weighted sum (`Σ(weight_i × dimension_i)`) across all 6 dimensions. Both are valid framings — the multiplicative version conveys the causal chain (duration is the root, weather is the multiplier), while the weighted sum is the precise calculation. If a judge asks, explain the weighted sum is the real engine.
+
 - [ ] Write `compute_stress_score(stablecoin: str, scenario: ScenarioParams | None = None) -> StressScoreResult`:
   - Run all 6 dimension functions
   - Composite: `Σ(weight_i × dimension_i)` per weights table
@@ -353,7 +356,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 #### SVB Data & Timeline
 - [ ] Create `data/fixtures/svb_timeline.json` — day-by-day data from Feb 1 – Mar 17 2023:
-  - `date`, `wam_days` (starts at ~730, stays high), `fed_funds_rate`, `unrealized_losses_bn`, `stress_score_computed`
+  - `date`, `wam_days` (starts at ~2,040, stays high), `fed_funds_rate`, `unrealized_losses_bn`, `stress_score_computed`
   - Key dates: Mar 8 (stock drop), Mar 9 (bank run begins), Mar 10 (FDIC seizure)
   - Annotation events: `{ date: "2023-03-08", label: "SVB stock drops 60%", type: "trigger" }`
 - [ ] Write `app/services/backtests/svb.py` — `run_svb_backtest() -> BacktestResult`
@@ -382,10 +385,10 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Create `src/components/TimelineScrubber.tsx`:
   - Slider over the date range
   - On scrub: updates a "current date" state, filters all chart data to that date
-  - Shows summary card on right: "On Mar 9, 2023: WAM = 730 days. Score = 78 (Critical). Rate hike catalyst."
+  - Shows summary card on right: "On Mar 9, 2023: WAM = 2,040 days. Score = 78 (Critical). Rate hike catalyst."
 - [ ] SVB annotated insights panel:
-  - "WAM was 730 days from Feb–Mar 2023 — 2-year treasuries"
-  - "Duration mismatch score was already at 92/100 before the bank run"
+  - "WAM was 2,040 days (~5.6 years) from Feb–Mar 2023 — long-dated MBS and agency securities"
+  - "Duration mismatch score was already at 100/100 before the bank run"
   - "Rate hike (+475bps over 12 months) was the catalyst, not the cause"
   - "Stress score crossed 75 (Critical) on March 8 — 48 hours before FDIC seizure"
 - [ ] Hurricane Ian annotated insights panel:
@@ -443,7 +446,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Write `src/lib/demoData.ts` — exports all demo fixture responses for each endpoint
 - [ ] Create demo mode banner: "Running in Demo Mode — cached data loaded"
 - [ ] Pre-wire 3 demo scenarios in demo mode:
-  - **Scenario A** (primary): Cat 4 hurricane at 38.9°N 77.2°W (Northern Virginia) → USDC ops risk + FL bank LTV stress → score jumps to 68
+  - **Scenario A** (primary): Cat 4 hurricane at 27.8°N 82.6°W (Gulf Coast / Tampa Bay) → FL bank LTV stress + Northern Virginia data center corridor ops risk as storm tracks north → score jumps to 68
   - **Scenario B**: SVB backtest replay — score crosses 75 on Mar 8 2023
   - **Scenario C**: 100bps rate hike → WAM sensitivity for all 6 stablecoins → sorted by impact
 
@@ -536,4 +539,4 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-10
+**Last updated:** 2026-03-11

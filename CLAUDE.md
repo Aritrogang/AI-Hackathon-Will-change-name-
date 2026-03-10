@@ -6,7 +6,7 @@
 
 Katabatic is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
 
-The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that made continuous reserve data programmatically accessible for the first time.
+The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that forced stablecoin issuers to disclose reserve composition, asset maturities, and custodian identities for the first time via monthly attestation reports.
 
 ### Why "System of Record" Framing
 
@@ -21,12 +21,12 @@ On-chain data platforms became the authoritative source for on-chain behavioral 
 
 ### Stack Positioning
 
-Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that made continuous reserve data programmatically accessible for the first time — the same unlock that blockchain growth provided for on-chain data.
+Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that forced standardized reserve disclosure for the first time — monthly attestation reports with reserve composition, maturity data, and custodian identities. We structure that mandated data into programmable risk intelligence.
 
 | Layer | What it does |
 |-------|--------------|
 | On-chain data (Dune, Nansen, Chainalysis) | Mint/burn flows, wallet balances, transaction history |
-| Off-chain regulatory (OCC XBRL, FDIC) | WAM, LTV ratios, bank health, reserve composition |
+| Off-chain regulatory (GENIUS Act attestations, FDIC) | WAM, LTV ratios, bank health, reserve composition |
 | **Reserve Risk — Katabatic** | **Stress Score = WAM × weather multiplier × concentration. API + streaming.** |
 | Downstream consumers | DAO governance · DeFi protocols · Risk desks · Oracle feeds · AI agents (MCP) |
 
@@ -58,7 +58,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 ## Strategic Improvements Over Original Brief
 
 ### Hole 1: Data Opacity (30+ day PDF lag)
-**Fix:** Under the 2025 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must provide XBRL filings and OCC-standardized API feeds. Ingest these programmatically instead of scraping PDFs. Cross-reference OCC filings with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
+**Fix:** Under the 2025 GENIUS Act, PPSIs (Permitted Payment Stablecoin Issuers) must publish monthly attestation reports certified by registered accounting firms, disclosing reserve composition, asset types, maturities, and custodian identities. We use LLM extraction (Claude) to structure these attestation reports and FDIC Call Reports into machine-readable data — turning compliance filings into programmable risk intelligence. Cross-reference attestation data with on-chain Mint/Burn flows — if $1B USDC is burned, the engine checks for a corresponding decrease in cash at BNY Mellon or State Street.
 
 ### Hole 2: Causal Gap (hurricane → bank → downgrade is too blunt)
 **Fix — two sub-signals:**
@@ -90,12 +90,12 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Styling** | Tailwind CSS | Rapid UI development |
 | **Backend** | FastAPI (Python 3.11+) | REST API, scoring engine, data pipelines |
 | **Knowledge Graph** | NetworkX | Stablecoin → Bank → DataCenter → Jurisdiction graph |
-| **LLM (Primary)** | Claude API (Anthropic SDK) | XBRL/PDF extraction, FDIC Call Report mining, stress narratives |
+| **LLM (Primary)** | Claude API (Anthropic SDK) | Attestation/PDF extraction, FDIC Call Report mining, stress narratives |
 | **LLM (Jury)** | Gemini API (Google GenAI) | Second model for consensus scoring |
 | **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Tail-risk weather multipliers |
 | **Bank Data** | FDIC API + FDIC Call Reports | WAM proxy, LTV ratios, liquidity data |
 | **On-Chain Data** | Etherscan API / Dune Analytics | Mint/Burn flow cross-reference |
-| **Regulatory Data** | OCC XBRL feeds / PDF fallback | Reserve composition, frequency, custodians |
+| **Regulatory Data** | GENIUS Act attestation reports / FDIC filings | Reserve composition, maturities, custodians (LLM-extracted) |
 | **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
 | **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
 | **IPFS Pinning** | Pinata API | Pin score snapshots to IPFS for verifiable, immutable score provenance |
@@ -109,7 +109,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │  Layer 1: INGESTION                                              │
-│  OCC XBRL feeds / Attestation PDFs → Claude extraction → JSON   │
+│  GENIUS Act attestation reports / PDFs → Claude extraction → JSON│
 │  On-chain Mint/Burn flows → cross-reference custodian cash       │
 │  NOAA/NHC forecasts → geocoded weather tail-risk events          │
 │  FDIC Call Reports → WAM proxy, LTV ratios, liquidity signals    │
@@ -149,7 +149,7 @@ Each dimension scores 0–100. Weighted composite = final Liquidity Stress Score
 | # | Dimension | Method | Weight |
 |---|-----------|--------|--------|
 | 1 | **Duration Risk (WAM)** | Weighted Average Maturity of portfolio; longer = more fragile | 30% |
-| 2 | **Reserve Transparency** | XBRL/OCC feed freshness + mint/burn cross-reference divergence | 20% |
+| 2 | **Reserve Transparency** | Attestation report freshness + mint/burn cross-reference divergence | 20% |
 | 3 | **Geographic + Operational Concentration** | HHI of bank locations + data center corridor overlap | 15% |
 | 4 | **Weather Tail-Risk Multiplier** | Storm track × bank LTV exposure (FDIC Call Reports) | 15% |
 | 5 | **Counterparty Health** | FDIC watch list status, LTV ratios, liquidity coverage (LLM-as-judge) | 15% |
@@ -172,7 +172,7 @@ Stress Score 76–100 → "Critical Stress. Latency: 72h+. Coverage: <85%"
 ```
 main                               ← Production-ready, deploy target
 ├── dev                            ← Integration branch
-│   ├── feat/data-ingestion        ← XBRL/PDF extraction + on-chain mint/burn
+│   ├── feat/data-ingestion        ← Attestation/PDF extraction + on-chain mint/burn
 │   ├── feat/knowledge-graph       ← NetworkX graph: banks + data centers + jurisdictions
 │   ├── feat/weather-pipeline      ← NOAA/NHC ingestion + FDIC Call Report LTV mining
 │   ├── feat/scoring-engine        ← WAM engine + weather multiplier + LLM jury
@@ -210,19 +210,19 @@ main                               ← Production-ready, deploy target
   ```
   /backend        ← FastAPI app
   /frontend       ← React + Vite app
-  /data           ← Seed data, XBRL fixtures, FDIC Call Report samples
+  /data           ← Seed data, attestation fixtures, FDIC Call Report samples
   /scripts        ← One-off data processing scripts
   ```
 - [ ] Set up `backend/`: FastAPI skeleton, `/health` endpoint, CORS config, `.env` for API keys
 - [ ] Set up `frontend/`: Vite + React + Tailwind, basic routing, layout shell
 - [ ] Create `dev` branch, push both scaffolds
-- [ ] Define JSON schema for reserve data (XBRL-first, PDF fallback):
+- [ ] Define JSON schema for reserve data (attestation-first, PDF fallback):
   ```json
   {
     "stablecoin": "USDC",
     "issuer": "Circle",
     "report_date": "2026-02-28",
-    "data_source": "occ_xbrl",
+    "data_source": "genius_act_attestation",
     "total_reserves": 42000000000,
     "weighted_avg_maturity_days": 45,
     "counterparties": [
@@ -250,12 +250,12 @@ main                               ← Production-ready, deploy target
 ### Phase 2: Pipeline & Knowledge Graph (Sat Morning · Hours 4–12)
 
 **feat/data-ingestion (LLM/Extraction role)**
-- [ ] Build Claude API prompt chain for OCC XBRL feed parsing (primary path)
+- [ ] Build Claude API prompt chain for GENIUS Act attestation report parsing (primary path) — these are monthly reports certified by accounting firms disclosing reserve composition, asset types, maturities, and custodians
 - [ ] PDF fallback parser for stablecoins not yet GENIUS Act-compliant (USDT, etc.)
 - [ ] Extract: bank names, deposit percentages, asset classes, WAM per tranche, jurisdictions
 - [ ] On-chain cross-reference: fetch 7-day Mint/Burn volume from Etherscan; compare to custodian cash delta in filing; flag divergences >5% as opacity signal
 - [ ] Output structured JSON per stablecoin, store in `/data/extracted/`
-- [ ] Endpoint: `POST /api/extract` — accepts XBRL/PDF, returns structured JSON with WAM
+- [ ] Endpoint: `POST /api/extract` — accepts attestation report/PDF, returns structured JSON with WAM
 
 **feat/knowledge-graph (Graph/Weather role)**
 - [ ] Build NetworkX graph nodes: `[Stablecoin, Bank, DataCenterCorridor, City, State, Jurisdiction]`
@@ -366,7 +366,7 @@ main                               ← Production-ready, deploy target
 
 ## Demo Script (5 Beats, <2 Minutes)
 
-1. **Show the stress score dashboard.** Six stablecoins with Liquidity Stress Scores and projected redemption latencies. "We ingest OCC regulatory filings, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."
+1. **Show the stress score dashboard.** Six stablecoins with Liquidity Stress Scores and projected redemption latencies. "The GENIUS Act forces stablecoin issuers to disclose reserve composition for the first time. We structure those attestation reports, cross-reference on-chain Mint/Burn flows, and compute the Weighted Average Maturity of every reserve portfolio — continuously."
 
 2. **Drop a hurricane on the map.** Two things happen simultaneously: Florida bank markers turn red as their mortgage LTV ratios deteriorate under the storm, and the Northern Virginia data center corridor lights up — because that's where treasury ops run. Stress score spikes. "This isn't a bank flooding. It's a liquidity squeeze from LTV deterioration and a 72-hour redemption delay from ops infrastructure exposure."
 

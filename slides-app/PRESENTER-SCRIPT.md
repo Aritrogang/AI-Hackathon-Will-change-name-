@@ -55,7 +55,7 @@
 **On screen:** Formula bar. Six rows with proportional color-field bars: Duration Risk (WAM) 30% [Primary], Reserve Transparency 20%, Geographic + Ops Concentration 15%, Weather Tail Risk 15% [Demo Focus], Counterparty Health 15%, Peg Stability 5%.
 
 - Point to formula: "Stress score equals duration risk times weather multiplier times concentration."
-- Point to Duration Risk: "Duration is 30% — the primary signal. SVB had a 730-day WAM against daily redemptions."
+- Point to Duration Risk: "Duration is 30% — the primary signal. SVB had a 2,040-day WAM — 5.6 years — against daily redemptions."
 - Point to Weather: "Weather is the force multiplier. It doesn't hit the bank — it hits the LTV ratio and the data center corridor."
 - Let the audience scan the rest.
 
@@ -122,10 +122,10 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 **Transition:** "Where does this go?"
 
-**On screen:** Dark background with atmospheric gradients. Three phase cards with connecting line: 01 Now (Stress Test Playground) → 02 Next (Oracle Grade Risk Feed, highlighted with glow) → 03 Endgame (Katabatic logo + "Stablecoin"). Bottom panel: Bloomberg quote left, WAM duration bars right (USDC 45d green vs SVB 730d purple).
+**On screen:** Dark background with atmospheric gradients. Three phase cards with connecting line: 01 Now (Stress Test Playground) → 02 Next (Oracle Grade Risk Feed, highlighted with glow) → 03 Endgame (Katabatic logo + "Stablecoin"). Bottom panel: Bloomberg quote left, WAM duration bars right (USDC 45d green vs SVB 2,040d purple).
 
 - "Phase 1 — prove the engine. Phase 2 — oracle-grade risk feed, scores pinned to IPFS, pushed to Chainlink. Phase 3 — the Katabatic stablecoin, managed by the engine."
-- Point to WAM bars: "45 days versus 730 days. That's the difference between safe and catastrophic."
+- Point to WAM bars: "45 days versus 2,040 days. That's the difference between safe and catastrophic."
 
 **Key phrase:** "Bloomberg started with terminals. We start with stress simulations."
 
@@ -137,7 +137,7 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 **Transition:** "Business model is simple."
 
-**On screen:** Heading: "API first infrastructure. Not a consulting fee." Three tiers: Starter API (REST, 6 stablecoins, <2s, 1M calls/mo), Enterprise (highlighted — streaming, custom onboarding, SLA, warehouse), Institutional (FDIC mining, oracle feed, dedicated pipeline). Logo conveyor: MakerDAO, Aave, Compound, Chainlink, USDC, Tether, Uniswap, Ethereum.
+**On screen:** Heading: "API first infrastructure. Not a consulting fee." Three tiers: Starter API (REST, MCP for AI agents, 6 stablecoins, <2s, webhook alerts), Enterprise (highlighted — streaming, IPFS verified, multi-model consensus, SLA, warehouse), Institutional (FDIC mining, oracle feed, GENIUS Act compliance, dedicated pipeline). Logo conveyor: MakerDAO, Aave, Compound, Chainlink, USDC, Tether, Uniswap, Ethereum.
 
 - "API-first infrastructure. Starter tier for REST access. Enterprise for streaming, MCP for AI agents, and SLA. Institutional for FDIC mining and oracle integration."
 - Gesture at logos: "Anyone holding stablecoin positions needs this data."
