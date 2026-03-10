@@ -46,7 +46,7 @@ export function SlideDimensions() {
       </motion.div>
 
       {/* Dimension rows — color-field proportional layout */}
-      <div className="flex-1 flex flex-col justify-start gap-[10px] mt-2">
+      <div className="flex-1 flex flex-col justify-center gap-[10px]">
         {dimensions.map((d, i) => {
           const delay = 0.14 + i * 0.055
           const fieldWidth = `${Math.max((d.pct / 30) * 85, 12)}%`

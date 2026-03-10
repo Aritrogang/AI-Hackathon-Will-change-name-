@@ -70,7 +70,7 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
               key={i}
               src={logo.src}
               alt={logo.name}
-              className="h-[64px] w-auto shrink-0"
+              className="h-[80px] w-auto shrink-0"
               style={{ opacity: 0.7 }}
             />
           ))}
@@ -82,7 +82,7 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
               key={`d-${i}`}
               src={logo.src}
               alt={logo.name}
-              className="h-[64px] w-auto shrink-0"
+              className="h-[80px] w-auto shrink-0"
               style={{ opacity: 0.7 }}
             />
           ))}
@@ -106,18 +106,18 @@ export function SlideBusiness(_props: { subStep?: number }) {
       </motion.h2>
 
       {/* Tiers — what you get, no prices */}
-      <div className="flex flex-col gap-4 mt-6">
+      <div className="flex flex-col gap-4">
         {[
-          { tier: "Starter API", tierColor: "text-text-tertiary", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
-          { tier: "Enterprise", tierColor: "text-accent", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
-          { tier: "Institutional", tierColor: "text-text-tertiary", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
+          { tier: "Starter API", tierColor: "text-text-tertiary", borderColor: "border-black/10", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
+          { tier: "Enterprise", tierColor: "text-accent", borderColor: "border-accent", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
+          { tier: "Institutional", tierColor: "text-text-tertiary", borderColor: "border-black/10", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
         ].map((t, i) => (
           <motion.div
             key={t.tier}
-            className="flex items-center gap-6 py-6 -mx-6 px-6 rounded-2xl bg-accent/[0.04]"
+            className={`flex items-center gap-6 py-6 -mx-6 px-6 rounded-2xl border-l-4 ${t.borderColor} ${t.featured ? "bg-accent/[0.05] shadow-[0_0_0_1px_rgba(108,92,231,0.08)]" : "bg-black/[0.02]"}`}
             {...fadeUp(0.1 + i * 0.08)}
           >
-            <span className={`text-[1rem] font-semibold uppercase tracking-[0.12em] min-w-[140px] ${t.tierColor}`}>
+            <span className={`text-[1.05rem] font-semibold uppercase tracking-[0.12em] min-w-[160px] ${t.tierColor}`}>
               {t.tier}
             </span>
             <div className="flex-1 text-[1.15rem] text-text-secondary leading-relaxed">{t.desc}</div>
@@ -125,10 +125,12 @@ export function SlideBusiness(_props: { subStep?: number }) {
         ))}
       </div>
 
-      {/* Logo conveyor */}
-      <motion.div className="pt-5 mt-6" {...fadeUp(0.3)}>
-        <LogoConveyor items={logos} speed={50} />
-      </motion.div>
+      {/* Logo conveyor — centered in remaining space */}
+      <div className="flex-1 flex items-center">
+        <motion.div className="w-full" {...fadeUp(0.3)}>
+          <LogoConveyor items={logos} speed={50} />
+        </motion.div>
+      </div>
     </SlideLayout>
   )
 }

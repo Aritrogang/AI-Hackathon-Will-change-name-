@@ -51,72 +51,78 @@ export function SlideVision(_props: { subStep?: number }) {
       </motion.h2>
 
       {/* Phases — horizontal pipeline style with connecting line */}
-      <motion.div className="relative mt-2" {...fadeUp(0.1)}>
+      <motion.div className="relative" {...fadeUp(0.1)}>
         {/* Connecting line behind the numbers */}
-        <div className="absolute top-[18px] left-[36px] right-[36px] h-px bg-accent/15" />
+        <div className="absolute top-[28px] left-[36px] right-[36px] h-px bg-accent/15" />
 
         <div className="grid grid-cols-3 gap-5">
           {phases.map((p, i) => (
             <motion.div
               key={p.title}
-              className={`relative ${p.featured ? "bg-accent/[0.04] -mx-2 px-2 py-3 rounded-lg" : "py-3"}`}
+              className={`relative ${p.featured ? "bg-accent/[0.04] -mx-2 px-5 py-5 rounded-xl border border-accent/10" : "py-5"}`}
               {...fadeUp(0.12 + i * 0.08)}
             >
               {/* Phase number on the line */}
-              <div className={`w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold relative z-10 mb-3 ${
+              <div className={`w-14 h-14 rounded-full flex items-center justify-center text-base font-bold relative z-10 mb-4 ${
                 p.featured
-                  ? "bg-accent text-white shadow-[0_0_12px_rgba(108,92,231,0.3)]"
+                  ? "bg-accent text-white shadow-[0_0_16px_rgba(108,92,231,0.3)]"
                   : "bg-bg-alt border border-black/10 text-text-secondary"
               }`}>
                 {p.num}
               </div>
 
-              <div className={`text-[0.75rem] font-semibold uppercase tracking-[0.1em] mb-1.5 ${p.labelColor}`}>
+              <div className={`text-[0.78rem] font-semibold uppercase tracking-[0.1em] mb-2 ${p.labelColor}`}>
                 Phase {p.num} &middot; {p.label}
               </div>
-              <div className="text-[1.02rem] font-semibold text-text-primary mb-1.5">{p.title}</div>
-              <div className="text-[0.92rem] text-text-secondary leading-relaxed">{p.desc}</div>
-              {p.badge && <div className="mt-2">{p.badge}</div>}
+              <div className="text-[1.15rem] font-semibold text-text-primary mb-2">{p.title}</div>
+              <div className="text-[0.95rem] text-text-secondary leading-relaxed">{p.desc}</div>
+              {p.badge && <div className="mt-3">{p.badge}</div>}
             </motion.div>
           ))}
         </div>
       </motion.div>
 
-      {/* Bloomberg quote — large pull quote, no card */}
-      <motion.div className="relative text-center py-3" {...fadeUp(0.35)}>
-        <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[4rem] leading-none text-accent/10 font-serif pointer-events-none select-none">
-          &ldquo;
-        </span>
-        <div className="text-[1.02rem] text-text-tertiary leading-relaxed max-w-[600px] mx-auto italic">
-          Bloomberg started with terminals. We start with stress simulations.
+      {/* Bottom section — quote + WAM bars side by side */}
+      <motion.div className="bg-bg-dark rounded-2xl p-6 flex gap-10 items-center" {...fadeUp(0.35)}>
+        {/* Bloomberg quote */}
+        <div className="flex-1 relative pl-6">
+          <span className="absolute top-[-8px] left-0 text-[3.5rem] leading-none text-accent-light/15 font-serif pointer-events-none select-none">
+            &ldquo;
+          </span>
+          <div className="text-[1.05rem] text-white/50 leading-relaxed italic">
+            Bloomberg started with terminals.<br />We start with stress simulations.
+          </div>
         </div>
-      </motion.div>
 
-      {/* WAM comparison bars */}
-      <motion.div className="border-t border-black/7 pt-3" {...fadeUp(0.4)}>
-        <div className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-2.5">
-          WAM Duration &middot; Healthy Reserve vs SVB Failure
-        </div>
-        <div className="flex flex-col gap-2">
-          {[
-            { name: "USDC", width: "9%", color: "bg-success", days: "45d", dayColor: "text-success", delay: 0.3 },
-            { name: "SVB 2023", width: "100%", color: "bg-accent", days: "730d", dayColor: "text-accent", delay: 0.55 },
-          ].map(bar => (
-            <div key={bar.name} className="flex items-center gap-3">
-              <div className="text-[0.82rem] text-text-secondary w-[68px] text-right font-medium shrink-0">{bar.name}</div>
-              <div className="w-[55%] h-6 bg-bg-alt rounded overflow-hidden shrink-0">
-                <div
-                  className={`h-full ${bar.color} rounded origin-left`}
-                  style={{
-                    width: bar.width,
-                    transform: "scaleX(0)",
-                    animation: `bar-grow 0.6s ease-out forwards ${bar.delay}s`,
-                  }}
-                />
+        {/* Divider */}
+        <div className="w-px h-16 bg-white/[0.08]" />
+
+        {/* WAM comparison bars */}
+        <div className="flex-1">
+          <div className="text-[0.72rem] font-semibold uppercase tracking-[0.1em] text-white/30 mb-3">
+            WAM Duration &middot; Healthy vs SVB
+          </div>
+          <div className="flex flex-col gap-3">
+            {[
+              { name: "USDC", width: "6%", color: "bg-success", days: "45d", dayColor: "text-success", delay: 0.3 },
+              { name: "SVB 2023", width: "100%", color: "bg-accent-light", days: "730d", dayColor: "text-accent-light", delay: 0.55 },
+            ].map(bar => (
+              <div key={bar.name} className="flex items-center gap-3">
+                <div className="text-[0.85rem] text-white/50 w-[72px] text-right font-medium shrink-0">{bar.name}</div>
+                <div className="flex-1 h-7 bg-white/[0.06] rounded overflow-hidden">
+                  <div
+                    className={`h-full ${bar.color} rounded origin-left`}
+                    style={{
+                      width: bar.width,
+                      transform: "scaleX(0)",
+                      animation: `bar-grow 0.6s ease-out forwards ${bar.delay}s`,
+                    }}
+                  />
+                </div>
+                <div className={`text-[0.85rem] font-bold shrink-0 w-[48px] text-right ${bar.dayColor}`}>{bar.days}</div>
               </div>
-              <div className={`text-[0.82rem] font-bold shrink-0 ${bar.dayColor}`}>{bar.days}</div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </motion.div>
 

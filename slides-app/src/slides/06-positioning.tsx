@@ -73,7 +73,7 @@ export function SlidePositioning(_props: { subStep?: number }) {
       </motion.h2>
 
       {/* 3 layers with arrow flow connectors */}
-      <div className="flex gap-2 mt-3 mb-3">
+      <div className="flex gap-2 mt-2">
         {layers.map((layer, i) => (
           <div key={layer.title} className="contents">
             <motion.div
@@ -96,22 +96,10 @@ export function SlidePositioning(_props: { subStep?: number }) {
         ))}
       </div>
 
-      {/* Key analogy callout */}
+      {/* Dark section — moat + analogy */}
       <motion.div
-        className="border-l-4 border-accent/30 bg-accent/[0.03] rounded-r-lg px-5 py-3 mb-2"
+        className="bg-bg-dark rounded-2xl p-6"
         {...fadeUp(0.3)}
-      >
-        <div className="text-[0.95rem] text-text-secondary leading-relaxed">
-          Onchain data platforms became the single source of truth for on-chain behavior.
-          <br />
-          <span className="text-text-primary font-semibold">Katabatic is the equivalent for off-chain reserve risk.</span>
-        </div>
-      </motion.div>
-
-      {/* Dark section — business model + moat */}
-      <motion.div
-        className="bg-bg-dark rounded-2xl p-6 flex-1 flex flex-col justify-center"
-        {...fadeUp(0.35)}
       >
         <div className="flex gap-10">
           {/* What onchain can't see */}
@@ -138,6 +126,12 @@ export function SlidePositioning(_props: { subStep?: number }) {
               ))}
             </div>
           </div>
+        </div>
+
+        {/* Analogy line */}
+        <div className="border-t border-white/[0.06] mt-5 pt-4 text-[0.95rem] text-white/40 leading-relaxed">
+          Onchain data platforms became the single source of truth for on-chain behavior.
+          {" "}<span className="text-white/80 font-semibold">Katabatic is the equivalent for off-chain reserve risk.</span>
         </div>
       </motion.div>
     </SlideLayout>

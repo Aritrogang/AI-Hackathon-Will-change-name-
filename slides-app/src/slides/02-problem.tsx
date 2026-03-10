@@ -1,7 +1,6 @@
 import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
-import { Badge } from "@/components/ui/badge"
 import { AnimatedNumber } from "@/components/ui/animated-number"
 
 const fadeUp = (delay = 0) => ({
@@ -29,37 +28,26 @@ export function SlideProblem(_props: { subStep?: number }) {
       </motion.h2>
 
       {/* Two-column: dark SVB card + stacked stats */}
-      <div className="flex gap-5 items-stretch mt-1">
-        {/* Left: SVB case study in dark container */}
+      <div className="flex gap-5 items-stretch flex-1 min-h-0">
+        {/* Left: SVB photo */}
         <motion.div
-          className="flex-[1.2] bg-bg-dark rounded-2xl p-6 flex flex-col gap-4"
+          className="flex-[1.2] rounded-2xl overflow-hidden relative"
           {...fadeUp(0.1)}
         >
-          <div>
-            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-accent-light/60 mb-1.5">
-              SVB &middot; March 2023
+          <img
+            src={`${import.meta.env.BASE_URL}svb-hq.jpg`}
+            alt="Silicon Valley Bank headquarters"
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-black/10" />
+          <div className="relative z-10 flex flex-col justify-end h-full p-6">
+            <div className="text-[0.75rem] font-semibold uppercase tracking-[0.1em] text-white/60">
+              SVB Headquarters &middot; Santa Clara, CA
             </div>
-            <div className="text-[2.8rem] font-bold text-accent-light tracking-tight leading-none tabular-nums">$<AnimatedNumber value={3.3} delay={0.2} decimals={1} />B</div>
-            <div className="text-[0.95rem] text-white/55 mt-1">USDC reserves at Silicon Valley Bank</div>
-          </div>
-
-          <div className="text-[0.95rem] text-white/[0.85] leading-relaxed">
-            Attestation said <strong className="text-white">fine</strong> two weeks prior.
-            <br />
-            USDC depegged to <strong className="text-accent-light">$0.87.</strong>
-            <br />
-            Invisible until it wasn&apos;t.
-          </div>
-
-          <Badge variant="accent">Root cause: duration mismatch, not credit risk</Badge>
-
-          {/* Attestation quote inset */}
-          <div className="border-l-2 border-white/10 pl-3 mt-auto">
-            <div className="text-[0.7rem] font-medium uppercase tracking-[0.08em] text-white/30 mb-1">Attestation said:</div>
-            <div className="text-[0.92rem] text-white/40 leading-relaxed">
-              &ldquo;Held at a US regulated bank with $100B+ assets&rdquo;
+            <div className="text-[2.2rem] font-bold text-white tracking-tight leading-none mt-1">
+              $<AnimatedNumber value={3.3} delay={0.2} decimals={1} />B
             </div>
-            <div className="text-[0.92rem] text-accent-light mt-1">Envelope, not data.</div>
+            <div className="text-[0.85rem] text-white/60 mt-0.5">USDC reserves held here</div>
           </div>
         </motion.div>
 
@@ -84,7 +72,7 @@ export function SlideProblem(_props: { subStep?: number }) {
       </div>
 
       {/* Depeg sparkline in card */}
-      <motion.div className="bg-card rounded-xl px-5 py-3 border border-black/7 flex items-center gap-5" {...fadeUp(0.4)}>
+      <motion.div className="flex items-center gap-5 px-1" {...fadeUp(0.4)}>
         <div className="shrink-0">
           <div className="text-[0.78rem] font-semibold uppercase tracking-[0.1em] text-text-tertiary mb-1">
             USDC peg &middot; SVB collapse &middot; Mar 2023
