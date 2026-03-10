@@ -213,6 +213,24 @@
 
 ---
 
+### feat/mcp-server
+
+#### MCP Server Implementation
+- [ ] Add `fastmcp` SDK to `requirements.txt`
+- [ ] Write `backend/mcp_server.py` — standalone MCP server module
+- [ ] Implement tool: `get_stress_scores` — returns all stablecoin stress scores (delegates to scoring service)
+- [ ] Implement tool: `get_stablecoin_detail(stablecoin)` — returns WAM, dimensions, narrative for one stablecoin
+- [ ] Implement tool: `simulate_scenario(stablecoin, rate_hike_bps, hurricane_lat, hurricane_lng, hurricane_category, bank_failure)` — what-if re-scoring
+- [ ] Implement tool: `get_active_alerts` — returns weather events + mint/burn anomalies + FDIC triggers
+- [ ] Implement tool: `get_score_history(stablecoin)` — returns historical scores with IPFS CIDs
+- [ ] Support stdio transport for local AI agent integration
+- [ ] Support SSE transport for remote AI agent access
+- [ ] All tool outputs use standard `{ "data": ..., "error": null, "timestamp": "..." }` envelope
+- [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all 5 tools
+- [ ] Add MCP server startup instructions to `backend/README.md`
+
+---
+
 ## Phase 3: Dashboard & What-If Simulator (Hours 12–20) · Sat Afternoon
 
 ### feat/dashboard
@@ -486,4 +504,4 @@
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-07
+**Last updated:** 2026-03-10

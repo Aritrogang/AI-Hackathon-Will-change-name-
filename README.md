@@ -70,6 +70,13 @@ INFO:     Uvicorn running on http://127.0.0.1:8000
 ```
 Visit http://localhost:8000/health — you should get `{"data":{"status":"ok"},...}`
 
+**Start the MCP server** (optional, for AI agent integration):
+```bash
+cd backend
+source venv/bin/activate
+python mcp_server.py
+```
+
 **Start the frontend** (in a separate terminal):
 ```bash
 cd frontend

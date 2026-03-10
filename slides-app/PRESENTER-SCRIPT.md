@@ -87,7 +87,7 @@
 
 **On screen:** Three layers with chevron arrows: Onchain (Dune, Nansen, Chainalysis) → Katabatic (animated logo reveal) → Downstream (MakerDAO, Aave, Risk Desks). Dark panel: "What Onchain Can't See" — Duration mismatch, Bank health signals, Data center ops risk, Weather tail-risk.
 
-- "Layer 1 — onchain platforms see the flows. Layer 2 — us. The structural fragility that onchain can't see. Layer 3 — DAOs, DeFi protocols, risk desks consume our scores."
+- "Layer 1 — onchain platforms see the flows. Layer 2 — us. The structural fragility that onchain can't see. Layer 3 — DAOs, DeFi protocols, risk desks, and AI agents consume our scores."
 - "Onchain data platforms became the source of truth for onchain behavior. We're building the equivalent for offchain reserve risk."
 
 **Key phrase:** "Onchain shows the flows. Katabatic shows what's about to break."
@@ -139,7 +139,7 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 **On screen:** Heading: "API first infrastructure. Not a consulting fee." Three tiers: Starter API (REST, 6 stablecoins, <2s, 1M calls/mo), Enterprise (highlighted — streaming, custom onboarding, SLA, warehouse), Institutional (FDIC mining, oracle feed, dedicated pipeline). Logo conveyor: MakerDAO, Aave, Compound, Chainlink, USDC, Tether, Uniswap, Ethereum.
 
-- "API-first infrastructure. Starter tier for REST access. Enterprise for streaming and SLA. Institutional for FDIC mining and oracle integration."
+- "API-first infrastructure. Starter tier for REST access. Enterprise for streaming, MCP for AI agents, and SLA. Institutional for FDIC mining and oracle integration."
 - Gesture at logos: "Anyone holding stablecoin positions needs this data."
 
 **Key phrase:** "API subscriptions, not consulting fees."
@@ -154,7 +154,7 @@ Run through the three scenarios on the dashboard. Keep it punchy:
 
 - Pause. Let the numbers count up.
 - "Under a Cat 4 plus 50 basis points — 72-hour latency, 88% coverage."
-- "That's not a letter grade. That's an operational output a DAO treasury can act on."
+- "That's not a letter grade. That's an operational output a DAO treasury — or an AI agent — can act on."
 - "That's Katabatic." *(logo animates on screen)*
 
 **Key phrase:** "72-hour latency. 88% coverage. That's what DAOs need. That's Katabatic."

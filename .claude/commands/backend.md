@@ -8,6 +8,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - **Graph**: NetworkX (stablecoin → bank → datacenter knowledge graph)
 - **LLMs**: Anthropic SDK (Claude), Google GenAI SDK (Gemini) — both for dual-model consensus
 - **External APIs**: FDIC, NOAA/NHC, Etherscan, Nominatim, OpenMeteo, Pinata (IPFS pinning)
+- **MCP**: FastMCP Python SDK — AI-agent-native delivery of risk scores as tool calls
 
 ## Key Files
 - `backend/main.py` — FastAPI app, CORS, routes
@@ -17,6 +18,7 @@ You are a specialized backend engineer for the Katabatic project. Your focus is 
 - `backend/llm/jury.py` — Claude + Gemini dual-model consensus scoring
 - `backend/ipfs/publisher.py` — Pinata IPFS pinning for score verification
 - `backend/data/` — SQLite models, seed fixtures, cached responses
+- `backend/mcp_server.py` — MCP server exposing 5 tools for AI agent consumption (stdio + SSE)
 
 ## Response Format
 All API responses must follow:
@@ -47,6 +49,13 @@ stress_score = (
 - `POST /api/narratives` — Dual-model causal explanation
 - `POST /api/publish-score` — Pin score snapshot to IPFS via Pinata, return CID
 - `GET  /api/score-history/{stablecoin}` — Historical pinned scores with IPFS CIDs
+
+## MCP Tools (AI Agent Interface)
+- `get_stress_scores` — All stablecoin scores (mirrors GET /api/stress-scores)
+- `get_stablecoin_detail(stablecoin)` — Deep dive on one stablecoin
+- `simulate_scenario(...)` — What-if re-scoring (mirrors POST /api/stress-scores/simulate)
+- `get_active_alerts` — Weather events + anomalies
+- `get_score_history(stablecoin)` — Historical scores with IPFS CIDs
 
 ## Conventions
 - Black formatter, type hints required on all public functions

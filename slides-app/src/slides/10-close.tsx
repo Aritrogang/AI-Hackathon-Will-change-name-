@@ -61,7 +61,7 @@ export function SlideClose(_props: { subStep?: number }) {
         >
           Under a Cat 4 hitting the Gulf + 50bps rate hike on your USDC position.
           <br />
-          <span className="text-white/80 font-medium inline-flex items-center gap-1 justify-center flex-wrap">That&apos;s what DAO treasuries need. That&apos;s <KatabaticLogo size="sm" dark />.</span>
+          <span className="text-white/80 font-medium inline-flex items-center gap-1 justify-center flex-wrap">That&apos;s what DAO treasuries and AI agents need. That&apos;s <KatabaticLogo size="sm" dark />.</span>
         </motion.p>
       </motion.div>
     </SlideLayout>

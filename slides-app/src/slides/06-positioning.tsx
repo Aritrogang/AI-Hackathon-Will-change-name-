@@ -122,6 +122,7 @@ const layers: {
       { src: `${base}logos/mkr.svg`, name: "MakerDAO" },
       { src: `${base}logos/aave.svg`, name: "Aave" },
       { src: `${base}logos/risk-desks.svg`, name: "Risk Desks" },
+      { src: `${base}logos/ai-agents.svg`, name: "AI Agents" },
     ],
     featured: false,
   },
@@ -144,7 +145,7 @@ export function SlidePositioning(_props: { subStep?: number }) {
       {/* 3 layers — original containers with connecting line + chevrons */}
       <div className="relative mt-4">
 
-        <div className="flex gap-5 relative">
+        <div className="flex gap-3 relative">
           {layers.map((layer, i) => (
             <div key={layer.title} className="contents">
               <motion.div
@@ -164,11 +165,11 @@ export function SlidePositioning(_props: { subStep?: number }) {
                     <span className="text-[1.15rem] font-semibold text-accent tracking-[-0.02em]">katabatic</span>
                   </div>
                 ) : (
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-3 flex-wrap">
                     {layer.logos.map(logo => (
-                      <div key={logo.name} className="flex items-center gap-2" title={logo.name}>
-                        <img src={logo.src} alt={logo.name} className="w-8 h-8 rounded-full" />
-                        <span className="text-[0.88rem] text-text-tertiary font-medium">{logo.name}</span>
+                      <div key={logo.name} className="flex items-center gap-1.5" title={logo.name}>
+                        <img src={logo.src} alt={logo.name} className="w-7 h-7 rounded-full" />
+                        <span className="text-[0.82rem] text-text-tertiary font-medium">{logo.name}</span>
                       </div>
                     ))}
                   </div>

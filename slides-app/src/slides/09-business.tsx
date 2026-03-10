@@ -108,8 +108,8 @@ export function SlideBusiness(_props: { subStep?: number }) {
       {/* Tiers — what you get, no prices */}
       <div className="flex flex-col gap-4">
         {[
-          { tier: "Starter API", tierColor: "text-text-tertiary", borderColor: "border-black/10", desc: "REST API access \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
-          { tier: "Enterprise", tierColor: "text-accent", borderColor: "border-accent", desc: "Real-time streaming \u00B7 custom stablecoin onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
+          { tier: "Starter API", tierColor: "text-text-tertiary", borderColor: "border-black/10", desc: "REST API access \u00B7 MCP for AI agents \u00B7 6 stablecoins \u00B7 <2s rescore \u00B7 1M calls/mo", featured: false },
+          { tier: "Enterprise", tierColor: "text-accent", borderColor: "border-accent", desc: "Real-time streaming \u00B7 custom onboarding \u00B7 SLA \u00B7 warehouse delivery", featured: true },
           { tier: "Institutional", tierColor: "text-text-tertiary", borderColor: "border-black/10", desc: "FDIC Call Report mining \u00B7 oracle feed integration \u00B7 dedicated scoring pipeline", featured: false },
         ].map((t, i) => (
           <motion.div

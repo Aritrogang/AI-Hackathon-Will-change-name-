@@ -17,6 +17,7 @@ On-chain data platforms became the authoritative source for on-chain behavioral 
 - DeFi protocols that gate borrowing against a reserve health score
 - Risk desks that embed the score into portfolio monitoring infrastructure
 - Oracle feeds (Chainlink) for on-chain risk-gating (aspirational/demo mock layer)
+- AI trading agents that query reserve risk via MCP tool calls before executing stablecoin positions
 
 ### Stack Positioning
 
@@ -27,7 +28,7 @@ Katabatic is to stablecoin reserve risk what on-chain data infrastructure platfo
 | On-chain data (Dune, Nansen, Chainalysis) | Mint/burn flows, wallet balances, transaction history |
 | Off-chain regulatory (OCC XBRL, FDIC) | WAM, LTV ratios, bank health, reserve composition |
 | **Reserve Risk — Katabatic** | **Stress Score = WAM × weather multiplier × concentration. API + streaming.** |
-| Downstream consumers | DAO governance · DeFi protocols · Risk desks · Oracle feeds |
+| Downstream consumers | DAO governance · DeFi protocols · Risk desks · Oracle feeds · AI agents (MCP) |
 
 On-chain data platforms have no WAM duration engine, no FDIC Call Report mining, no weather tail-risk model, no reserve stress simulation. Katabatic ingests on-chain mint/burn data as *one input* into a multi-signal scoring engine combining off-chain regulatory filings + macroeconomic signals. **Complementary, not competing.**
 
@@ -48,6 +49,7 @@ Stablecoin risk is a **duration mismatch problem** (SVB failure mode), not a cre
 - Webhook/streaming (real-time score updates on new data)
 - What-If simulator UI (demo-facing; shows the data product in action)
 - Oracle mock (Chainlink-ready; scores pinned to IPFS via Pinata with verifiable CID)
+- MCP server (AI-agent-native; risk scores as MCP tool calls for trading bots and agent frameworks)
 
 **Target customers:** DAO Treasuries (MakerDAO, Aave, Compound), DeFi protocols holding stablecoin positions, institutional risk desks, stablecoin issuers needing GENIUS Act compliance tooling.
 
@@ -97,6 +99,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
 | **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
 | **IPFS Pinning** | Pinata API | Pin score snapshots to IPFS for verifiable, immutable score provenance |
+| **MCP Server** | FastMCP (Python SDK) | AI-agent-native delivery of risk scores as tool calls |
 | **Deployment** | Vercel (frontend) + Railway/Render (backend) | Demo hosting |
 
 ---
@@ -123,6 +126,7 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 │  Operational: Data center corridor overlap with storm track       │
 │  LLM jury: Claude + Gemini consensus on qualitative signals      │
 │  Output: Liquidity Stress Score (0–100) + redemption latency     │
+│  MCP Server: 5 tools for AI agent consumption (stdio + SSE)      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Layer 4: WHAT-IF DASHBOARD                                      │
 │  Interactive map: bank markers + data center corridors           │
@@ -175,6 +179,7 @@ main                               ← Production-ready, deploy target
 │   ├── feat/dashboard             ← React shell, stress score table, WAM charts
 │   ├── feat/what-if-simulator     ← Leaflet map, hurricane drop, rate/failure sliders
 │   ├── feat/narratives            ← Multi-model causal explanation generation
+│   ├── feat/mcp-server            ← MCP server: AI-agent-native score delivery
 │   ├── feat/svb-backtest          ← SVB March 2023 duration mismatch replay
 │   └── feat/demo-polish           ← Final polish, trust layer mock, deploy
 ```
@@ -281,6 +286,14 @@ main                               ← Production-ready, deploy target
 - [ ] Endpoint: `GET /api/stress-scores` — returns all stablecoin stress scores
 - [ ] Endpoint: `POST /api/stress-scores/simulate` — accepts scenario params (rate hike bps, hurricane category + location, bank failure), returns re-scored outputs
 
+**feat/mcp-server (Backend role)**
+- [ ] Add `fastmcp` SDK to `requirements.txt`
+- [ ] Write `backend/mcp_server.py` — MCP server exposing 5 tools: `get_stress_scores`, `get_stablecoin_detail`, `simulate_scenario`, `get_active_alerts`, `get_score_history`
+- [ ] Each tool delegates to existing scoring/weather/ipfs service functions
+- [ ] Support stdio transport (local agent) and SSE transport (remote agent)
+- [ ] All tool outputs use the standard `{ "data": ..., "error": null, "timestamp": "..." }` envelope
+- [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all 5 MCP tools
+
 - [ ] Tag `v0.2-pipeline`
 
 ### Phase 3: Dashboard & What-If Simulator (Sat Afternoon · Hours 12–20)
@@ -361,7 +374,7 @@ main                               ← Production-ready, deploy target
 
 4. **SVB backtest.** Rewind to March 2023. Show the WAM chart — SVB was holding 2-year treasuries. Duration mismatch was already critical. The rate hike was just the match. "Our engine would have flagged this 48 hours before the depeg."
 
-5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage' — pinned to IPFS so anyone can verify it. That's what DAO treasuries and DeFi protocols need. That's Katabatic."
+5. **Close the pitch.** "This is the difference between a rating agency and a risk engine. We don't give you a letter grade you can get sued over. We give you: 'Under a Cat 4 hitting the Gulf + 50bps hike, your USDC position shows 72-hour redemption latency and 88% coverage' — pinned to IPFS so anyone can verify it, consumed as an API call or an MCP tool call. That's what DAO treasuries, DeFi protocols, and AI agents need. That's Katabatic."
 
 ---
 

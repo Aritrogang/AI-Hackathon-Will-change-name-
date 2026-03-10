@@ -27,7 +27,7 @@ const phases = [
     label: "Next",
     labelColor: "text-white/70",
     title: "Oracle Grade Risk Feed",
-    badge: <Badge variant="consensus" dot>IPFS verified &middot; Multi SIG for AI &middot; Chainlink ready</Badge>,
+    badge: <Badge variant="consensus" dot>IPFS verified &middot; MCP for AI agents &middot; Chainlink ready</Badge>,
     featured: true,
     bg: true,
   },
