@@ -1,0 +1,64 @@
+"""Pydantic models for stress scoring output and scenario parameters."""
+
+from pydantic import BaseModel, Field
+from typing import Optional
+
+
+class DimensionScore(BaseModel):
+    name: str
+    score: float = Field(ge=0, le=100)
+    weight: float = Field(ge=0, le=1)
+    weighted_score: float = Field(ge=0, le=100)
+    detail: Optional[str] = None
+
+
+class JuryResult(BaseModel):
+    claude_score: float
+    gemini_score: float
+    delta: float
+    consensus: bool
+    averaged_score: float
+    warning: Optional[str] = None
+
+
+class StressScoreResult(BaseModel):
+    stablecoin: str
+    stress_score: float = Field(ge=0, le=100)
+    redemption_latency_hours: str
+    liquidity_coverage_ratio: str
+    stress_level: str = Field(description="Low, Moderate, Elevated, or Critical")
+    dimensions: list[DimensionScore]
+    jury: Optional[JuryResult] = None
+    narrative: Optional[str] = None
+    ipfs_cid: Optional[str] = None
+    resolution_source: str = Field(default="fixture", description="live | cache | fixture — how underlying data was resolved")
+    source_timestamp: Optional[str] = Field(default=None, description="ISO timestamp of when source data was fetched")
+
+
+class HurricaneParams(BaseModel):
+    lat: float
+    lng: float
+    category: int = Field(ge=1, le=5)
+
+
+class ScenarioParams(BaseModel):
+    stablecoin: str
+    rate_hike_bps: Optional[int] = Field(default=None, ge=0, le=500)
+    hurricane: Optional[HurricaneParams] = None
+    bank_failure: Optional[str] = None
+
+
+class BacktestEvent(BaseModel):
+    date: str
+    stress_score: float
+    wam_svb_days: Optional[float] = None
+    fed_rate: Optional[float] = None
+    event: Optional[str] = None
+
+
+class BacktestResult(BaseModel):
+    name: str
+    description: str
+    timeline: list[BacktestEvent]
+    critical_date: Optional[str] = None
+    key_insight: Optional[str] = None

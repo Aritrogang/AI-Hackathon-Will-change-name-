@@ -37,11 +37,11 @@ async def startup_check():
     keys = {
         "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
         "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
-        "NOAA_API_TOKEN": os.getenv("NOAA_API_TOKEN"),
         "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
         "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),
         "PINATA_SECRET_API_KEY": os.getenv("PINATA_SECRET_API_KEY"),
     }
+    # Note: NOAA NWS, Open-Meteo, FDIC BankFind, and Nominatim require no API keys
     for name, val in keys.items():
         if not val:
             print(f"  WARNING: {name} not set — related features will be disabled")

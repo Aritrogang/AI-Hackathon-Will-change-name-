@@ -33,7 +33,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Set up `.env` loading with `python-dotenv` — all API keys read from env
 - [ ] Create `app/` package structure: `app/routers/`, `app/services/`, `app/models/`, `app/db/`
 - [ ] Set up SQLite with `app/db/database.py` — tables: `reserve_data`, `stress_scores`, `api_cache`
-- [ ] Implement API response envelope: `{ "data": ..., "error": null, "timestamp": "..." }` as a shared utility
+- [ ] Implement API response envelope: `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }` as a shared utility
 - [ ] Write `app/models/reserve.py` — Pydantic models for the reserve JSON schema (stablecoin, counterparties, onchain_cross_check)
 - [ ] Write `app/models/stress.py` — Pydantic models for stress score output (score, latency, coverage, dimensions)
 
@@ -45,16 +45,25 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Create `src/lib/api.ts` — typed fetch wrapper pointing to backend base URL, handles response envelope unwrapping
 - [ ] Add `.env` for `VITE_API_BASE_URL`
 
-### Seed Data / Fixtures
-- [ ] Author `data/fixtures/usdc_baseline.json` — USDC reserve data with BNY Mellon (35%, NY), State Street (30%, Boston), BlackRock (20%, Chicago), other (15%). WAM = 45 days.
-- [ ] Author `data/fixtures/usdt_baseline.json` — USDT reserve data (less transparent; higher opacity score). WAM = 90 days.
+### Data Provider Layer + Fixtures
+
+> **Architecture:** Every data source follows a 3-tier resolution pattern: **Live API → SQLite Cache (TTL) → Fixture Fallback**. Every API response includes a `data_source` field (`"live"`, `"cache"`, `"fixture"`) so the UI shows data provenance.
+
+- [ ] Build `app/services/data_provider.py` — abstract base class with `Live→Cache→Fixture` resolution pattern + `DataResult` model carrying `source` provenance field
+- [ ] Build `app/services/cache.py` — async SQLite cache with TTL-based `get`/`set`/`invalidate`, key = `(provider, source_id)`, configurable TTL per provider
+- [ ] Build `app/services/fdic_provider.py` — FDIC BankFind API client (`https://api.fdic.gov/financials`, no auth needed). Derives WAM proxy from `SC/ASSET × avg maturity` and LTV proxy from `(ASSET-EQ)/ASSET`
+- [ ] Build `app/services/weather_provider.py` — NOAA NWS alerts (`https://api.weather.gov/alerts/active`, User-Agent header only, no API token) + Open-Meteo historical weather (`https://archive-api.open-meteo.com/v1/archive`, fully public, no key, 10k req/day)
+- [ ] Build `app/services/etherscan_provider.py` — Etherscan V2 API (`https://api.etherscan.io/v2/api?chainid=1`, API key required). ERC-20 transfers + token supply for mint/burn cross-reference
+- [ ] Build `app/services/nominatim_provider.py` — Nominatim geocoding (`https://nominatim.openstreetmap.org/search`, User-Agent required, 1 req/sec rate limit)
+- [x] Validate existing fixtures as fallback layer (`usdc_baseline.json`, `usdt_baseline.json`, `svb_march2023.json`)
 - [ ] Author `data/fixtures/dai_baseline.json` — DAI with mixed collateral, lower WAM, higher peg stability risk.
 - [ ] Author `data/fixtures/frax_baseline.json` — FRAX algorithmic component, moderate stress.
 - [ ] Author `data/fixtures/busd_baseline.json` — BUSD with Paxos (regulatory action scenario).
 - [ ] Author `data/fixtures/pyusd_baseline.json` — PayPal USDC-like, newer issuer, moderate transparency.
-- [ ] Author `data/fixtures/svb_march2023.json` — SVB scenario: WAM ~2,040 days (5.6-year average duration per 10-K filing), high duration mismatch, $209B assets, Silicon Valley Bank, Santa Clara CA.
 - [ ] Author `data/fixtures/hurricane_ian_sept2022.json` — Ian scenario: Cat 4, Gulf coast landfall, FL bank LTV exposure, ops risk to Atlanta data corridor.
 - [ ] Author `data/fixtures/hurricane_nova_scenario.json` — Synthetic Cat 4 hitting Northern Virginia — triggers AWS us-east-1 ops risk for USDC/Circle.
+- [ ] Build `backend/scripts/warm_cache.py` — one-shot script to pre-populate SQLite cache from all live APIs on startup
+- [ ] Add `data_source` provenance field (`"live" | "cache" | "fixture"`) to all API response models
 - [ ] Tag `v0.1-foundation`
 
 ---
@@ -73,7 +82,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Cache extraction results in SQLite `api_cache` table keyed on source URL + hash
 
 #### On-Chain Cross-Reference
-- [ ] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData` using Etherscan API
+- [ ] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData` using Etherscan V2 API (`https://api.etherscan.io/v2/api?chainid=1`)
 - [ ] USDC contract address hardcoded: `0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48`
 - [ ] USDT contract address: `0xdAC17F958D2ee523a2206206994597C13D831ec7`
 - [ ] Parse Transfer events from Etherscan to compute 7-day net burn/mint volume in USD
@@ -136,9 +145,9 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Used for SVB (March 2023 Bay Area conditions) and Hurricane Ian (Sept 2022 Gulf conditions) backtests
 
 #### FDIC Call Report Mining
-- [ ] Write `app/services/fdic.py` — `get_bank_financials(fdic_cert: int) -> BankFinancials` using FDIC API (`https://banks.data.fdic.gov/api/financials`)
-- [ ] Fields to extract: total assets, total deposits, mortgage loans, LTV ratios, liquidity ratios, net interest margin
-- [ ] Write `mine_ltv_from_call_report(fdic_cert: int) -> float` — calls FDIC API, uses Claude to parse LTV ratio from narrative fields if not in structured data
+- [ ] Write `app/services/fdic.py` — `get_bank_financials(fdic_cert: int) -> BankFinancials` using FDIC BankFind API (`https://api.fdic.gov/financials`, no auth required)
+- [ ] Fields available: ASSET, DEP, EQ, SC, NIMY, ROA. Note: WAM and LTV are NOT directly available — derive WAM proxy from `SC/ASSET × avg_maturity` and LTV proxy from `(ASSET-EQ)/ASSET` (leverage ratio)
+- [ ] Write `mine_ltv_from_call_report(fdic_cert: int) -> float` — calls FDIC API for structured fields, uses Claude to derive LTV estimate from available financial ratios
 - [ ] Write `app/prompts/fdic_ltv_extraction.txt` — prompt for Claude to extract LTV ratio from Call Report text
 - [ ] Attach LTV ratios to bank nodes in knowledge graph
 
@@ -240,7 +249,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 - [ ] Implement tool: `get_score_history(stablecoin)` — returns historical scores with IPFS CIDs
 - [ ] Support stdio transport for local AI agent integration
 - [ ] Support SSE transport for remote AI agent access
-- [ ] All tool outputs use standard `{ "data": ..., "error": null, "timestamp": "..." }` envelope
+- [ ] All tool outputs use standard `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }` envelope
 - [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all 5 tools
 - [ ] Add MCP server startup instructions to `backend/README.md`
 
@@ -440,12 +449,13 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 ### feat/demo-polish
 
-#### Demo Mode
-- [ ] Add `VITE_DEMO_MODE=true` env flag
-- [ ] When demo mode on: all API calls return from local fixture JSON (no network latency)
-- [ ] Write `src/lib/demoData.ts` — exports all demo fixture responses for each endpoint
-- [ ] Create demo mode banner: "Running in Demo Mode — cached data loaded"
-- [ ] Pre-wire 3 demo scenarios in demo mode:
+#### Graceful Degradation (replaces "Demo Mode")
+
+> **No separate demo mode.** The 3-tier data resolution (Live→Cache→Fixture) IS the graceful degradation. UI shows a provenance badge on every data point: "Live" (green), "Cached" (yellow), "Fixture" (gray). If live APIs are down, scores still compute from cache/fixtures — judges see the same product, with a badge showing data source.
+
+- [ ] Add data source badge component — shows "LIVE", "CACHED", or "FIXTURE" pill next to every score
+- [ ] Implement automatic fallback: if live API fails → try cache → try fixture (no manual toggle needed)
+- [ ] Pre-wire 3 demo scenarios that work regardless of data source:
   - **Scenario A** (primary): Cat 4 hurricane at 27.8°N 82.6°W (Gulf Coast / Tampa Bay) → FL bank LTV stress + Northern Virginia data center corridor ops risk as storm tracks north → score jumps to 68
   - **Scenario B**: SVB backtest replay — score crosses 75 on Mar 8 2023
   - **Scenario C**: 100bps rate hike → WAM sensitivity for all 6 stablecoins → sorted by impact
@@ -506,7 +516,7 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 ### API Key Validation
 - [ ] On backend startup: validate all required env vars are set, log warning if any missing
-- [ ] Graceful degradation: if NOAA key missing → skip weather data, log warning, continue with baseline scores
+- [ ] Graceful degradation: if NOAA API unreachable → use cached weather data or skip, log warning, continue with baseline scores (NOAA requires no API key — only User-Agent header)
 - [ ] Graceful degradation: if Etherscan key missing → skip on-chain cross-reference, set divergence_pct = null
 
 ### Documentation
@@ -518,14 +528,16 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 
 ## Environment Variables Checklist
 
-- [ ] `ANTHROPIC_API_KEY` — obtained and set in `.env`
-- [ ] `GEMINI_API_KEY` — obtained and set in `.env`
-- [ ] `NOAA_API_TOKEN` — obtained from api.weather.gov (free registration)
-- [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (free tier)
-- [ ] `VITE_API_BASE_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)
-- [ ] `PINATA_API_KEY` — obtained from pinata.cloud (free tier)
+- [ ] `ANTHROPIC_API_KEY` — obtained and set in `.env` (required for LLM jury + narratives)
+- [ ] `GEMINI_API_KEY` — obtained and set in `.env` (required for multi-model consensus)
+- [ ] `ETHERSCAN_API_KEY` — obtained from etherscan.io (free tier, required for Etherscan V2 mint/burn cross-reference)
+- [ ] `PINATA_API_KEY` — obtained from pinata.cloud (free tier, required for IPFS score pinning)
 - [ ] `PINATA_SECRET_API_KEY` — obtained from pinata.cloud
-- [ ] `VITE_DEMO_MODE` — set to `true` for demo, `false` for live data
+
+> **No API key needed for:** NOAA NWS (User-Agent header only), Open-Meteo (fully public), FDIC BankFind (fully public), Nominatim (User-Agent only)
+
+**Frontend config (not API keys):**
+- [ ] `VITE_API_BASE_URL` — set to backend URL (local: `http://localhost:8000`, prod: Railway URL)
 
 ---
 
@@ -539,4 +551,4 @@ Katabatic is an **API-first data infrastructure product**, not a dashboard. The 
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-11
+**Last updated:** 2026-03-11 (live pipeline migration applied)

@@ -1,0 +1,99 @@
+{
+  "stablecoin": "USDC",
+  "issuer": "Circle",
+  "report_date": "2023-02-28",
+  "data_source": "pdf_attestation",
+  "total_reserves": 43500000000,
+  "weighted_avg_maturity_days": 45,
+  "scenario": {
+    "name": "SVB Collapse — March 2023",
+    "description": "Silicon Valley Bank held $3.3B of USDC reserves. SVB had extreme duration mismatch: ~2,040-day WAM on held-to-maturity securities (MBS + agency bonds). Fed rate hikes (+475bps over 12 months) created $17.7B in unrealized losses. Bank run triggered by stock drop on March 8, FDIC seizure on March 10. USDC depegged to $0.87 on March 11.",
+    "key_insight": "Duration mismatch was the root cause. Rate hikes were the catalyst. The bank run was the outcome. A stress engine watching WAM would have flagged critical risk 1-2 weeks before the depeg."
+  },
+  "counterparties": [
+    {
+      "bank_name": "Silicon Valley Bank",
+      "city": "Santa Clara",
+      "state": "CA",
+      "lat": 37.3541,
+      "lng": -121.9552,
+      "percentage": 7.6,
+      "asset_class": "demand_deposits",
+      "maturity_days": 0,
+      "fdic_cert": 24735,
+      "fdic_ltv_ratio": 0.71,
+      "liquidity_coverage": 0.68,
+      "data_center_corridor": "us-west-2",
+      "svb_specific": {
+        "total_assets_bn": 209,
+        "htm_securities_bn": 91.3,
+        "htm_avg_maturity_days": 2040,
+        "unrealized_losses_bn": 17.7,
+        "deposits_uninsured_pct": 93.8,
+        "fed_funds_rate_at_failure": 4.75,
+        "stock_drop_mar8_pct": -60,
+        "fdic_seizure_date": "2023-03-10",
+        "usdc_depeg_low": 0.87
+      }
+    },
+    {
+      "bank_name": "BNY Mellon",
+      "city": "New York",
+      "state": "NY",
+      "lat": 40.7128,
+      "lng": -74.006,
+      "percentage": 35.0,
+      "asset_class": "t_bills",
+      "maturity_days": 30,
+      "fdic_cert": 7534,
+      "fdic_ltv_ratio": 0.55,
+      "liquidity_coverage": 1.18,
+      "data_center_corridor": "us-east-1"
+    },
+    {
+      "bank_name": "State Street",
+      "city": "Boston",
+      "state": "MA",
+      "lat": 42.3601,
+      "lng": -71.0589,
+      "percentage": 30.0,
+      "asset_class": "t_bills",
+      "maturity_days": 45,
+      "fdic_cert": 823,
+      "fdic_ltv_ratio": 0.52,
+      "liquidity_coverage": 1.20,
+      "data_center_corridor": "us-east-1"
+    },
+    {
+      "bank_name": "Other custodians",
+      "city": "Various",
+      "state": "Various",
+      "lat": null,
+      "lng": null,
+      "percentage": 27.4,
+      "asset_class": "t_bills",
+      "maturity_days": 30,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": null,
+      "data_center_corridor": null
+    }
+  ],
+  "backtest_timeline": [
+    { "date": "2023-02-01", "stress_score": 42, "wam_svb_days": 2040, "fed_rate": 4.50, "event": null },
+    { "date": "2023-02-15", "stress_score": 45, "wam_svb_days": 2040, "fed_rate": 4.50, "event": null },
+    { "date": "2023-03-01", "stress_score": 52, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "Fed signals further hikes" },
+    { "date": "2023-03-06", "stress_score": 58, "wam_svb_days": 2040, "fed_rate": 4.75, "event": null },
+    { "date": "2023-03-08", "stress_score": 76, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "SVB stock drops 60%. Katabatic crosses CRITICAL threshold." },
+    { "date": "2023-03-09", "stress_score": 85, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "Bank run begins. $42B withdrawal attempts." },
+    { "date": "2023-03-10", "stress_score": 94, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "FDIC seizes SVB. Circle confirms $3.3B exposure." },
+    { "date": "2023-03-11", "stress_score": 97, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "USDC depegs to $0.87. Redemptions frozen." },
+    { "date": "2023-03-13", "stress_score": 68, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "Fed backstop announced. USDC re-pegs. Circle moves reserves." },
+    { "date": "2023-03-15", "stress_score": 48, "wam_svb_days": 2040, "fed_rate": 4.75, "event": "USDC fully re-pegged. SVB exposure eliminated." }
+  ],
+  "onchain_cross_check": {
+    "burn_7d_usd": 3200000000,
+    "custodian_cash_delta": -3300000000,
+    "divergence_pct": 3.1
+  }
+}

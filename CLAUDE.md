@@ -96,9 +96,9 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 | **Knowledge Graph** | NetworkX | Stablecoin → Bank → DataCenter → Jurisdiction graph |
 | **LLM (Primary)** | Claude API (Anthropic SDK) | Attestation/PDF extraction, FDIC Call Report mining, stress narratives |
 | **LLM (Jury)** | Gemini API (Google GenAI) | Second model for consensus scoring |
-| **Weather Data** | NOAA API, NHC (hurricane tracks), OpenMeteo | Tail-risk weather multipliers |
-| **Bank Data** | FDIC API + FDIC Call Reports | WAM proxy, LTV ratios, liquidity data |
-| **On-Chain Data** | Etherscan API / Dune Analytics | Mint/Burn flow cross-reference |
+| **Weather Data** | NOAA NWS API (no auth, User-Agent only), NHC, Open-Meteo (no auth) | Tail-risk weather multipliers |
+| **Bank Data** | FDIC BankFind API (`api.fdic.gov`, no auth) | ASSET/DEP/EQ/SC/NIMY/ROA — derive WAM & LTV proxies |
+| **On-Chain Data** | Etherscan V2 API (`api.etherscan.io/v2/api?chainid=1`) | Mint/Burn flow cross-reference |
 | **Regulatory Data** | GENIUS Act XBRL feeds / OCC API / FDIC filings | Reserve composition, maturities, custodians (LLM-extracted) |
 | **Geocoding** | Nominatim (OpenStreetMap) | Bank + data center → lat/lng resolution |
 | **Database** | SQLite (dev) | Reserve data, stress history, cached API responses |
@@ -150,10 +150,19 @@ This is why the SVB backtest works: SVB had extreme duration mismatch → weathe
 
 ---
 
-## Architecture (5 Layers)
+## Architecture (6 Layers)
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
+│  Layer 0: DATA PROVIDERS (3-Tier Resolution)                     │
+│  Every data source: Live API → SQLite Cache (TTL) → Fixture      │
+│  FDIC BankFind API (no auth) → bank financials, derive WAM/LTV  │
+│  NOAA NWS (User-Agent only) → active weather alerts              │
+│  Etherscan V2 (API key) → mint/burn cross-reference              │
+│  Open-Meteo (no auth) → historical weather for backtests         │
+│  Nominatim (User-Agent, 1req/s) → geocoding                     │
+│  All responses carry data_source: "live" | "cache" | "fixture"  │
+├─────────────────────────────────────────────────────────────────┤
 │  Layer 1: INGESTION                                              │
 │  GENIUS Act attestation reports / PDFs → Claude extraction → JSON│
 │  On-chain Mint/Burn flows → cross-reference custodian cash       │
@@ -329,7 +338,7 @@ main                               ← Production-ready, deploy target
   /backend        ← FastAPI app
   /frontend       ← React 19 + Vite dashboard SPA (demo vehicle for the API)
   /slides-app     ← React 19 + Vite + Framer Motion pitch deck (10 slides, DONE)
-  /data           ← Seed data, attestation fixtures, FDIC Call Report samples
+  /data           ← Fixture fallbacks (demo safety net), attestation samples, extracted data
   /scripts        ← One-off data processing scripts
   ```
 - [ ] Set up `backend/`: FastAPI skeleton, `/health` endpoint, CORS config, `.env` for API keys
@@ -363,7 +372,8 @@ main                               ← Production-ready, deploy target
     }
   }
   ```
-- [ ] Hard-code seed fixtures: SVB scenario (March 2023) + Hurricane Ian (Sept 2022) + Hurricane scenario hitting Northern Virginia data center corridor
+- [ ] Build data provider layer: `data_provider.py` (Live→Cache→Fixture base), `cache.py` (async SQLite TTL cache), `fdic_provider.py`, `weather_provider.py`, `etherscan_provider.py`, `nominatim_provider.py`
+- [ ] Validate existing fixture fallbacks: `usdc_baseline.json`, `usdt_baseline.json`, `svb_march2023.json`
 - [ ] Tag `v0.1-foundation`
 
 ### Phase 2: Pipeline & Knowledge Graph (Sat Morning · Hours 4–12)
@@ -468,7 +478,7 @@ main                               ← Production-ready, deploy target
   - Scenario B: SVB collapse backtest — duration mismatch as root cause
   - Scenario C: 100bps rate hike → WAM sensitivity → show which stablecoins are most exposed
 - [ ] Loading states, error handling, empty states
-- [ ] Demo mode toggle: preload data, skip API latency with cached responses
+- [ ] Graceful degradation: UI shows data source badge ("Live"/"Cached"/"Fixture") on every score — no separate demo mode needed. 3-tier resolution (Live→Cache→Fixture) IS the graceful degradation
 
 - [ ] Tag `v0.4-backtests`
 
@@ -514,12 +524,12 @@ main                               ← Production-ready, deploy target
 ```
 ANTHROPIC_API_KEY=           # Claude API for extraction, narratives, LLM jury
 GEMINI_API_KEY=              # Gemini for multi-model consensus scoring
-NOAA_API_TOKEN=              # NOAA weather data
-OPENMETEO_API_KEY=           # Historical weather (free tier)
-ETHERSCAN_API_KEY=           # On-chain Mint/Burn cross-reference
+ETHERSCAN_API_KEY=           # Etherscan V2 — on-chain Mint/Burn cross-reference
 PINATA_API_KEY=              # Pinata IPFS pinning for score verification
 PINATA_SECRET_API_KEY=       # Pinata secret key for authenticated pinning
 ```
+
+**No API key needed for:** NOAA NWS (User-Agent header only), Open-Meteo (fully public, 10k req/day), FDIC BankFind (fully public), Nominatim (User-Agent only, 1 req/sec).
 
 ---
 
@@ -552,7 +562,7 @@ All project work is tracked in **`TASKS.md`** at the repo root. This is the mast
 - Commit messages: `feat:`, `fix:`, `chore:`, `docs:` prefixes
 - Python: Black formatter, type hints, docstrings on public functions
 - React: Functional components, hooks only, no class components
-- All API responses follow: `{ "data": ..., "error": null, "timestamp": "..." }`
+- All API responses follow: `{ "data": ..., "error": null, "timestamp": "...", "resolution_source": "live|cache|fixture" }`
 - Branch names: `feat/short-description`, `fix/short-description`
 - Never use "rating" or "grade" in UI copy — always "Liquidity Stress Score" or "stress level"
 

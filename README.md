@@ -48,10 +48,11 @@ Edit `backend/.env` and fill in your keys:
 # Required — get these BEFORE the hackathon
 ANTHROPIC_API_KEY=sk-ant-...        # https://console.anthropic.com
 GEMINI_API_KEY=...                   # https://aistudio.google.com/apikey
-NOAA_API_TOKEN=...                  # https://api.weather.gov (free, instant)
 ETHERSCAN_API_KEY=...               # https://etherscan.io/myapikey (free tier)
 PINATA_API_KEY=...                  # https://app.pinata.cloud/developers (free tier)
 PINATA_SECRET_API_KEY=...           # Same Pinata dashboard
+
+# No key needed: NOAA (User-Agent only), Open-Meteo (public), FDIC BankFind (public), Nominatim (User-Agent only)
 ```
 
 **DO NOT commit this file.** It's in `.gitignore`.
@@ -106,7 +107,7 @@ If both health check and frontend dev server start without errors, you're good t
 ├── backend/          ← FastAPI API + scoring engine (Python)
 ├── frontend/         ← React dashboard (TypeScript)
 ├── slides-app/       ← Pitch deck presentation (React)
-├── data/             ← Seed fixtures, extracted data
+├── data/             ← Fixture fallbacks, extracted data, cache
 ├── scripts/          ← One-off data processing scripts
 ├── setup.sh          ← One-command dev setup
 ├── CLAUDE.md         ← Full project spec
@@ -117,3 +118,7 @@ If both health check and frontend dev server start without errors, you're good t
 
 - Adi Prathapa
 - Aritro Ganguly
+- Connor
+- Krish
+- Suchit
+- Vikram

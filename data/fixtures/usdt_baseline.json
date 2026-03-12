@@ -1,0 +1,71 @@
+{
+  "stablecoin": "USDT",
+  "issuer": "Tether",
+  "report_date": "2026-01-31",
+  "data_source": "pdf_attestation",
+  "total_reserves": 95000000000,
+  "weighted_avg_maturity_days": 90,
+  "counterparties": [
+    {
+      "bank_name": "Cantor Fitzgerald",
+      "city": "New York",
+      "state": "NY",
+      "lat": 40.7128,
+      "lng": -74.006,
+      "percentage": 40.0,
+      "asset_class": "t_bills",
+      "maturity_days": 90,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": null,
+      "data_center_corridor": "us-east-1"
+    },
+    {
+      "bank_name": "Britannia Financial",
+      "city": "Nassau",
+      "state": "Bahamas",
+      "lat": 25.0480,
+      "lng": -77.3554,
+      "percentage": 25.0,
+      "asset_class": "commercial_paper",
+      "maturity_days": 120,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": null,
+      "data_center_corridor": null
+    },
+    {
+      "bank_name": "Undisclosed EU Bank",
+      "city": "Unknown",
+      "state": "EU",
+      "lat": 48.8566,
+      "lng": 2.3522,
+      "percentage": 20.0,
+      "asset_class": "sovereign_bonds",
+      "maturity_days": 180,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": null,
+      "data_center_corridor": "eu-west-1"
+    },
+    {
+      "bank_name": "Other / Undisclosed",
+      "city": "Unknown",
+      "state": "Unknown",
+      "lat": null,
+      "lng": null,
+      "percentage": 15.0,
+      "asset_class": "mixed",
+      "maturity_days": 60,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": null,
+      "data_center_corridor": null
+    }
+  ],
+  "onchain_cross_check": {
+    "burn_7d_usd": 1200000000,
+    "custodian_cash_delta": null,
+    "divergence_pct": null
+  }
+}
