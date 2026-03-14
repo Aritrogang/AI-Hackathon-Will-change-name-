@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 import { Badge } from "@/components/ui/badge"
-import { HelicityLogo } from "@/components/helicity-logo"
+import { KatabaticLogo } from "@/components/katabatic-logo"
 
 const base = import.meta.env.BASE_URL
 
@@ -26,7 +26,7 @@ const phases = [
     num: "02",
     label: "Next",
     labelColor: "text-white/70",
-    title: "Oracle Grade Risk Feed",
+    title: "Oracle Standard Risk Feed",
     badge: <Badge variant="consensus" dot>Enterprise API &middot; Streaming &middot; TEE execution</Badge>,
     featured: true,
     bg: true,
@@ -102,7 +102,7 @@ export function SlideVision(_props: { subStep?: number }) {
               </div>
               <div className={`relative z-10 text-[1.3rem] font-semibold ${p.featured ? "text-white" : "text-text-primary"}`}>
                 {(p as any).titleComponent ? (
-                  <span className="flex items-center gap-1">The <HelicityLogo size="sm" /> Stablecoin</span>
+                  <span className="flex items-center gap-1">The <KatabaticLogo size="sm" /> Stablecoin</span>
                 ) : p.title}
               </div>
               {p.badge && <div className="relative z-10 mt-auto pt-4">{p.badge}</div>}

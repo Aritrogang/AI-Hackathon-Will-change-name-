@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 load_dotenv()
 
-app = FastAPI(title="Helicity API", version="0.1.0")
+app = FastAPI(title="Katabatic API", version="0.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -23,13 +23,22 @@ from app.services.knowledge_graph import KnowledgeGraphService
 from app.services.llm_jury import LLMJuryService
 from app.services.narratives import NarrativeService
 from app.services.weather_provider import WeatherProvider
+from app.services.etherscan_provider import EtherscanProvider
 
 cache = Cache()
 graph_service = KnowledgeGraphService()
 llm_jury = LLMJuryService()
 narrative_service = NarrativeService()
 weather_provider = WeatherProvider(cache)
+etherscan_provider = EtherscanProvider(cache)
 scoring_engine = None  # Initialized on startup
+
+# --- Global Availability Flags ---
+CLAUDE_AVAILABLE = False
+GEMINI_AVAILABLE = False
+ETHERSCAN_AVAILABLE = False
+UNSILOED_AVAILABLE = False
+IPFS_AVAILABLE = False
 
 
 def envelope(data=None, error=None):
@@ -65,20 +74,29 @@ async def health():
 
 @app.on_event("startup")
 async def startup():
-    # Validate API keys
+    # Validate API keys and set availability flags
+    global CLAUDE_AVAILABLE, GEMINI_AVAILABLE, ETHERSCAN_AVAILABLE, UNSILOED_AVAILABLE, IPFS_AVAILABLE
+    
     keys = {
         "ANTHROPIC_API_KEY": os.getenv("ANTHROPIC_API_KEY"),
         "GEMINI_API_KEY": os.getenv("GEMINI_API_KEY"),
         "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
         "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),
-        "PINATA_SECRET_API_KEY": os.getenv("PINATA_SECRET_API_KEY"),
         "UNSILOED_API_KEY": os.getenv("UNSILOED_API_KEY"),
     }
-    for name, val in keys.items():
-        if not val:
-            print(f"  WARNING: {name} not set — related features will be disabled")
-        else:
-            print(f"  OK: {name} is set")
+    
+    CLAUDE_AVAILABLE = bool(keys["ANTHROPIC_API_KEY"])
+    GEMINI_AVAILABLE = bool(keys["GEMINI_API_KEY"])
+    ETHERSCAN_AVAILABLE = bool(keys["ETHERSCAN_API_KEY"])
+    UNSILOED_AVAILABLE = bool(keys["UNSILOED_API_KEY"])
+    IPFS_AVAILABLE = bool(keys["PINATA_API_KEY"])
+
+    print("\n--- Katabatic Service Availability ---")
+    print(f"  [CORE] Jury & Narratives:  {'OK' if CLAUDE_AVAILABLE and GEMINI_AVAILABLE else 'PARTIAL' if CLAUDE_AVAILABLE or GEMINI_AVAILABLE else 'DISABLED (Fix: Set ANTHROPIC/GEMINI keys)'}")
+    print(f"  [ON-CHAIN] Peg Stability: {'OK' if ETHERSCAN_AVAILABLE else 'FIXTURE FALLBACK (Fix: Set ETHERSCAN_API_KEY)'}")
+    print(f"  [VISION] PDF Extraction:  {'OK' if UNSILOED_AVAILABLE else 'TEXT-ONLY FALLBACK (Fix: Set UNSILOED_API_KEY)'}")
+    print(f"  [IPFS] Decentralized:     {'OK' if IPFS_AVAILABLE else 'LOCAL-ONLY (Fix: Set PINATA_API_KEY)'}")
+    print("---------------------------------------\n")
 
     # Initialize cache
     await cache.initialize()
@@ -108,10 +126,10 @@ async def startup():
 
     scoring_engine = ScoringEngine(cache, graph_service, llm_jury, narrative_service)
     print("  Scoring engine ready")
-    print("Helicity API started successfully.")
+    print("Katabatic API started successfully.")
 
 
 @app.on_event("shutdown")
 async def shutdown():
     await cache.close()
-    print("Helicity API shut down.")
+    print("Katabatic API shut down.")

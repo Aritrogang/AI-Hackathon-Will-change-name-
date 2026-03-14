@@ -2,7 +2,7 @@
   "stablecoin": "USDC",
   "issuer": "Circle",
   "report_date": "2026-02-28",
-  "data_source": "genius_act_attestation",
+  "data_source": "occ_xbrl",
   "total_reserves": 42000000000,
   "weighted_avg_maturity_days": 45,
   "counterparties": [

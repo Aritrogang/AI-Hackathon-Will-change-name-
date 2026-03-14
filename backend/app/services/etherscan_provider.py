@@ -32,6 +32,15 @@ class EtherscanProvider(DataProvider):
         self.api_key = os.getenv("ETHERSCAN_API_KEY", "")
         self.client = httpx.AsyncClient(timeout=15.0)
 
+    @property
+    def available(self) -> bool:
+        """Check if Etherscan API key is configured."""
+        return bool(self.api_key)
+
+    def _is_available(self) -> bool:
+        """Required for standardized API availability checks."""
+        return self.available
+
     async def fetch_live(self, source_id: str) -> Optional[dict]:
         """Fetch token supply data. source_id = stablecoin symbol (e.g., 'USDC').
 

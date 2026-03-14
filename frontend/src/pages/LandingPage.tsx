@@ -52,7 +52,7 @@ export function LandingPage() {
               <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
               <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
             </svg>
-            <span className="text-xl font-bold text-white tracking-[-0.04em]">helicity</span>
+            <span className="text-xl font-bold text-white tracking-[-0.04em]">katabatic</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-[#aaa]">
             <a href="#problem" className="hover:text-white transition-colors">Problem</a>
@@ -412,7 +412,7 @@ export function LandingPage() {
 
       {/* Footer */}
       <footer className="border-t border-white/[0.04] py-8 px-8 md:px-16 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-[#555]">
-        <span>© 2026 Helicity. Cornell AI Hackathon.</span>
+        <span>© 2026 Katabatic. Cornell AI Hackathon.</span>
         <div className="flex gap-6">
           <Link to="/dashboard" className="hover:text-[#888] transition-colors">Dashboard</Link>
           <Link to="/developers" className="hover:text-[#888] transition-colors">Developers</Link>

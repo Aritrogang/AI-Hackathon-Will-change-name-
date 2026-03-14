@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import path from 'path'
 
 export default defineConfig({
-  base: '/helicity/',
+  base: '/katabatic/',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

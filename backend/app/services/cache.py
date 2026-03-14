@@ -7,7 +7,7 @@ from typing import Any, Optional
 
 import aiosqlite
 
-DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent.parent / "data" / "cache.sqlite"
+DEFAULT_DB_PATH = Path(__file__).resolve().parent.parent.parent.parent / "data" / "cache.sqlite"
 
 
 class Cache:

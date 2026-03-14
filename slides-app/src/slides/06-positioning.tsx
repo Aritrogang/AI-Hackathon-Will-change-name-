@@ -10,15 +10,15 @@ const LINE_DATA = [
   { x1: 23, x2: 29, color: "#6c5ce7", delay: 0.2 },
 ]
 
-const HELICITY_LETTERS = "helicity".split("")
+const KATABATIC_LETTERS = "katabatic".split("")
 const LETTER_STAGGER = 0.055
 const LETTER_START = 0.32
 
-/* Animated "helicity" — wind mark + letter-by-letter reveal, inline in text */
-const AnimatedHelicity = () => (
+/* Animated "katabatic" — wind mark + letter-by-letter reveal, inline in text */
+const AnimatedKatabatic = () => (
   <>
     <AnimatedWindMark />
-    {HELICITY_LETTERS.map((char, i) => (
+    {KATABATIC_LETTERS.map((char, i) => (
       <motion.span
         key={i}
         style={{ display: "inline-block" }}
@@ -80,7 +80,7 @@ const layers: {
   borderColor: string
   title: string
   logos: LogoItem[]
-  helicity?: boolean
+  katabatic?: boolean
   featured: boolean
 }[] = [
   {
@@ -102,7 +102,7 @@ const layers: {
     borderColor: "border-accent",
     title: "Reserve Risk Infrastructure",
     logos: [],
-    helicity: true,
+    katabatic: true,
     featured: true,
   },
   {
@@ -131,7 +131,7 @@ export function SlidePositioning(_props: { subStep?: number }) {
       >
         Onchain shows the flows.
         <br />
-        <AnimatedHelicity /> shows <span className="gradient-text">what&apos;s about to break.</span>
+        <AnimatedKatabatic /> shows <span className="gradient-text">what&apos;s about to break.</span>
       </motion.h2>
 
       {/* 3 layers — original containers with connecting line + chevrons */}
@@ -151,14 +151,14 @@ export function SlidePositioning(_props: { subStep?: number }) {
                 <div className={`text-[0.85rem] font-semibold uppercase tracking-[0.1em] mb-2.5 ${layer.numColor}`}>{layer.num}</div>
                 <div className="text-[1.3rem] font-semibold text-text-primary mb-4">{layer.title}</div>
 
-                {layer.helicity ? (
+                {layer.katabatic ? (
                   <div className="flex items-center gap-3 py-2">
                     <svg width="30" height="42" viewBox="0 0 30 44" fill="none">
                       <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.35)" strokeWidth="3.5" strokeLinecap="round" />
                       <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.65)" strokeWidth="3.5" strokeLinecap="round" />
                       <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
                     </svg>
-                    <span className="text-[1.5rem] font-semibold text-accent tracking-[-0.02em]">helicity</span>
+                    <span className="text-[1.5rem] font-semibold text-accent tracking-[-0.02em]">katabatic</span>
                   </div>
                 ) : (
                   <div className={`${layer.logos.length > 3 ? "grid grid-cols-2 gap-x-4 gap-y-2" : "flex items-center gap-4"}`}>

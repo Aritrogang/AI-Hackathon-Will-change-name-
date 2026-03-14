@@ -14,7 +14,7 @@ from app.services.cache import Cache
 from app.services.data_provider import DataProvider
 
 NOMINATIM_URL = "https://nominatim.openstreetmap.org/search"
-HEADERS = {"User-Agent": "Helicity/1.0 (stablecoin-risk-engine; contact@helicity.dev)"}
+HEADERS = {"User-Agent": "Katabatic/1.0 (stablecoin-risk-engine; contact@katabatic.dev)"}
 
 
 class NominatimProvider(DataProvider):
