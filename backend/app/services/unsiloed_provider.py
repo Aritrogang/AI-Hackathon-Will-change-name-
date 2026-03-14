@@ -9,33 +9,35 @@ for multimodal unstructured → structured conversion.  Their API handles the
 heavy visual parsing of PDF tables; Claude then focuses exclusively on semantic
 risk interpretation, saving tokens and producing a cleaner extraction story.
 
-API docs:  https://www.unsiloed.ai/
+API docs:  https://docs.unsiloed.ai/
 Discord:   https://discord.gg/FrKjCfZx  (obtain API key here)
-
-NOTE: Update _BASE_URL and _EXTRACT_PATH below once you have the actual
-      endpoint from their Discord/docs.  Everything else is wired up.
 """
 
 import asyncio
-import base64
 import os
 from typing import Any, Optional
 
 import httpx
 
 # ---------------------------------------------------------------------------
-# API config — update these once you have Unsiloed's actual endpoint
+# API config — matches https://docs.unsiloed.ai/api-reference
 # ---------------------------------------------------------------------------
-_BASE_URL = os.getenv("UNSILOED_BASE_URL", "https://api.unsiloed.ai/v1")
-_EXTRACT_PATH = "/extract"          # POST endpoint for PDF extraction
-_TIMEOUT_SECONDS = 60               # Vision models can be slow on large PDFs
+_BASE_URL = os.getenv("UNSILOED_BASE_URL", "https://prod.visionapi.unsiloed.ai")
+_PARSE_PATH = "/parse"
+_TIMEOUT_SECONDS = 30               # Timeout per individual HTTP request
+_POLL_MAX_SECONDS = 300              # Max total time waiting for job completion
+_POLL_INITIAL_INTERVAL = 1.0        # Start polling at 1s
+_POLL_MAX_INTERVAL = 10.0           # Cap backoff at 10s
+_POLL_BACKOFF_FACTOR = 1.5          # Exponential backoff multiplier
 
 
 class UnsIloedClient:
-    """Async HTTP client for the Unsiloed AI document extraction API.
+    """Async HTTP client for the Unsiloed AI document parsing API.
 
-    Handles auth, request building, and raw response parsing.
-    All public methods are async-safe and share a single httpx.AsyncClient.
+    Uses the async job pattern:
+      1. POST /parse (multipart form-data) → {job_id}
+      2. Poll GET /parse/{job_id} until status == "Succeeded"
+      3. Parse chunks/segments from the result
     """
 
     def __init__(self) -> None:
@@ -53,7 +55,7 @@ class UnsIloedClient:
             self._client = httpx.AsyncClient(
                 base_url=_BASE_URL,
                 headers={
-                    "Authorization": f"Bearer {self.api_key}",
+                    "api-key": self.api_key or "",
                     "Accept": "application/json",
                 },
                 timeout=_TIMEOUT_SECONDS,
@@ -66,15 +68,19 @@ class UnsIloedClient:
             await self._client.aclose()
 
     # ------------------------------------------------------------------
-    # Low-level API call
+    # Low-level: submit parse job
     # ------------------------------------------------------------------
 
-    async def _call_api(self, endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
-        """POST to a Unsiloed API endpoint and return the parsed JSON response.
+    async def _submit_parse(
+        self,
+        *,
+        file_bytes: Optional[bytes] = None,
+        file_name: str = "document.pdf",
+        url: Optional[str] = None,
+    ) -> str:
+        """Submit a document for parsing and return the job_id.
 
-        Raises:
-            RuntimeError: if the API key is not set.
-            httpx.HTTPStatusError: on non-2xx responses.
+        Either file_bytes or url must be provided (not both).
         """
         if not self.available:
             raise RuntimeError(
@@ -82,108 +88,145 @@ class UnsIloedClient:
             )
 
         client = self._get_client()
-        response = await client.post(endpoint, json=payload)
+
+        # Build multipart form data
+        data: dict[str, Any] = {
+            "use_high_resolution": "true",
+            "merge_tables": "true",
+            "ocr_mode": "auto_ocr",
+            "segmentation_method": "smart_layout_detection",
+        }
+
+        files: Optional[dict[str, Any]] = None
+        if file_bytes is not None:
+            files = {"file": (file_name, file_bytes, "application/pdf")}
+        elif url is not None:
+            data["url"] = url
+        else:
+            raise ValueError("Must provide either file_bytes or url")
+
+        response = await client.post(_PARSE_PATH, data=data, files=files)
         response.raise_for_status()
-        return response.json()
+        result = response.json()
+        job_id = result.get("job_id")
+        if not job_id:
+            raise RuntimeError(f"Unsiloed API did not return job_id: {result}")
+        return job_id
 
     # ------------------------------------------------------------------
-    # PDF table extraction
+    # Low-level: poll for job completion
+    # ------------------------------------------------------------------
+
+    async def _poll_job(self, job_id: str) -> dict[str, Any]:
+        """Poll GET /parse/{job_id} until the job succeeds or fails.
+
+        Uses exponential backoff starting at 1s, capped at 10s.
+        Total wait capped at _POLL_MAX_SECONDS.
+        """
+        client = self._get_client()
+        elapsed = 0.0
+        interval = _POLL_INITIAL_INTERVAL
+
+        while elapsed < _POLL_MAX_SECONDS:
+            await asyncio.sleep(interval)
+            elapsed += interval
+
+            response = await client.get(f"{_PARSE_PATH}/{job_id}")
+            response.raise_for_status()
+            result = response.json()
+
+            status = result.get("status", "")
+            if status == "Succeeded":
+                return result
+            elif status == "Failed":
+                raise RuntimeError(
+                    f"Unsiloed parse job {job_id} failed: {result.get('message', 'unknown error')}"
+                )
+
+            # Still processing — back off
+            interval = min(interval * _POLL_BACKOFF_FACTOR, _POLL_MAX_INTERVAL)
+
+        raise TimeoutError(
+            f"Unsiloed parse job {job_id} did not complete within {_POLL_MAX_SECONDS}s"
+        )
+
+    # ------------------------------------------------------------------
+    # PDF table extraction (public API)
     # ------------------------------------------------------------------
 
     async def extract_pdf_tables(self, pdf_bytes: bytes) -> dict[str, Any]:
-        """Send a PDF to Unsiloed AI and return extracted tables and text.
+        """Send a PDF to Unsiloed AI and return the parsed result.
 
-        Encodes the PDF as base64 and POSTs it to the extraction endpoint.
-        The response is expected to contain:
-          - "tables": list of table objects (rows, headers, page numbers)
-          - "text":   full text content of the document
-          - "metadata": document-level metadata (issuer, date, etc.)
-
-        Args:
-            pdf_bytes: raw bytes of the PDF file.
-
-        Returns:
-            Raw API response dict with at minimum a "tables" key.
-
-        Raises:
-            RuntimeError: if UNSILOED_API_KEY is not configured.
-            httpx.HTTPStatusError: on API errors.
+        Submits the PDF as multipart form-data, polls for completion,
+        and returns the full job result containing chunks and segments.
         """
-        encoded = base64.b64encode(pdf_bytes).decode("utf-8")
-        payload = {
-            "document": encoded,
-            "type": "pdf",
-            "extract_tables": True,
-            "extract_text": True,
-        }
-        return await self._call_api(_EXTRACT_PATH, payload)
+        job_id = await self._submit_parse(file_bytes=pdf_bytes)
+        return await self._poll_job(job_id)
 
     async def extract_pdf_tables_from_url(self, pdf_url: str) -> dict[str, Any]:
-        """Send a PDF URL to Unsiloed AI for extraction (alternative to raw bytes).
+        """Send a PDF URL to Unsiloed AI for parsing.
 
         Args:
             pdf_url: publicly accessible URL pointing to the PDF.
-
-        Returns:
-            Raw API response dict with at minimum a "tables" key.
         """
-        payload = {
-            "url": pdf_url,
-            "type": "pdf",
-            "extract_tables": True,
-            "extract_text": True,
-        }
-        return await self._call_api(_EXTRACT_PATH, payload)
+        job_id = await self._submit_parse(url=pdf_url)
+        return await self._poll_job(job_id)
 
     # ------------------------------------------------------------------
     # Structured JSON converter
     # ------------------------------------------------------------------
 
     def to_structured_json(self, api_response: dict[str, Any]) -> str:
-        """Convert the raw Unsiloed API response into a structured text summary
+        """Convert the Unsiloed parse result into a structured text summary
         ready for Claude to interpret as reserve risk signals.
 
-        Flattens extracted tables and text into a prompt-friendly format
-        so Claude can focus on semantic interpretation rather than visual parsing.
-
-        Args:
-            api_response: raw dict returned by extract_pdf_tables().
-
-        Returns:
-            A formatted string combining table data and full text, suitable
-            for inclusion in a Claude prompt.
+        Processes chunks → segments, extracting tables (as markdown) and
+        text content. Segment types: Table, Text, Title, SectionHeader,
+        ListItem, Caption, Footnote, Formula, Picture, etc.
         """
         parts: list[str] = []
+        chunks = api_response.get("chunks") or []
+        table_idx = 0
 
-        # Full text content (document body)
-        text = api_response.get("text") or ""
-        if text.strip():
-            parts.append("=== DOCUMENT TEXT ===")
-            parts.append(text.strip())
+        for chunk in chunks:
+            segments = chunk.get("segments") or []
 
-        # Extracted tables — flatten to markdown-style rows
-        tables = api_response.get("tables") or []
-        for idx, table in enumerate(tables, start=1):
-            parts.append(f"\n=== TABLE {idx} ===")
-            headers = table.get("headers") or []
-            rows = table.get("rows") or []
-            if headers:
-                parts.append(" | ".join(str(h) for h in headers))
-                parts.append("-" * max(40, len(" | ".join(str(h) for h in headers))))
-            for row in rows:
-                if isinstance(row, list):
-                    parts.append(" | ".join(str(cell) for cell in row))
-                elif isinstance(row, dict):
-                    parts.append(" | ".join(f"{k}: {v}" for k, v in row.items()))
+            # If the chunk has an 'embed' field (full text), use it
+            embed = chunk.get("embed")
+            if embed and not segments:
+                parts.append(embed)
+                continue
 
-        # Document-level metadata
-        metadata = api_response.get("metadata") or {}
-        if metadata:
-            parts.append("\n=== METADATA ===")
-            for key, val in metadata.items():
-                parts.append(f"{key}: {val}")
+            for segment in segments:
+                seg_type = segment.get("type") or segment.get("segment_type") or "Text"
+                # Prefer markdown content, fall back to plain content
+                content = (
+                    segment.get("markdown")
+                    or segment.get("html")
+                    or segment.get("content")
+                    or segment.get("text")
+                    or ""
+                )
+                if not content.strip():
+                    continue
 
-        return "\n".join(parts) if parts else text
+                if seg_type == "Table":
+                    table_idx += 1
+                    parts.append(f"\n=== TABLE {table_idx} ===")
+                    parts.append(content.strip())
+                elif seg_type in ("Title", "SectionHeader"):
+                    parts.append(f"\n## {content.strip()}")
+                elif seg_type == "ListItem":
+                    parts.append(f"- {content.strip()}")
+                elif seg_type == "Caption":
+                    parts.append(f"[Caption: {content.strip()}]")
+                elif seg_type == "Footnote":
+                    parts.append(f"[Footnote: {content.strip()}]")
+                else:
+                    # Text, Formula, Picture description, etc.
+                    parts.append(content.strip())
+
+        return "\n".join(parts) if parts else ""
 
     # ------------------------------------------------------------------
     # Safe extraction with graceful fallback

@@ -25,7 +25,7 @@ export function BacktestDetailPage() {
 
   if (error || !backtest) {
     return (
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8 text-center">
+      <div className="text-center">
         <p className="text-[#e84393] font-medium mb-2">Failed to load backtest</p>
         <p className="text-sm text-[#888]">{error}</p>
         <Link to="/backtests" className="text-sm text-[#6c5ce7] hover:underline mt-4 inline-block">
@@ -38,8 +38,9 @@ export function BacktestDetailPage() {
   return (
     <div className="space-y-6">
       {/* Back link */}
-      <Link to="/backtests" className="text-sm text-[#6c5ce7] hover:underline">
-        &larr; Back to Backtests
+      <Link to="/backtests" className="text-sm text-[#6c5ce7] hover:underline inline-flex items-center gap-1">
+        <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+        Back to Backtests
       </Link>
 
       {/* Header */}

@@ -18,7 +18,7 @@ export function DeveloperPortalPage() {
       <div>
         <div className={LABEL}>Developer Portal</div>
         <h2 className="text-3xl font-bold text-white mb-2">
-          MCP Server — AI Agent Integration
+          MCP Server: AI Agent Integration
         </h2>
         <p className="text-[#aaa] text-base max-w-2xl">
           Helicity exposes reserve risk scores as{' '}
@@ -105,7 +105,7 @@ function StdioTab() {
   return (
     <div className="space-y-6">
       <div>
-        <div className={SECTION_TITLE}>Claude Desktop — stdio transport</div>
+        <div className={SECTION_TITLE}>Claude Desktop / stdio transport</div>
         <p className={SECTION_DESC}>
           For local agent use. Add the following block to{' '}
           <code className="bg-white/[0.06] px-1 rounded text-xs">
@@ -130,7 +130,7 @@ python mcp_server.py`}</pre>
       </div>
 
       <div className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-4 text-sm text-[#aaa]">
-        <strong className="text-white">Requires Python 3.11+</strong> — fastmcp does not
+        <strong className="text-white">Requires Python 3.11+</strong>. fastmcp does not
         support Python 3.9. The project ships a <code>.venv</code> at{' '}
         <code>backend/.venv</code> with all dependencies pre-installed.
       </div>
@@ -146,7 +146,7 @@ function SseTab({ backendUrl }: { backendUrl: string }) {
   return (
     <div className="space-y-6">
       <div>
-        <div className={SECTION_TITLE}>Remote Agent — SSE transport</div>
+        <div className={SECTION_TITLE}>Remote Agent / SSE transport</div>
         <p className={SECTION_DESC}>
           For remote or cloud-hosted agents. Start the MCP server in SSE mode and connect via
           HTTP Server-Sent Events.
@@ -193,7 +193,7 @@ function ExampleTab({ backendUrl: _ }: { backendUrl: string }) {
   return (
     <div className="space-y-6">
       <div>
-        <div className={SECTION_TITLE}>Python agent — fastmcp client</div>
+        <div className={SECTION_TITLE}>Python agent / fastmcp client</div>
         <p className={SECTION_DESC}>
           Use the <code className="bg-white/[0.06] px-1 rounded text-xs">fastmcp</code> client SDK to
           call Helicity tools from any Python agent.
@@ -206,7 +206,7 @@ async def main():
         # Get all current stress scores
         scores = await client.call_tool("get_stress_scores", {})
         for coin in scores["data"]:
-            print(f"{coin['stablecoin']}: {coin['stress_score']}/100 — {coin['stress_level']}")
+            print(f"{coin['stablecoin']}: {coin['stress_score']}/100 | {coin['stress_level']}")
 
         # Deep-dive on USDC
         detail = await client.call_tool("get_stablecoin_detail", {"symbol": "USDC"})
@@ -289,8 +289,8 @@ function ToolsTab() {
             stablecoin: 'USDC',
             stress_score: 42.5,
             stress_level: 'Moderate Stress',
-            redemption_latency_hours: '4-24h',
-            liquidity_coverage_ratio: '95-100%',
+            redemption_latency_hours: '4 to 24h',
+            liquidity_coverage_ratio: '95 to 100%',
             resolution_source: 'live',
           },
         ],
@@ -300,7 +300,7 @@ function ToolsTab() {
     },
     {
       name: 'get_stablecoin_detail',
-      description: 'Return the full 6-dimension stress score breakdown for a single stablecoin.',
+      description: 'Return the full 6 dimension stress score breakdown for a single stablecoin.',
       params: [{ name: 'symbol', type: 'string', required: true, desc: 'Ticker, e.g. "USDC"' }],
       example: {
         data: {
@@ -327,7 +327,7 @@ function ToolsTab() {
         { name: 'rate_hike_bps', type: 'integer', required: false, desc: 'Rate hike in basis points' },
         { name: 'hurricane_lat', type: 'number', required: false, desc: 'Hurricane latitude' },
         { name: 'hurricane_lng', type: 'number', required: false, desc: 'Hurricane longitude' },
-        { name: 'hurricane_category', type: 'integer', required: false, desc: '1–5' },
+        { name: 'hurricane_category', type: 'integer', required: false, desc: '1 to 5' },
         { name: 'bank_failure', type: 'string', required: false, desc: 'Partial bank name' },
       ],
       example: {

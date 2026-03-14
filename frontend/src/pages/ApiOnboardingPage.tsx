@@ -1,48 +1,51 @@
 import { useState } from 'react'
 
+const LABEL = 'text-xs uppercase tracking-widest text-[#888] font-semibold mb-1'
+const SECTION_TITLE = 'text-lg font-bold text-white mb-1'
+const SECTION_DESC = 'text-sm text-[#aaa] mb-4'
+const CODE_COLORS = 'bg-[#0c0a14] text-[#a29bfe] font-mono text-sm rounded-xl p-4 overflow-x-auto'
+
 export function ApiOnboardingPage() {
   const [showKey, setShowKey] = useState(false)
   const [activeLang, setActiveLang] = useState<'curl' | 'python' | 'ts'>('curl')
 
   return (
-    <div className="space-y-12 pb-12 animate-in fade-in duration-500">
-      {/* Hero Section */}
-      <section className="bg-white/[0.03] rounded-xl shadow-sm border border-white/[0.06] p-8 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-[#6c5ce7]/10 to-[#a29bfe]/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="relative z-10 max-w-2xl">
-          <h1 className="text-3xl font-bold tracking-tight text-white mb-4">
-            Developer Portal
-          </h1>
-          <p className="text-lg text-[#aaa] mb-8 leading-relaxed">
-            Integrate the Helicity scoring engine into your DAO treasury, DeFi protocol, or AI agent workflow. Access real-time reserve risk data via REST API or MCP.
-          </p>
-          <div className="flex flex-wrap gap-4">
-            <a href="#api-keys" className="px-5 py-2.5 bg-[#0f0f0f] text-white rounded-lg font-medium hover:bg-black/80 transition-colors shadow-sm text-sm">
-              API Keys
-            </a>
-            <a href="#sdk-quickstart" className="px-5 py-2.5 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
-              SDK Quickstart
-            </a>
-            <a href="#rest-api" className="px-5 py-2.5 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
-              REST API
-            </a>
-            <a href="#mcp-server" className="px-5 py-2.5 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
-              MCP Server
-            </a>
-          </div>
-        </div>
-      </section>
+    <div className="max-w-4xl mx-auto space-y-10 py-2">
+      {/* Header */}
+      <div>
+        <div className={LABEL}>API Portal</div>
+        <h2 className="text-3xl font-bold text-white mb-2">
+          REST API & SDK Integration
+        </h2>
+        <p className="text-[#aaa] text-base max-w-2xl">
+          Integrate the Helicity scoring engine into your DAO treasury, DeFi protocol, or AI agent workflow. Access realtime reserve risk data via REST API or MCP.
+        </p>
+      </div>
+
+      {/* Quick nav */}
+      <div className="flex flex-wrap gap-3">
+        <a href="#api-keys" className="px-4 py-2 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
+          API Keys
+        </a>
+        <a href="#sdk-quickstart" className="px-4 py-2 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
+          SDK Quickstart
+        </a>
+        <a href="#rest-api" className="px-4 py-2 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
+          REST API
+        </a>
+        <a href="#mcp-server" className="px-4 py-2 bg-white/[0.05] text-white border border-white/[0.06] rounded-lg font-medium hover:bg-white/[0.08] transition-colors text-sm">
+          MCP Server
+        </a>
+      </div>
 
       {/* API Key Management */}
-      <section id="api-keys" className="bg-white/[0.03] rounded-xl shadow-sm border border-white/[0.06] p-8 scroll-mt-24">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[#00b894]/10 flex items-center justify-center text-[#00b894]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" /></svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">API Key Management</h2>
+      <section id="api-keys" className="scroll-mt-24 space-y-4">
+        <div>
+          <div className={SECTION_TITLE}>API Key Management</div>
+          <p className={SECTION_DESC}>Manage your production and development API keys.</p>
         </div>
-        
-        <div className="grid md:grid-cols-3 gap-6 mb-6">
+
+        <div className="grid md:grid-cols-3 gap-6">
           <div className="md:col-span-2 bg-white/[0.03] rounded-lg border border-white/[0.06] p-5">
             <div className="flex justify-between items-center mb-3">
               <span className="text-sm font-bold text-white">Active Production Key</span>
@@ -50,9 +53,9 @@ export function ApiOnboardingPage() {
             </div>
             <div className="flex items-center gap-3">
               <code className="flex-1 bg-white/[0.04] border border-white/[0.06] rounded px-3 py-2.5 text-sm text-white font-mono">
-                {showKey ? 'sk-heli-live-9f8e7d...a1b2c3' : 'sk-heli-live-••••••••••••••••••••••'}
+                {showKey ? 'sk-heli-live-9f8e7d...a1b2c3' : 'sk-heli-live-\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022'}
               </code>
-              <button 
+              <button
                 onClick={() => setShowKey(!showKey)}
                 className="px-3 py-2.5 bg-white/[0.05] text-[#aaa] border border-white/[0.06] rounded hover:bg-white/[0.08] transition-colors flex items-center justify-center"
                 title={showKey ? "Hide" : "Reveal"}
@@ -69,7 +72,7 @@ export function ApiOnboardingPage() {
             </div>
             <div className="mt-4 flex gap-3">
               <button className="text-sm font-medium text-[#e17055] hover:underline">Roll Key</button>
-              <span className="text-black/20">|</span>
+              <span className="text-white/20">|</span>
               <button className="text-sm font-medium text-[#aaa] hover:text-white hover:underline">Revoke</button>
             </div>
           </div>
@@ -82,7 +85,7 @@ export function ApiOnboardingPage() {
                   <span className="text-[#aaa]">Requests Today</span>
                   <span className="font-mono font-medium text-white">1,248</span>
                 </div>
-                <div className="w-full bg-black/5 rounded-full h-1.5">
+                <div className="w-full bg-white/[0.04] rounded-full h-1.5">
                   <div className="bg-[#6c5ce7] h-1.5 rounded-full" style={{ width: '12%' }}></div>
                 </div>
               </div>
@@ -91,7 +94,7 @@ export function ApiOnboardingPage() {
                   <span className="text-[#aaa]">Requests This Month</span>
                   <span className="font-mono font-medium text-white">45,201 <span className="text-[#888] font-sans text-xs">/ 100k</span></span>
                 </div>
-                <div className="w-full bg-black/5 rounded-full h-1.5">
+                <div className="w-full bg-white/[0.04] rounded-full h-1.5">
                   <div className="bg-[#6c5ce7] h-1.5 rounded-full" style={{ width: '45%' }}></div>
                 </div>
               </div>
@@ -101,29 +104,27 @@ export function ApiOnboardingPage() {
       </section>
 
       {/* SDK Quickstart */}
-      <section id="sdk-quickstart" className="bg-white/[0.03] rounded-xl shadow-sm border border-white/[0.06] p-8 scroll-mt-24">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[#0f0f0f]/10 flex items-center justify-center text-white">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">SDK Quickstart</h2>
+      <section id="sdk-quickstart" className="scroll-mt-24 space-y-4">
+        <div>
+          <div className={SECTION_TITLE}>SDK Quickstart</div>
+          <p className={SECTION_DESC}>Get started with a single API call.</p>
         </div>
 
         <div className="bg-[#0c0a14] rounded-lg overflow-hidden">
           <div className="flex bg-[#1a1825] px-2 py-2 border-b border-white/10 gap-2 overflow-x-auto">
-            <button 
+            <button
               onClick={() => setActiveLang('curl')}
               className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${activeLang === 'curl' ? 'bg-[#6c5ce7] text-white' : 'text-[#888] hover:text-white hover:bg-white/5'}`}
             >
               cURL
             </button>
-            <button 
+            <button
               onClick={() => setActiveLang('python')}
               className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${activeLang === 'python' ? 'bg-[#6c5ce7] text-white' : 'text-[#888] hover:text-white hover:bg-white/5'}`}
             >
               Python (httpx)
             </button>
-            <button 
+            <button
               onClick={() => setActiveLang('ts')}
               className={`px-4 py-1.5 rounded text-sm font-medium transition-colors ${activeLang === 'ts' ? 'bg-[#6c5ce7] text-white' : 'text-[#888] hover:text-white hover:bg-white/5'}`}
             >
@@ -168,29 +169,26 @@ headers = &#123;
       </section>
 
       {/* REST API Section */}
-      <section id="rest-api" className="bg-white/[0.03] rounded-xl shadow-sm border border-white/[0.06] p-8 scroll-mt-24">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[#6c5ce7]/10 flex items-center justify-center text-[#6c5ce7]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
-          </div>
-          <div>
-            <h2 className="text-2xl font-bold text-white">REST API Documentation</h2>
-            <p className="text-[#aaa] mt-1 text-sm">Base URL: <code className="bg-white/[0.03] border border-white/[0.06] px-1.5 py-0.5 rounded ml-1 font-mono text-xs">https://api.helicity.network/v1</code></p>
-          </div>
+      <section id="rest-api" className="scroll-mt-24 space-y-4">
+        <div>
+          <div className={SECTION_TITLE}>REST API Documentation</div>
+          <p className={SECTION_DESC}>
+            Base URL: <code className="bg-white/[0.06] px-1.5 py-0.5 rounded ml-1 font-mono text-xs">https://api.helicity.network/v1</code>
+          </p>
         </div>
-        
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white/[0.03] p-4 rounded-lg border border-white/[0.06]">
+
+        <div className="grid md:grid-cols-2 gap-4 mb-4">
+          <div className="bg-white/[0.04] p-4 rounded-lg">
             <h3 className="text-sm font-bold text-white mb-2">Authentication</h3>
             <p className="text-sm text-[#aaa]">All endpoints require a Bearer token in the <code className="text-xs font-mono">Authorization</code> header.</p>
           </div>
-          <div className="bg-white/[0.03] p-4 rounded-lg border border-white/[0.06]">
+          <div className="bg-white/[0.04] p-4 rounded-lg">
             <h3 className="text-sm font-bold text-white mb-2">Rate Limits</h3>
             <p className="text-sm text-[#aaa]">100 requests / minute per active key. IPFS pinning endpoints are limited to 10 / minute.</p>
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           {/* Endpoint 1 */}
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
             <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
@@ -202,95 +200,89 @@ headers = &#123;
             <div className="p-5">
               <p className="text-sm text-[#aaa] mb-4">Returns liquidity stress scores for all tracked stablecoins.</p>
               <h4 className="text-xs font-bold uppercase tracking-wider text-[#888] mb-2">Response Schema</h4>
-              <div className="bg-[#0c0a14] rounded-lg p-4">
-                <pre className="text-xs text-[#e2e8f0] font-mono leading-relaxed overflow-x-auto">
-&#123;
-  <span className="text-[#6c5ce7]">"data"</span>: [
-    &#123;
+              <pre className={CODE_COLORS}>
+{`{
+  "data": [
+    {
       "symbol": "USDC",
       "score": 12,
       "latency_hours": 4,
       "lcr_estimate": 1.05
-    &#125;
+    }
   ],
-  <span className="text-[#6c5ce7]">"error"</span>: null,
-  <span className="text-[#6c5ce7]">"timestamp"</span>: "2026-03-14T00:00:00Z"
-&#125;
-                </pre>
-              </div>
+  "error": null,
+  "timestamp": "2026-03-14T00:00:00Z"
+}`}
+              </pre>
             </div>
           </div>
 
           {/* Endpoint 2 */}
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
-            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
+            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
                 <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/stress-scores/&#123;symbol&#125;</code>
               </div>
             </div>
             <div className="p-5">
-              <p className="text-sm text-[#aaa] mb-4">Returns a single stablecoin's detailed 6-dimension breakdown and consensus narrative.</p>
+              <p className="text-sm text-[#aaa]">Returns a single stablecoin's detailed 6 dimension breakdown and consensus narrative.</p>
             </div>
           </div>
 
           {/* Endpoint 3 */}
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
-            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
+            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
                 <span className="bg-[#e17055]/10 text-[#e17055] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">POST</span>
                 <code className="text-white font-mono text-sm font-medium">/api/stress-scores/project</code>
               </div>
             </div>
             <div className="p-5">
-              <p className="text-sm text-[#aaa] mb-4">Projects a scenario analysis given specific macro/weather shocks.</p>
+              <p className="text-sm text-[#aaa]">Projects a scenario analysis given specific macro/weather shocks.</p>
             </div>
           </div>
 
           {/* Endpoint 4 */}
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
-            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
+            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
                 <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/weather/active</code>
               </div>
             </div>
             <div className="p-5">
-              <p className="text-sm text-[#aaa] mb-4">Returns active NOAA events with estimated operational impact.</p>
+              <p className="text-sm text-[#aaa]">Returns active NOAA events with estimated operational impact.</p>
             </div>
           </div>
 
           {/* Endpoint 5 */}
           <div className="border border-white/[0.06] rounded-xl overflow-hidden">
-            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3 flex items-center justify-between">
+            <div className="bg-white/[0.03] border-b border-white/[0.06] px-5 py-3">
               <div className="flex items-center gap-3">
                 <span className="bg-[#00b894]/10 text-[#00b894] px-2 py-0.5 rounded text-xs font-bold uppercase tracking-wider">GET</span>
                 <code className="text-white font-mono text-sm font-medium">/api/graph</code>
               </div>
             </div>
             <div className="p-5">
-              <p className="text-sm text-[#aaa] mb-4">Returns the complete knowledge graph configuration (nodes, edges, weights).</p>
+              <p className="text-sm text-[#aaa]">Returns the complete knowledge graph configuration (nodes, edges, weights).</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* MCP Server Section */}
-      <section id="mcp-server" className="bg-white/[0.03] rounded-xl shadow-sm border border-white/[0.06] p-8 scroll-mt-24">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-lg bg-[#e84393]/10 flex items-center justify-center text-[#e84393]">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
-          </div>
-          <h2 className="text-2xl font-bold text-white">MCP Server Setup</h2>
+      <section id="mcp-server" className="scroll-mt-24 space-y-4">
+        <div>
+          <div className={SECTION_TITLE}>MCP Server Setup</div>
+          <p className={SECTION_DESC}>
+            The Model Context Protocol (MCP) server allows AI trading bots and agent frameworks to query risk scores as tool calls before executing stablecoin positions.
+          </p>
         </div>
-        
-        <p className="text-[#aaa] mb-8">
-          The Model Context Protocol (MCP) server allows AI trading bots and agent frameworks to query risk scores as tool calls before executing stablecoin positions.
-        </p>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
-            <h3 className="text-lg font-bold text-white mb-3">Tool Reference</h3>
+        <div className="grid md:grid-cols-2 gap-6 mb-4">
+          <div>
+            <h3 className="text-sm font-bold text-white mb-3">Tool Reference</h3>
             <ul className="space-y-4">
               <li className="flex items-start gap-2">
                 <div className="w-1.5 h-1.5 rounded-full bg-[#6c5ce7] mt-2"></div>
@@ -329,24 +321,24 @@ headers = &#123;
               </li>
             </ul>
           </div>
-          
-          <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
-            <h3 className="text-lg font-bold text-white mb-4">Transports</h3>
-            
+
+          <div>
+            <h3 className="text-sm font-bold text-white mb-4">Transports</h3>
+
             <div className="mb-6">
               <h4 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg>
                 stdio (Local Agents)
               </h4>
-              <p className="text-sm text-[#aaa] mb-2">Run the server as a subprocess for local agents like Claude Code or Cursor. Config via `mcp.json`.</p>
+              <p className="text-sm text-[#aaa] mb-2">Run the server as a subprocess for local agents like Claude Code or Cursor.</p>
             </div>
-            
+
             <div>
               <h4 className="text-sm font-bold text-white mb-2 flex items-center gap-2">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="M12 5l7 7-7 7"></path></svg>
                 SSE (Remote Agents)
               </h4>
-              <p className="text-sm text-[#aaa]">Connect remote agents to the hosted MCP server over Server-Sent Events utilizing API Key authentication.</p>
+              <p className="text-sm text-[#aaa]">Connect remote agents to the hosted MCP server over Server-Sent Events.</p>
               <code className="block mt-2 text-xs bg-white/[0.04] border border-white/[0.06] px-2 py-1 rounded font-mono text-white">https://api.helicity.network/mcp/sse</code>
             </div>
           </div>
@@ -363,7 +355,7 @@ headers = &#123;
     <span className="text-[#6c5ce7]">"helicity"</span>: &#123;
       "command": "python",
       "args": ["-m", "helicity.mcp_server"],
-      "env": &#123; 
+      "env": &#123;
         "HELICITY_API_KEY": "sk-heli-live-..."
       &#125;
     &#125;

@@ -31,7 +31,7 @@ export function StressScoreDetail() {
 
   if (error || !score) {
     return (
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8 text-center">
+      <div className="text-center">
         <p className="text-[#e84393] font-medium mb-2">Failed to load {symbol}</p>
         <p className="text-sm text-[#888]">{error}</p>
         <Link to="/" className="text-sm text-[#6c5ce7] hover:underline mt-4 inline-block">
@@ -56,7 +56,7 @@ export function StressScoreDetail() {
       </Link>
 
       {/* Hero score card */}
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8">
+      <div>
         <div className="flex items-start justify-between mb-6">
           <div>
             <h2 className="text-2xl font-bold text-white">{score.stablecoin}</h2>
@@ -82,22 +82,25 @@ export function StressScoreDetail() {
         </div>
       </div>
 
-      {/* 6-Dimension Breakdown */}
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+      {/* 6 Dimension Breakdown */}
+      <div>
         <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
-          6-Dimension Breakdown
+          6 Dimension Breakdown
         </h3>
         <ResponsiveContainer width="100%" height={280}>
           <BarChart data={dimChartData} layout="vertical" margin={{ left: 140 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f2f7" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
             <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 12, fill: '#888' }} />
-            <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fill: '#555' }} width={130} />
+            <YAxis dataKey="name" type="category" tick={{ fontSize: 12, fill: '#888' }} width={130} />
             <Tooltip
               formatter={(value: number, name: string) => [
                 `${value.toFixed(1)}`,
                 name === 'weighted' ? 'Weighted Score' : 'Raw Score'
               ]}
-              contentStyle={{ borderRadius: 8, border: '1px solid #eee' }}
+              contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', backgroundColor: '#1a1825', color: '#e2e8f0' }}
+              wrapperStyle={{ backgroundColor: 'transparent', boxShadow: 'none', border: 'none' }}
+              labelStyle={{ color: '#e2e8f0' }}
+              itemStyle={{ color: '#aaa' }}
             />
             <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={18}>
               {dimChartData.map((entry, i) => (
@@ -118,7 +121,7 @@ export function StressScoreDetail() {
 
       {/* Consensus Panel */}
       {score.jury && (
-        <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+        <div>
           <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
             Model Consensus
           </h3>

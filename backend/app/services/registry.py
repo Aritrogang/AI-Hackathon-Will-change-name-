@@ -38,6 +38,38 @@ STABLECOIN_REGISTRY = {
         "counterparty_fdic_certs": [],  # Tether counterparties lack FDIC certs
         "data_center_corridors": ["us-east-1", "eu-west-1"],
     },
+    "DAI": {
+        "symbol": "DAI",
+        "issuer": "MakerDAO",
+        "contract_address": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+        "fixture_file": "dai_baseline.json",
+        "counterparty_fdic_certs": [16150],  # Huntingdon Valley Bank
+        "data_center_corridors": ["us-east-1", "eu-west-1"],
+    },
+    "FRAX": {
+        "symbol": "FRAX",
+        "issuer": "Frax Finance",
+        "contract_address": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+        "fixture_file": "frax_baseline.json",
+        "counterparty_fdic_certs": [],
+        "data_center_corridors": ["us-central"],
+    },
+    "PYUSD": {
+        "symbol": "PYUSD",
+        "issuer": "Paxos (PayPal)",
+        "contract_address": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+        "fixture_file": "pyusd_baseline.json",
+        "counterparty_fdic_certs": [16571, 7534, 823, 34919],  # BMO Harris, BNY Mellon, State Street, Customers Bank
+        "data_center_corridors": ["us-central", "us-east-1", "us-east-2"],
+    },
+    "TUSD": {
+        "symbol": "TUSD",
+        "issuer": "TrueUSD",
+        "contract_address": "0x0000000000085d4780B73119b644AE5ecd22b376",
+        "fixture_file": "tusd_baseline.json",
+        "counterparty_fdic_certs": [27653, 57053],  # Silvergate, Signature Bank
+        "data_center_corridors": ["us-west-2", "us-east-1"],
+    },
 }
 
 

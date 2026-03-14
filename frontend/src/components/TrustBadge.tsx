@@ -16,7 +16,7 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
     : null
 
   return (
-    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+    <div>
       <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
         Verification &amp; Trust
       </h3>
@@ -63,7 +63,7 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
         )}
 
         {/* Oracle-ready label */}
-        <div className="flex flex-col gap-1 pt-1 border-t border-black/4">
+        <div className="flex flex-col gap-1 pt-1 border-t border-white/[0.06]">
           <div className="flex items-center gap-2">
             <span className="text-[10px] text-[#bbb] uppercase tracking-wider">
               TEE-ready for Chainlink
@@ -71,18 +71,18 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
               ipfsCid && !isMock
                 ? 'bg-[#00b894]/10 text-[#00b894]'
-                : 'bg-black/4 text-[#888]'
+                : 'bg-white/[0.04] text-[#888]'
             }`}>
               Chainlink Ready
             </span>
             {isMock && (
               <span className="text-[10px] text-[#e17055] font-medium">
-                Demo Mode — IPFS verification simulated
+                Demo Mode: IPFS verification simulated
               </span>
             )}
           </div>
           {stablecoin && (
-            <span className="font-mono text-[10px] bg-black/4 px-1.5 py-0.5 rounded text-[#aaa] w-fit">
+            <span className="font-mono text-[10px] bg-white/[0.04] px-1.5 py-0.5 rounded text-[#aaa] w-fit">
               /api/oracle/{stablecoin.toLowerCase()}
             </span>
           )}

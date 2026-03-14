@@ -30,7 +30,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
   return (
     <div className="space-y-4">
       {/* Slider */}
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-4">
+      <div>
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-[#888] uppercase tracking-wider font-semibold">
             Timeline Scrubber
@@ -55,7 +55,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
       </div>
 
       {/* Summary card */}
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+      <div>
         <div className="flex items-start justify-between mb-4">
           <div>
             <p className="text-xs text-[#888] uppercase tracking-wider font-semibold">
@@ -125,21 +125,24 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
           )}
         </div>
 
-        {/* 6-Dimension Breakdown */}
+        {/* 6 Dimension Breakdown */}
         <h4 className="text-xs font-semibold text-white uppercase tracking-wider mb-3">
           Dimension Breakdown
         </h4>
         <ResponsiveContainer width="100%" height={220}>
           <BarChart data={dimChartData} layout="vertical" margin={{ left: 120 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f3f2f7" />
+            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
             <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#888' }} />
-            <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#555' }} width={110} />
+            <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#888' }} width={110} />
             <Tooltip
               formatter={(value: number, name: string) => [
                 `${value.toFixed(1)}`,
                 name === 'weighted' ? 'Weighted Score' : 'Raw Score',
               ]}
-              contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 12 }}
+              contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', backgroundColor: '#1a1825', color: '#e2e8f0', fontSize: 12 }}
+              wrapperStyle={{ backgroundColor: 'transparent', boxShadow: 'none', border: 'none' }}
+              labelStyle={{ color: '#e2e8f0' }}
+              itemStyle={{ color: '#aaa' }}
             />
             <Bar dataKey="score" radius={[0, 4, 4, 0]} barSize={14}>
               {dimChartData.map((entry, i) => (

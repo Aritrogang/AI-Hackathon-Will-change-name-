@@ -22,7 +22,7 @@ export function BacktestListPage() {
 
   if (error || !backtests) {
     return (
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8 text-center">
+      <div className="text-center">
         <p className="text-[#e84393] font-medium mb-2">Failed to load backtests</p>
         <p className="text-sm text-[#888]">{error}</p>
       </div>
@@ -54,8 +54,9 @@ export function BacktestListPage() {
               <span className="text-[#bbb]">&middot;</span>
               <span>{bt.date_range}</span>
             </div>
-            <div className="mt-3 text-xs font-medium text-[#6c5ce7] opacity-0 group-hover:opacity-100 transition-opacity">
-              View timeline &rarr;
+            <div className="mt-3 text-xs font-medium text-[#6c5ce7] opacity-0 group-hover:opacity-100 transition-opacity inline-flex items-center gap-1">
+              View timeline
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </div>
           </Link>
         ))}

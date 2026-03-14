@@ -1,0 +1,71 @@
+{
+  "stablecoin": "PYUSD",
+  "issuer": "Paxos (PayPal)",
+  "report_date": "2026-02-28",
+  "data_source": "genius_act_attestation",
+  "total_reserves": 900000000,
+  "weighted_avg_maturity_days": 28,
+  "counterparties": [
+    {
+      "bank_name": "BMO Harris Bank",
+      "city": "Chicago",
+      "state": "IL",
+      "lat": 41.8781,
+      "lng": -87.6298,
+      "percentage": 35.0,
+      "asset_class": "t_bills",
+      "maturity_days": 30,
+      "fdic_cert": 16571,
+      "fdic_ltv_ratio": 0.54,
+      "liquidity_coverage": 1.25,
+      "data_center_corridor": "us-central"
+    },
+    {
+      "bank_name": "Bank of New York Mellon",
+      "city": "New York",
+      "state": "NY",
+      "lat": 40.7128,
+      "lng": -74.0060,
+      "percentage": 30.0,
+      "asset_class": "t_bills",
+      "maturity_days": 45,
+      "fdic_cert": 7534,
+      "fdic_ltv_ratio": 0.62,
+      "liquidity_coverage": 1.15,
+      "data_center_corridor": "us-east-1"
+    },
+    {
+      "bank_name": "State Street",
+      "city": "Boston",
+      "state": "MA",
+      "lat": 42.3601,
+      "lng": -71.0589,
+      "percentage": 20.0,
+      "asset_class": "money_market",
+      "maturity_days": 7,
+      "fdic_cert": 823,
+      "fdic_ltv_ratio": 0.58,
+      "liquidity_coverage": 1.22,
+      "data_center_corridor": "us-east-1"
+    },
+    {
+      "bank_name": "Customers Bank",
+      "city": "West Reading",
+      "state": "PA",
+      "lat": 40.3348,
+      "lng": -75.9282,
+      "percentage": 15.0,
+      "asset_class": "deposits",
+      "maturity_days": 0,
+      "fdic_cert": 34919,
+      "fdic_ltv_ratio": 0.65,
+      "liquidity_coverage": 1.08,
+      "data_center_corridor": "us-east-2"
+    }
+  ],
+  "onchain_cross_check": {
+    "burn_7d_usd": 45000000,
+    "custodian_cash_delta": -44200000,
+    "divergence_pct": 1.8
+  }
+}

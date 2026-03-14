@@ -1,0 +1,57 @@
+{
+  "stablecoin": "TUSD",
+  "issuer": "TrueUSD",
+  "report_date": "2026-02-28",
+  "data_source": "occ_xbrl",
+  "total_reserves": 1500000000,
+  "weighted_avg_maturity_days": 55,
+  "counterparties": [
+    {
+      "bank_name": "First Digital Trust",
+      "city": "Hong Kong",
+      "state": "HK",
+      "lat": 22.3193,
+      "lng": 114.1694,
+      "percentage": 60.0,
+      "asset_class": "t_bills",
+      "maturity_days": 60,
+      "fdic_cert": null,
+      "fdic_ltv_ratio": null,
+      "liquidity_coverage": 1.02,
+      "data_center_corridor": null
+    },
+    {
+      "bank_name": "Silvergate Bank",
+      "city": "La Jolla",
+      "state": "CA",
+      "lat": 32.8328,
+      "lng": -117.2713,
+      "percentage": 25.0,
+      "asset_class": "deposits",
+      "maturity_days": 0,
+      "fdic_cert": 27653,
+      "fdic_ltv_ratio": 0.78,
+      "liquidity_coverage": 0.88,
+      "data_center_corridor": "us-west-2"
+    },
+    {
+      "bank_name": "Signature Bank",
+      "city": "New York",
+      "state": "NY",
+      "lat": 40.7128,
+      "lng": -74.0060,
+      "percentage": 15.0,
+      "asset_class": "deposits",
+      "maturity_days": 0,
+      "fdic_cert": 57053,
+      "fdic_ltv_ratio": 0.75,
+      "liquidity_coverage": 0.92,
+      "data_center_corridor": "us-east-1"
+    }
+  ],
+  "onchain_cross_check": {
+    "burn_7d_usd": 89000000,
+    "custodian_cash_delta": -83500000,
+    "divergence_pct": 6.2
+  }
+}

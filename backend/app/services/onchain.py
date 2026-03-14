@@ -40,12 +40,18 @@ TOKEN_CONTRACTS: dict[str, str] = {
     "USDC": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
     "USDT": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
     "DAI": "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    "FRAX": "0x853d955aCEf822Db058eb8505911ED77F175b99e",
+    "PYUSD": "0x6c3ea9036406852006290770BEdFcAbA0e23A0e8",
+    "TUSD": "0x0000000000085d4780B73119b644AE5ecd22b376",
 }
 
 TOKEN_DECIMALS: dict[str, int] = {
     "USDC": 6,
     "USDT": 6,
     "DAI": 18,
+    "FRAX": 18,
+    "PYUSD": 6,
+    "TUSD": 18,
 }
 
 # Fixture directories (newer /data/reserves/ preferred, legacy /data/fixtures/ as fallback)

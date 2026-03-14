@@ -1,6 +1,73 @@
 import { useState, useEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 
+/* ────────────────────────── logos ────────────────────────── */
+const logos = [
+  { name: 'MakerDAO', src: '/logos/mkr-wordmark.svg' },
+  { name: 'Aave', src: '/logos/aave-wordmark.svg' },
+  { name: 'Compound', src: '/logos/comp-wordmark.svg' },
+  { name: 'Chainlink', src: '/logos/link-wordmark.svg' },
+  { name: 'USDC', src: '/logos/usdc-wordmark.svg' },
+  { name: 'Tether', src: '/logos/usdt-wordmark.svg' },
+  { name: 'Uniswap', src: '/logos/uni-wordmark.svg' },
+  { name: 'Ethereum', src: '/logos/eth-wordmark.svg' },
+]
+
+function LogoConveyor({ items, speed = 25 }: { items: typeof logos; speed?: number }) {
+  const setRef = useRef<HTMLDivElement>(null)
+  const [setWidth, setSetWidth] = useState(0)
+
+  useEffect(() => {
+    const el = setRef.current
+    if (!el) return
+    const measure = () => setSetWidth(el.scrollWidth)
+    const images = el.querySelectorAll('img')
+    let loaded = 0
+    images.forEach((img) => {
+      if (img.complete) {
+        loaded++
+      } else {
+        img.addEventListener('load', () => {
+          loaded++
+          if (loaded === images.length) measure()
+        })
+      }
+    })
+    if (loaded === images.length) measure()
+  }, [])
+
+  return (
+    <div className="overflow-hidden relative w-full">
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-20 bg-gradient-to-r from-[#0c0a14] to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-20 bg-gradient-to-l from-[#0c0a14] to-transparent z-10" />
+      <style>{`
+        @keyframes conveyor {
+          from { transform: translateX(-${setWidth}px); }
+          to { transform: translateX(0); }
+        }
+      `}</style>
+      <div
+        className="flex items-center w-max"
+        style={{
+          animation: setWidth ? `conveyor ${speed}s linear infinite` : 'none',
+          willChange: 'transform',
+        }}
+      >
+        <div ref={setRef} className="flex items-center gap-10 shrink-0 pr-10">
+          {items.map((logo, i) => (
+            <img key={i} src={logo.src} alt={logo.name} className="h-[56px] w-auto shrink-0 opacity-60 hover:opacity-90 transition-opacity" />
+          ))}
+        </div>
+        <div className="flex items-center gap-10 shrink-0 pr-10">
+          {items.map((logo, i) => (
+            <img key={`d-${i}`} src={logo.src} alt={logo.name} className="h-[56px] w-auto shrink-0 opacity-60" />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 /* ────────────────────────── helpers ────────────────────────── */
 function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: string }) {
   const [count, setCount] = useState(0)
@@ -82,14 +149,15 @@ export function LandingPage() {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-[#888] max-w-2xl mb-10 leading-relaxed">
-            Real-time liquidity stress scores for every major stablecoin. API-first infrastructure for DAO treasuries, DeFi protocols, and AI trading agents.
+            Realtime liquidity stress scores for every major stablecoin. API first infrastructure for DAO treasuries, DeFi protocols, and AI trading agents.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
             <Link
               to="/developers"
               className="px-8 py-3.5 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-sm"
             >
-              Get API Access →
+              Get API Access
+              <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
             </Link>
             <Link
               to="/dashboard"
@@ -104,7 +172,7 @@ export function LandingPage() {
             {[
               { value: 300, suffix: 'B+', label: 'Reserves Monitored' },
               { value: 6, suffix: '', label: 'Stablecoins Tracked' },
-              { value: 2, suffix: 's', label: 'Re-score Latency' },
+              { value: 2, suffix: 's', label: 'Rescore Latency' },
               { value: 19, suffix: '', label: 'Risk Graph Nodes' },
             ].map((s) => (
               <div key={s.label} className="text-center">
@@ -130,33 +198,39 @@ export function LandingPage() {
               $300B+ in Unstressed Reserves
             </h2>
             <p className="text-lg text-[#888] max-w-2xl mx-auto leading-relaxed">
-              Stablecoin risk is a <strong className="text-white">duration mismatch problem</strong> — the same failure mode that brought down SVB. Weather and geopolitical events are tail-risk multipliers on already-fragile balance sheets.
+              Stablecoin risk is a <strong className="text-white">duration mismatch problem</strong>, the same failure mode that brought down SVB. Weather and geopolitical events are tail risk multipliers on already fragile balance sheets.
             </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                icon: '⏱️',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                ),
                 title: 'Duration Mismatch',
-                desc: 'Reserves locked in long-maturity bonds while redemption demand can spike in hours. This is the SVB failure mode — the catalyst, not a credit event.',
+                desc: 'Reserves locked in long maturity bonds while redemption demand can spike in hours. This is the SVB failure mode: the catalyst, not a credit event.',
               },
               {
-                icon: '📄',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                ),
                 title: '30-Day PDF Lag',
-                desc: 'Pre-GENIUS Act, reserve disclosures were quarterly PDFs. Even now, most data sits in compliance filings that no one ingests systematically.',
+                desc: 'Before the GENIUS Act, reserve disclosures were quarterly PDFs. Even now, most data sits in compliance filings that no one ingests systematically.',
               },
               {
-                icon: '🔗',
+                icon: (
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/><line x1="12" y1="1.05" x2="12" y2="7"/><line x1="12" y1="17.01" x2="12" y2="22.96"/></svg>
+                ),
                 title: 'No System of Record',
-                desc: 'On-chain platforms track wallet flows. Nobody structures the off-chain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.',
+                desc: 'Onchain platforms track wallet flows. Nobody structures the offchain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.',
               },
             ].map((c) => (
               <div
                 key={c.title}
                 className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:border-[#6c5ce7]/30 transition-colors group"
               >
-                <div className="text-3xl mb-4">{c.icon}</div>
+                <div className="mb-4">{c.icon}</div>
                 <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-[#a29bfe] transition-colors">{c.title}</h3>
                 <p className="text-sm text-[#888] leading-relaxed">{c.desc}</p>
               </div>
@@ -175,10 +249,10 @@ export function LandingPage() {
           <div className="text-center mb-16">
             <span className="text-xs uppercase tracking-[0.2em] text-[#6c5ce7] font-medium">How It Works</span>
             <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-6">
-              Four Data Sources → One Risk Score
+              Four Data Sources. One Risk Score.
             </h2>
             <p className="text-lg text-[#888] max-w-2xl mx-auto">
-              We ingest regulatory filings, on-chain flows, bank health data, and weather intelligence — then run a 6-step scoring engine.
+              We ingest regulatory filings, onchain flows, bank health data, and weather intelligence, then run a 6 step scoring engine.
             </p>
           </div>
 
@@ -189,9 +263,9 @@ export function LandingPage() {
               <div className="text-xs uppercase tracking-widest text-[#888] mb-4 font-medium">Data Sources</div>
               {[
                 { label: 'GENIUS Act Filings', sub: 'XBRL + OCC API' },
-                { label: 'On-chain Flows', sub: 'Mint/burn via Etherscan' },
+                { label: 'Onchain Flows', sub: 'Mint/burn via Etherscan' },
                 { label: 'FDIC Call Reports', sub: 'Bank health metrics' },
-                { label: 'NOAA / Open-Meteo', sub: 'Weather tail-risk' },
+                { label: 'NOAA / Open-Meteo', sub: 'Weather tail risk' },
               ].map((s) => (
                 <div key={s.label} className="bg-white/[0.04] border border-white/[0.08] rounded-xl px-5 py-3.5 flex items-center gap-3">
                   <div className="w-2 h-2 rounded-full bg-[#00b894]" />
@@ -210,7 +284,7 @@ export function LandingPage() {
 
             {/* Engine */}
             <div className="flex-1 bg-gradient-to-br from-[#6c5ce7]/10 to-[#a29bfe]/5 border border-[#6c5ce7]/20 rounded-2xl p-6">
-              <div className="text-xs uppercase tracking-widest text-[#a29bfe] mb-4 font-medium">6-Step Engine</div>
+              <div className="text-xs uppercase tracking-widest text-[#a29bfe] mb-4 font-medium">6 Step Engine</div>
               <ol className="space-y-2.5 text-sm">
                 {['WAM Duration Analysis', 'Concentration Factor', 'Weather Multiplier', 'LLM Jury Consensus', 'Knowledge Graph Walk', 'Score Aggregation'].map((step, i) => (
                   <li key={step} className="flex items-center gap-3">
@@ -266,8 +340,8 @@ export function LandingPage() {
                 ),
                 title: 'REST API',
                 audience: 'For Systems',
-                desc: 'JSON stress scores on demand. <2s re-score latency. Webhook alerts on threshold breaches. IPFS-verified score snapshots.',
-                cta: 'View Docs →',
+                desc: 'JSON stress scores on demand. <2s rescore latency. Webhook alerts on threshold breaches. IPFS verified score snapshots.',
+                cta: 'View Docs',
                 link: '/developers',
               },
               {
@@ -277,7 +351,7 @@ export function LandingPage() {
                 title: 'MCP Server',
                 audience: 'For AI Agents',
                 desc: 'Tool calls for trading bots and agent frameworks. Query risk scores before executing stablecoin positions via stdio or SSE transport.',
-                cta: 'MCP Setup →',
+                cta: 'MCP Setup',
                 link: '/developers#mcp-server',
               },
               {
@@ -287,7 +361,7 @@ export function LandingPage() {
                 title: 'Monitoring Dashboard',
                 audience: 'For Humans',
                 desc: 'Live risk modeling sandbox with geographic overlays, knowledge graph visualization, and scenario projection tools.',
-                cta: 'Open Dashboard →',
+                cta: 'Open Dashboard',
                 link: '/dashboard',
               },
             ].map((m) => (
@@ -299,8 +373,9 @@ export function LandingPage() {
                 <h3 className="text-xl font-semibold text-white mb-1">{m.title}</h3>
                 <span className="text-xs text-[#888] uppercase tracking-wider mb-4">{m.audience}</span>
                 <p className="text-sm text-[#888] leading-relaxed flex-1">{m.desc}</p>
-                <Link to={m.link} className="mt-6 text-sm font-medium text-[#a29bfe] hover:text-[#6c5ce7] transition-colors">
+                <Link to={m.link} className="mt-6 text-sm font-medium text-[#a29bfe] hover:text-[#6c5ce7] transition-colors inline-flex items-center gap-1.5">
                   {m.cta}
+                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
                 </Link>
               </div>
             ))}
@@ -314,7 +389,7 @@ export function LandingPage() {
           <div className="text-center mb-16">
             <span className="text-xs uppercase tracking-[0.2em] text-[#a29bfe] font-medium">Pricing</span>
             <h2 className="text-4xl md:text-5xl font-bold text-white mt-4 mb-4">
-              API-First Infrastructure
+              API First Infrastructure
             </h2>
             <p className="text-lg text-[#888]">Not a consulting fee.</p>
           </div>
@@ -345,7 +420,7 @@ export function LandingPage() {
               <h3 className="text-lg font-semibold text-white mb-1">Enterprise</h3>
               <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For protocols & desks</p>
               <ul className="space-y-3 text-sm text-[#aaa] flex-1">
-                {['Real-time streaming', 'IPFS verified scores', 'Multi-model consensus', 'Enterprise SLA', 'Warehouse delivery'].map((f) => (
+                {['Realtime streaming', 'IPFS verified scores', 'Multi model consensus', 'Enterprise SLA', 'Warehouse delivery'].map((f) => (
                   <li key={f} className="flex items-start gap-2.5">
                     <svg className="w-4 h-4 text-[#6c5ce7] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
                     {f}
@@ -379,15 +454,9 @@ export function LandingPage() {
 
       {/* ═══════════════════ 6. TRUSTED BY ═══════════════════ */}
       <section className="relative py-20 px-6 md:px-16 border-t border-white/[0.04]">
-        <div className="max-w-5xl mx-auto text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-[#888] font-medium mb-10">Built for the protocols that matter</p>
-          <div className="flex flex-wrap justify-center gap-x-12 gap-y-6 text-[#555]">
-            {['MakerDAO', 'Aave', 'Compound', 'Chainlink', 'USDC', 'Tether', 'Uniswap', 'Ethereum'].map((name) => (
-              <span key={name} className="text-lg font-semibold tracking-tight hover:text-[#888] transition-colors cursor-default">
-                {name}
-              </span>
-            ))}
-          </div>
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs uppercase tracking-[0.2em] text-[#888] font-medium mb-10 text-center">Built for the protocols that matter</p>
+          <LogoConveyor items={logos} speed={25} />
         </div>
       </section>
 
@@ -405,7 +474,8 @@ export function LandingPage() {
             to="/developers"
             className="inline-block px-10 py-4 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-base"
           >
-            Get API Access →
+            Get API Access
+            <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
           </Link>
         </div>
       </section>

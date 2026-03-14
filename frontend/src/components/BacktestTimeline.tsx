@@ -46,7 +46,7 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
     .filter(e => e.event)
 
   return (
-    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+    <div>
       <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
         Stress Score Timeline
       </h3>
@@ -63,18 +63,18 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
               <stop offset="100%" stopColor="#00b894" stopOpacity={0.1} />
             </linearGradient>
           </defs>
-          <CartesianGrid strokeDasharray="3 3" stroke="#f3f2f7" />
+          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
           <XAxis
             dataKey="label"
             tick={{ fontSize: 11, fill: '#888' }}
             tickLine={false}
-            axisLine={{ stroke: '#eee' }}
+            axisLine={{ stroke: 'rgba(255,255,255,0.08)' }}
           />
           <YAxis
             domain={[0, 100]}
             tick={{ fontSize: 11, fill: '#888' }}
             tickLine={false}
-            axisLine={{ stroke: '#eee' }}
+            axisLine={{ stroke: 'rgba(255,255,255,0.08)' }}
             width={35}
           />
           <Tooltip
@@ -84,7 +84,7 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
               const idx = d.index
               const event = timeline[idx]
               return (
-                <div className="bg-white/[0.04] rounded-lg border border-white/[0.08] p-3 shadow-lg text-xs max-w-[240px]">
+                <div className="bg-[#1a1825] rounded-lg border border-white/[0.1] p-3 shadow-lg text-xs max-w-[240px]">
                   <div className="font-semibold text-white">{event.date}</div>
                   <div className="mt-1">
                     Stress Score:{' '}
@@ -94,7 +94,7 @@ export function BacktestTimeline({ timeline, criticalDate, selectedIndex, onSele
                   </div>
                   <div className="text-[#888]">{event.level}</div>
                   {event.event && (
-                    <div className="mt-1 text-[#aaa] border-t border-black/6 pt-1">{event.event}</div>
+                    <div className="mt-1 text-[#aaa] border-t border-white/[0.06] pt-1">{event.event}</div>
                   )}
                 </div>
               )

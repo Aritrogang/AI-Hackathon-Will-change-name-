@@ -70,16 +70,16 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 ### feat/data-ingestion
 
 #### Unsiloed AI + Claude Extraction Pipeline (Sponsor Integration)
-- [ ] Create Unsiloed AI account + get API credentials from Discord
-- [ ] Write `app/services/unsiloed_provider.py` — Unsiloed vision model client for PDF table extraction
-- [ ] Write `app/services/extractor.py` — async function `extract_xbrl(feed_url: str) -> ReserveData`
-- [ ] Pipeline: PDF → Unsiloed AI (table/visual extraction) → structured JSON → Claude (risk signal interpretation)
-- [ ] Build Claude API prompt chain for OCC XBRL parsing
-- [ ] Build PDF fallback parser for non-GENIUS-Act-compliant stablecoins
+- [x] Create Unsiloed AI account + get API credentials from Discord
+- [x] Write `app/services/unsiloed_provider.py` — Unsiloed vision model client for PDF table extraction
+- [x] Write `app/services/extractor.py` — async function `extract_xbrl(feed_url: str) -> ReserveData`
+- [x] Pipeline: PDF → Unsiloed AI (table/visual extraction) → structured JSON → Claude (risk signal interpretation)
+- [x] Build Claude API prompt chain for OCC XBRL parsing
+- [x] Build PDF fallback parser for non-GENIUS-Act-compliant stablecoins
 - [ ] Implement extraction retry logic (max 3 attempts)
-- [ ] Cache extraction results in SQLite
-- [ ] Add `UNSILOED_API_KEY` to `.env.example` and backend startup validation
-- [ ] Graceful fallback: if Unsiloed unavailable, fall back to Claude-only extraction
+- [x] Cache extraction results in SQLite
+- [x] Add `UNSILOED_API_KEY` to `.env.example` and backend startup validation
+- [x] Graceful fallback: if Unsiloed unavailable, fall back to Claude-only extraction
 
 #### On-Chain Cross-Reference
 - [x] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData`

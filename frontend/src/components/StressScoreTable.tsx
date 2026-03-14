@@ -26,7 +26,7 @@ export function StressScoreTable({ scores, loading }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8">
+      <div>
         <div className="animate-pulse space-y-4">
           {[1, 2].map(i => (
             <div key={i} className="h-16 bg-white/[0.04] rounded-lg" />
@@ -37,12 +37,10 @@ export function StressScoreTable({ scores, loading }: Props) {
   }
 
   return (
-    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/[0.06]">
-        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
-          Liquidity Stress Scores
-        </h2>
-      </div>
+    <div>
+      <h2 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+        Liquidity Stress Scores
+      </h2>
       <table className="w-full">
         <thead>
           <tr className="text-xs text-[#888] uppercase tracking-wider border-b border-white/[0.06]">

@@ -5,16 +5,25 @@ import { fetchActiveScenarios } from '../lib/api'
 import type { DetectedScenario } from '../lib/types'
 
 function scoreColor(score: number): string {
-  if (score <= 25) return '#00b894'
-  if (score <= 75) return '#e17055'
+  if (score <= 25) return '#2ecc71'
+  if (score <= 75) return '#f39c12'
   return '#e84393'
 }
 
-function scenarioIcon(type: string): string {
-  if (type === 'weather') return '\u{1F300}'
-  if (type === 'rate') return '\u{1F4C8}'
-  if (type === 'bank') return '\u{1F3E6}'
-  return '\u{26A0}\u{FE0F}'
+function ScenarioIcon({ type }: { type: string }) {
+  const cls = "w-5 h-5"
+  if (type === 'weather') return (
+    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+  )
+  if (type === 'rate') return (
+    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+  )
+  if (type === 'bank') return (
+    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>
+  )
+  return (
+    <svg className={cls} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+  )
 }
 
 function severityLabel(severity: number): string {
@@ -36,9 +45,9 @@ export function RiskModeling() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   return (
-    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
+    <div>
       {/* Header */}
-      <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+      <div className="flex items-center justify-between mb-4">
         <div>
           <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
             System-Detected Risk Scenarios
@@ -53,7 +62,7 @@ export function RiskModeling() {
         </div>
       </div>
 
-      <div className="p-6">
+      <div>
         {loading && !scenarios && (
           <div className="text-sm text-[#888] text-center py-8">Scanning data feeds...</div>
         )}
@@ -80,7 +89,7 @@ export function RiskModeling() {
                 >
                   {/* Scenario card header */}
                   <div className="px-4 py-3 flex items-center gap-3">
-                    <span className="text-lg">{scenarioIcon(scenario.type)}</span>
+                    <span className="text-[#aaa]"><ScenarioIcon type={scenario.type} /></span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-semibold text-white truncate">{scenario.title}</span>
@@ -116,27 +125,27 @@ export function RiskModeling() {
 
                       {/* Score comparison */}
                       <div className="grid grid-cols-3 gap-4 mb-4">
-                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
-                          <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Current</p>
+                        <div className="rounded-lg p-3 border border-white/[0.08]">
+                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Current</p>
                           <p className="text-2xl font-bold" style={{ color: scoreColor(proj.baseline.stress_score) }}>
                             {proj.baseline.stress_score}
                           </p>
-                          <p className="text-[10px] text-[#888] mt-0.5">{proj.baseline.stress_level}</p>
+                          <p className="text-[10px] text-[#aaa] mt-0.5">{proj.baseline.stress_level}</p>
                         </div>
-                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
-                          <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Projected</p>
+                        <div className="rounded-lg p-3 border border-white/[0.08]">
+                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Projected</p>
                           <p className="text-2xl font-bold" style={{ color: scoreColor(proj.projected.stress_score) }}>
                             {proj.projected.stress_score}
                           </p>
-                          <p className="text-[10px] text-[#888] mt-0.5">{proj.projected.stress_level}</p>
+                          <p className="text-[10px] text-[#aaa] mt-0.5">{proj.projected.stress_level}</p>
                         </div>
-                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
-                          <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Impact</p>
-                          <p className={`text-2xl font-bold ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#00b894]'}`}>
+                        <div className="rounded-lg p-3 border border-white/[0.08]">
+                          <p className="text-[10px] text-[#999] uppercase tracking-wider mb-1">Impact</p>
+                          <p className={`text-2xl font-bold ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#2ecc71]'}`}>
                             {proj.delta > 0 ? '+' : ''}{proj.delta}
                           </p>
-                          <p className="text-[10px] text-[#888] mt-0.5">
-                            Latency: {proj.baseline.redemption_latency_hours} → {proj.projected.redemption_latency_hours}
+                          <p className="text-[10px] text-[#aaa] mt-0.5">
+                            Latency: {proj.baseline.redemption_latency_hours} to {proj.projected.redemption_latency_hours}
                           </p>
                         </div>
                       </div>
@@ -145,7 +154,7 @@ export function RiskModeling() {
                       {proj.dimensions && proj.dimensions.length > 0 && (
                         <div>
                           <h3 className="text-[10px] font-semibold text-white uppercase tracking-wider mb-2">
-                            Per-Dimension Impact
+                            Per Dimension Impact
                           </h3>
                           <ResponsiveContainer width="100%" height={180}>
                             <BarChart
@@ -162,13 +171,16 @@ export function RiskModeling() {
                               <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#888' }} />
                               <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#aaa' }} width={110} />
                               <Tooltip
-                                contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backgroundColor: '#1a1825', color: '#e2e8f0' }}
+                                contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.15)', fontSize: 11, backgroundColor: '#1a1825', color: '#e2e8f0' }}
+                                wrapperStyle={{ backgroundColor: 'transparent', boxShadow: 'none', border: 'none' }}
+                                labelStyle={{ color: '#e2e8f0' }}
+                                itemStyle={{ color: '#aaa' }}
                                 formatter={(value: number, name: string) => [
                                   value.toFixed(1),
                                   name === 'baseline' ? 'Current' : 'Projected',
                                 ]}
                               />
-                              <Bar dataKey="baseline" fill="#a29bfe" fillOpacity={0.4} radius={[0, 3, 3, 0]} barSize={8} />
+                              <Bar dataKey="baseline" fill="#a29bfe" fillOpacity={0.8} radius={[0, 3, 3, 0]} barSize={8} />
                               <Bar dataKey="projected" radius={[0, 3, 3, 0]} barSize={8}>
                                 {proj.dimensions.map((_d, i) => (
                                   <Cell key={i} fill={proj.dimensions[i].delta > 5 ? '#e84393' : proj.dimensions[i].delta > 0 ? '#e17055' : '#00b894'} />

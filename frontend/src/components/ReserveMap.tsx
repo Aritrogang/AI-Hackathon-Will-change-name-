@@ -22,7 +22,7 @@ const CORRIDOR_CENTERS: Record<string, { lat: number; lng: number }> = {
 }
 
 function scoreColor(ltv: number | null): string {
-  if (ltv === null) return '#888888'
+  if (ltv === null) return '#00b894'
   if (ltv < 0.6) return '#00b894'
   if (ltv < 0.7) return '#e17055'
   return '#e84393'
@@ -56,19 +56,23 @@ interface GlobeRing {
   color: string
 }
 
-export function ReserveMap() {
+interface ReserveMapProps {
+  height?: number
+}
+
+export function ReserveMap({ height = 600 }: ReserveMapProps) {
   const fetcher = useCallback(() => fetchGraph(), [])
   const { data, loading } = usePolling<GraphData>(fetcher, 120000)
   const globeRef = useRef<any>(null) // eslint-disable-line @typescript-eslint/no-explicit-any
 
-  // Auto-rotate & initial view
+  // Static view centered on US (no auto-rotate)
   useEffect(() => {
     if (globeRef.current) {
       const controls = globeRef.current.controls()
-      controls.autoRotate = true
-      controls.autoRotateSpeed = 0.4
+      controls.autoRotate = false
       controls.enableZoom = true
-      globeRef.current.pointOfView({ lat: 35, lng: -50, altitude: 2.2 }, 1000)
+      controls.enableRotate = true
+      globeRef.current.pointOfView({ lat: 38, lng: -96, altitude: 1.8 }, 1000)
     }
   }, [data])
 
@@ -94,22 +98,38 @@ export function ReserveMap() {
     }
 
     // Points: banks + datacenters
-    const pts: GlobePoint[] = []
+    // Deduplicate banks at the same lat/lng — keep the highest-risk one
+    const bankByLocation: Record<string, GlobePoint> = {}
 
     for (const bank of bankNodes) {
       const ltv = bank.fdic_ltv_ratio as number | null
       const edgeInfo = bankEdges[bank.id]
       const size = edgeInfo ? Math.max(0.3, edgeInfo.percentage / 25) : 0.3
-      pts.push({
-        lat: bank.lat as number,
-        lng: bank.lng as number,
+      const lat = bank.lat as number
+      const lng = bank.lng as number
+      const key = `${lat.toFixed(2)},${lng.toFixed(2)}`
+      const color = scoreColor(ltv)
+      const point: GlobePoint = {
+        lat,
+        lng,
         name: bank.name as string,
-        color: scoreColor(ltv),
+        color,
         size,
         type: 'bank',
         detail: `LTV: ${ltv !== null ? (ltv * 100).toFixed(0) + '%' : 'N/A'} | Maturity: ${bank.maturity_days}d${edgeInfo ? ` | Reserves: ${edgeInfo.percentage.toFixed(0)}% (${edgeInfo.stablecoins.join(', ')})` : ''}`,
-      })
+      }
+
+      const existing = bankByLocation[key]
+      if (!existing || (ltv !== null && ((existing.color === '#00b894' && color !== '#00b894') || (existing.color === '#e17055' && color === '#e84393')))) {
+        // Keep the higher-risk marker; merge size to be the larger one
+        if (existing) point.size = Math.max(existing.size, size)
+        bankByLocation[key] = point
+      } else if (existing) {
+        existing.size = Math.max(existing.size, size)
+      }
     }
+
+    const pts: GlobePoint[] = Object.values(bankByLocation)
 
     for (const dc of dcNodes) {
       const corridorId = dc.corridor_id as string
@@ -157,9 +177,9 @@ export function ReserveMap() {
         return {
           lat: center.lat,
           lng: center.lng,
-          maxR: 3,
-          propagationSpeed: 2,
-          repeatPeriod: 1200,
+          maxR: 4,
+          propagationSpeed: 1,
+          repeatPeriod: 3000,
           color: CORRIDOR_COLORS[corridorId] || '#6c5ce7',
         }
       })
@@ -170,7 +190,7 @@ export function ReserveMap() {
 
   if (loading || !data) {
     return (
-      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] h-[600px] flex items-center justify-center">
+      <div className="flex items-center justify-center" style={{ height }}>
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-[#6c5ce7]/30 border-t-[#6c5ce7] rounded-full animate-spin mx-auto mb-3" />
           <p className="text-sm text-[#888]">Initializing globe...</p>
@@ -180,8 +200,8 @@ export function ReserveMap() {
   }
 
   return (
-    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
-      <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
+    <div>
+      <div className="flex items-center justify-between mb-4">
         <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
           Reserve Network Globe
         </h2>
@@ -200,30 +220,57 @@ export function ReserveMap() {
           </span>
         </div>
       </div>
-      <div className="h-[600px] relative" style={{ background: 'radial-gradient(ellipse at center, #0e0c18 0%, #060510 100%)' }}>
+      <div className="relative" style={{ height, background: '#0c0a14' }}>
         <Globe
           ref={globeRef}
           width={typeof window !== 'undefined' ? Math.min(window.innerWidth - 48, 1200) : 800}
-          height={600}
+          height={height}
           backgroundColor="rgba(0,0,0,0)"
           globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
           atmosphereColor="#6c5ce7"
           atmosphereAltitude={0.18}
 
-          // Points: banks & datacenters
-          pointsData={points}
-          pointLat="lat"
-          pointLng="lng"
-          pointColor="color"
-          pointAltitude={0.01}
-          pointRadius="size"
-          pointLabel={(d: object) => {
+          // Clear the default 3D points layer
+          pointsData={[]}
+
+          // Markers: banks & datacenters (HTML elements for crisp rendering)
+          htmlElementsData={points}
+          htmlLat="lat"
+          htmlLng="lng"
+          htmlAltitude={0.01}
+          htmlElement={(d: object) => {
             const p = d as GlobePoint
-            return `<div style="background:#1a1825;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-family:Sora,sans-serif;font-size:11px;color:#e2e8f0;min-width:160px;backdrop-filter:blur(8px)">
-              <div style="font-weight:600;margin-bottom:4px;color:white">${p.name}</div>
-              <div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px">${p.type === 'bank' ? 'Custodian Bank' : 'Data Center'}</div>
-              <div style="color:#aaa">${p.detail}</div>
-            </div>`
+            const sizePx = Math.max(12, p.size * 30)
+
+            const wrapper = document.createElement('div')
+            wrapper.style.position = 'relative'
+            wrapper.style.transform = 'translate(-50%, -50%)'
+            wrapper.style.pointerEvents = 'auto'
+            wrapper.style.overflow = 'visible'
+
+            const dot = document.createElement('div')
+            dot.style.width = `${sizePx}px`
+            dot.style.height = `${sizePx}px`
+            dot.style.borderRadius = '50%'
+            dot.style.background = p.color
+            dot.style.border = `2px solid ${p.color}`
+            dot.style.boxShadow = `0 0 ${sizePx / 2}px ${p.color}60`
+            dot.style.cursor = 'pointer'
+            wrapper.appendChild(dot)
+
+            const tip = document.createElement('div')
+            tip.style.cssText = `display:none;position:absolute;bottom:${sizePx + 8}px;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:10;background:#1a1825;border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:8px 12px;font-family:Sora,sans-serif;font-size:11px;color:#e2e8f0;min-width:160px;backdrop-filter:blur(8px);pointer-events:none;`
+            tip.innerHTML = `<div style="font-weight:600;margin-bottom:4px;color:white">${p.name}</div><div style="color:#888;font-size:10px;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:2px">${p.type === 'bank' ? 'Custodian Bank' : 'Data Center'}</div><div style="color:#aaa">${p.detail}</div>`
+            wrapper.appendChild(tip)
+
+            wrapper.addEventListener('mouseenter', () => { tip.style.display = 'block' })
+            wrapper.addEventListener('mouseleave', () => { tip.style.display = 'none' })
+
+            return wrapper
+          }}
+          htmlElementVisibilityModifier={(el: HTMLElement, isVisible: boolean) => {
+            el.style.opacity = isVisible ? '1' : '0.15'
+            el.style.transition = 'opacity 200ms'
           }}
 
           // Arcs: bank ↔ datacenter connections
@@ -248,7 +295,7 @@ export function ReserveMap() {
           ringRepeatPeriod="repeatPeriod"
           ringColor={(d: object) => {
             const r = d as GlobeRing
-            return r.color + '40'
+            return r.color + '20'
           }}
         />
       </div>
