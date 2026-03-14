@@ -1,6 +1,9 @@
 import type { ApiResponse, StressScore, WeatherData, GraphData, ProjectionRequest, ProjectionResult, NarrativeResult, DetectedScenario, BacktestResult, BacktestSummary, VerifiedScore } from './types'
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+const API_BASE =
+  import.meta.env.VITE_API_URL ||
+  import.meta.env.VITE_API_BASE_URL ||
+  'http://localhost:8000'
 
 async function fetchApi<T>(path: string): Promise<ApiResponse<T>> {
   const res = await fetch(`${API_BASE}${path}`)
