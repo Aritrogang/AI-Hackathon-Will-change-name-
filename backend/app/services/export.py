@@ -181,3 +181,47 @@ async def export_scores_json(
                 return [dict(row) for row in rows]
     except Exception:
         return []
+
+
+# ---------------------------------------------------------------------------
+# Read side — CSV export
+# ---------------------------------------------------------------------------
+
+_CSV_COLUMNS = [
+    "date", "stablecoin", "score", "level", "latency_hours", "coverage_ratio",
+    "dim_duration", "dim_transparency", "dim_concentration", "dim_weather",
+    "dim_counterparty", "dim_peg", "ipfs_cid",
+]
+
+
+async def export_scores_csv(
+    stablecoins: Optional[list[str]],
+    start_date: str,
+    end_date: str,
+    limit: int = 1000,
+    offset: int = 0,
+) -> str:
+    """Export historical scores as a CSV string.
+
+    Same filtering and pagination as export_scores_json.
+    Returns an empty CSV (header only) when no rows match — never raises.
+
+    CSV columns:
+        date, stablecoin, score, level, latency_hours, coverage_ratio,
+        dim_duration, dim_transparency, dim_concentration, dim_weather,
+        dim_counterparty, dim_peg, ipfs_cid
+    """
+    rows = await export_scores_json(stablecoins, start_date, end_date, limit, offset)
+
+    buf = io.StringIO()
+    writer = csv.DictWriter(
+        buf,
+        fieldnames=_CSV_COLUMNS,
+        extrasaction="ignore",
+        lineterminator="\n",
+    )
+    writer.writeheader()
+    for row in rows:
+        writer.writerow(row)
+
+    return buf.getvalue()
