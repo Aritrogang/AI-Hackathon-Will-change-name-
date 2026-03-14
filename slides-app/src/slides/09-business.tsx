@@ -22,7 +22,7 @@ const logos = [
   { name: "Ethereum", src: `${base}logos/eth-wordmark.svg` },
 ]
 
-function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: number }) {
+function LogoConveyor({ items, speed = 25 }: { items: typeof logos; speed?: number }) {
   const setRef = useRef<HTMLDivElement>(null)
   const [setWidth, setSetWidth] = useState(0)
 
@@ -48,8 +48,8 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
   return (
     <div className="overflow-hidden relative w-full">
       {/* Fade overlays */}
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-24 bg-gradient-to-r from-white/90 to-transparent z-10" />
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-24 bg-gradient-to-l from-white/90 to-transparent z-10" />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white/90 to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white/90 to-transparent z-10" />
       <style>{`
         @keyframes conveyor {
           from { transform: translateX(-${setWidth}px); }
@@ -64,7 +64,7 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
         }}
       >
         {/* First set — measured */}
-        <div ref={setRef} className="flex items-center gap-16 shrink-0 pr-16">
+        <div ref={setRef} className="flex items-center gap-10 shrink-0 pr-10">
           {items.map((logo, i) => (
             <img
               key={i}
@@ -76,7 +76,7 @@ function LogoConveyor({ items, speed = 50 }: { items: typeof logos; speed?: numb
           ))}
         </div>
         {/* Second set — duplicate for seamless loop */}
-        <div className="flex items-center gap-16 shrink-0 pr-16">
+        <div className="flex items-center gap-10 shrink-0 pr-10">
           {items.map((logo, i) => (
             <img
               key={`d-${i}`}
@@ -128,7 +128,7 @@ export function SlideBusiness(_props: { subStep?: number }) {
       {/* Logo conveyor — centered in remaining space */}
       <div className="flex-1 flex items-center">
         <motion.div className="w-full" {...fadeUp(0.3)}>
-          <LogoConveyor items={logos} speed={50} />
+          <LogoConveyor items={logos} speed={25} />
         </motion.div>
       </div>
     </SlideLayout>
