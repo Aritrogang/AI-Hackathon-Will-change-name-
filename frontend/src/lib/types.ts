@@ -127,6 +127,17 @@ export interface ProjectionResult {
   delta: number
 }
 
+export interface DetectedScenario {
+  id: string
+  type: 'weather' | 'rate' | 'bank'
+  title: string
+  description: string
+  source: string
+  severity: number
+  projection: ProjectionResult | null
+  affected_stablecoins: string[]
+}
+
 export interface ApiResponse<T> {
   data: T
   error: string | null

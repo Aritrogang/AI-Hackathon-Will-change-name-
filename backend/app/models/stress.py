@@ -78,3 +78,14 @@ class BacktestResult(BaseModel):
     timeline: list[BacktestEvent]
     critical_date: Optional[str] = None
     key_insight: Optional[str] = None
+
+
+class DetectedScenario(BaseModel):
+    id: str
+    type: str  # "weather", "rate", "bank"
+    title: str
+    description: str
+    source: str  # "NOAA", "FDIC", "macro"
+    severity: int = Field(ge=1, le=5)
+    projection: Optional[dict] = None  # ProjectionResult dict per stablecoin
+    affected_stablecoins: list[str] = []

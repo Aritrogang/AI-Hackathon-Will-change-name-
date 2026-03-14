@@ -29,6 +29,20 @@ async def get_all_stress_scores():
     return envelope(data=[r.model_dump() for r in results])
 
 
+@router.get("/scenarios/active")
+async def get_active_scenarios():
+    """Return system-detected risk scenarios ranked by severity and projected impact."""
+    from main import envelope, scoring_engine, weather_provider, graph_service, cache
+    from app.services.scenario_detector import ScenarioDetector
+
+    if scoring_engine is None:
+        raise HTTPException(status_code=503, detail="Scoring engine not initialized")
+
+    detector = ScenarioDetector(weather_provider, graph_service, cache)
+    scenarios = await detector.detect_scenarios()
+    return envelope(data=scenarios)
+
+
 @router.post("/project")
 async def project_scenario(body: ProjectionRequest):
     """Project stress score under a data-driven scenario.

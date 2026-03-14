@@ -14,7 +14,7 @@ export function DashboardPage({ scores, loading }: Props) {
     <div className="space-y-6">
       <AlertBanner />
       <StressScoreTable scores={scores || []} loading={loading} />
-      <RiskModeling scores={scores} />
+      <RiskModeling />
       <ReserveMap />
     </div>
   )
