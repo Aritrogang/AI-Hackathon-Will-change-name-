@@ -24,6 +24,10 @@ class NarrativeService:
         self.gemini_key = os.getenv("GEMINI_API_KEY")
         self.available = bool(self.anthropic_key or self.gemini_key)
 
+    def _is_available(self) -> bool:
+        """Required for standardized API availability checks."""
+        return self.available
+
     async def generate_narrative(self, stress_context: str) -> Optional[NarrativeResult]:
         """Generate a multi-model causal narrative with claim comparison.
 

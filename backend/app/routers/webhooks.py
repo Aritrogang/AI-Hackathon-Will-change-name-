@@ -43,7 +43,7 @@ class RegisterRequest(BaseModel):
     )
     secret: str = Field(
         min_length=8,
-        description="HMAC-SHA256 signing key. Use this to verify X-Helicity-Signature on delivery.",
+        description="HMAC-SHA256 signing key. Use this to verify X-Katabatic-Signature on delivery.",
     )
 
 
@@ -78,7 +78,7 @@ async def create_webhook(body: RegisterRequest):
             "threshold_delta": body.threshold_delta,
             "verification": (
                 "Verify deliveries by computing HMAC-SHA256 of the raw JSON body "
-                "with your secret and comparing to the X-Helicity-Signature header."
+                "with your secret and comparing to the X-Katabatic-Signature header."
             ),
         }
     )

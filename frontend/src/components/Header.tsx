@@ -29,7 +29,7 @@ export function Header({ lastUpdated }: Props) {
               <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
               <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
             </svg>
-            <span className="text-lg font-bold tracking-[-0.04em] text-white">helicity</span>
+            <span className="text-lg font-bold tracking-[-0.04em] text-white">katabatic</span>
           </Link>
           <nav className="flex gap-1">
             {navItems.map(item => (

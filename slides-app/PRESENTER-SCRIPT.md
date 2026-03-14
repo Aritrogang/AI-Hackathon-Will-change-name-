@@ -1,4 +1,4 @@
-# Helicity — Presenter Script
+# Katabatic — Presenter Script
 
 > 9 slides, ~3 minutes talking + ~1 minute live demo. Total: ~4 minutes. Each slide has talking points, one key phrase to nail, and an advance cue. Keep it tight — let the visuals do the work.
 
@@ -6,9 +6,9 @@
 
 ## Slide 01 — Hero (15s)
 
-**On screen:** Hurricane rings, Helicity logo (animated letter reveal), subtitle "Liquidity stress testing for stablecoin reserves", hackathon badge, team names (Adi, Aritro, Connor, Krish, Suchit, Vikram).
+**On screen:** Hurricane rings, Katabatic logo (animated letter reveal), subtitle "Liquidity stress testing for stablecoin reserves", hackathon badge, team names (Adi, Aritro, Connor, Krish, Suchit, Vikram).
 
-- "Hey everyone — we're Helicity. We built the risk data layer for stablecoin reserves — an API that continuously scores the structural fragility of reserve portfolios so DAOs, DeFi protocols, and AI agents can act on it."
+- "Hey everyone — we're Katabatic. We built the risk data layer for stablecoin reserves — an API that continuously scores the structural fragility of reserve portfolios so DAOs, DeFi protocols, and AI agents can act on it."
 
 **Key phrase:** "The risk data layer for stablecoin reserves."
 
@@ -20,7 +20,7 @@
 
 **Transition:** "Here's why this matters."
 
-**On screen:** SVB headquarters photo with $3.3B overlay. Two stat blocks: $300B+ unstressed reserve assets, 30 days between attestations. Depeg sparkline $1.00→$0.87. "Helicity flags critical 48h prior."
+**On screen:** SVB headquarters photo with $3.3B overlay. Two stat blocks: $300B+ unstressed reserve assets, 30 days between attestations. Depeg sparkline $1.00→$0.87. "Katabatic flags critical 48h prior."
 
 - Point to SVB photo: "SVB held $3.3 billion in USDC reserves. The attestation two weeks before said fine."
 - Point to sparkline: "Thirteen cents in 48 hours. USDC hit 87 cents."
@@ -85,12 +85,12 @@
 
 **Transition:** "Where do we sit in the stack?"
 
-**On screen:** Three layers with chevron arrows: Onchain (Dune, Nansen, Chainalysis) → Helicity (animated logo reveal) → Downstream (MakerDAO, Aave, Risk Desks). Dark panel: "What Onchain Can't See" — Duration mismatch, Bank health signals, Data center ops risk, Weather tail-risk.
+**On screen:** Three layers with chevron arrows: Onchain (Dune, Nansen, Chainalysis) → Katabatic (animated logo reveal) → Downstream (MakerDAO, Aave, Risk Desks). Dark panel: "What Onchain Can't See" — Duration mismatch, Bank health signals, Data center ops risk, Weather tail-risk.
 
 - "Onchain data platforms — Dune, Nansen, Chainalysis — they see the flows. Mint, burn, wallet balances. But they can't see what's happening off-chain: the bond maturities, the bank health, the data center that processes the redemptions."
-- "Helicity sits in the middle. We ingest the off-chain data that onchain platforms can't see, score it, and deliver it downstream — to DAO treasuries, DeFi protocols, risk desks, and AI agents."
+- "Katabatic sits in the middle. We ingest the off-chain data that onchain platforms can't see, score it, and deliver it downstream — to DAO treasuries, DeFi protocols, risk desks, and AI agents."
 
-**Key phrase:** "Onchain shows the flows. Helicity shows what's about to break."
+**Key phrase:** "Onchain shows the flows. Katabatic shows what's about to break."
 
 **Advance:** After the key phrase.
 
@@ -137,14 +137,14 @@ Frame each step around the **product**, not the UI:
 
 ## Slide 09 — The Close (20s)
 
-**On screen:** Dark background, hurricane rings. Heading: "Weather proves the engine." Glass card: 72h Redemption Latency | 88% Liquidity Coverage. "That's what DAO treasuries need. That's [Helicity logo]."
+**On screen:** Dark background, hurricane rings. Heading: "Weather proves the engine." Glass card: 72h Redemption Latency | 88% Liquidity Coverage. "That's what DAO treasuries need. That's [Katabatic logo]."
 
 - Pause. Let the numbers count up.
 - "Cat 4 hurricane plus 50 basis points — 72-hour redemption latency, 88% liquidity coverage."
 - "That's not a letter grade. That's an operational output that a DAO governance contract can gate on, a DeFi protocol can rebalance against, and an AI trading agent can query before executing a position."
-- "That's Helicity — the system of record for stablecoin reserve risk." *(logo animates on screen)*
+- "That's Katabatic — the system of record for stablecoin reserve risk." *(logo animates on screen)*
 
-**Key phrase:** "The system of record for stablecoin reserve risk. That's Helicity."
+**Key phrase:** "The system of record for stablecoin reserve risk. That's Katabatic."
 
 **Advance:** Stay on this slide for Q&A.
 

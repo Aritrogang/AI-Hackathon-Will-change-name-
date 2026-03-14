@@ -38,7 +38,7 @@ async def pin_score_to_ipfs(score_snapshot: dict) -> dict:
     payload = {
         "pinataContent": score_snapshot,
         "pinataMetadata": {
-            "name": f"helicity-score-{stablecoin}-{ts}",
+            "name": f"katabatic-score-{stablecoin}-{ts}",
         },
     }
 

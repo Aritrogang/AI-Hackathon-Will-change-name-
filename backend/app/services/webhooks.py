@@ -4,7 +4,7 @@ When a stress score changes beyond a configurable threshold, registered webhook
 endpoints receive a signed HTTP POST containing the score update payload.
 
 Features:
-  - HMAC-SHA256 payload signing via X-Helicity-Signature header
+  - HMAC-SHA256 payload signing via X-Katabatic-Signature header
   - Retry logic: 3 attempts with exponential backoff (1s → 4s → 16s)
   - Per-stablecoin filtering and per-webhook delta threshold
   - Delivery log stored in SQLite for audit trail
@@ -31,7 +31,7 @@ from app.models.stress import StressScoreResult
 # ---------------------------------------------------------------------------
 
 DEFAULT_DB_PATH = (
-    Path(__file__).resolve().parent.parent.parent / "data" / "webhooks.sqlite"
+    Path(__file__).resolve().parent.parent.parent.parent / "data" / "webhooks.sqlite"
 )
 
 _BACKOFF_SECONDS = [1, 4, 16]  # exponential backoff delays for retries
@@ -328,8 +328,8 @@ async def _deliver(
     body = json.dumps(payload, separators=(",", ":"), sort_keys=True)
     headers = {
         "Content-Type": "application/json",
-        "X-Helicity-Signature": signature,
-        "User-Agent": "Helicity-Webhook/1.0",
+        "X-Katabatic-Signature": signature,
+        "User-Agent": "Katabatic-Webhook/1.0",
     }
 
     last_exc: Optional[Exception] = None

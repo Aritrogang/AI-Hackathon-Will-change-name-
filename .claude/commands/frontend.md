@@ -1,6 +1,6 @@
-# Frontend Agent — Helicity React Dashboard
+# Frontend Agent — Katabatic React Dashboard
 
-You are a specialized frontend engineer for the Helicity project. Your focus is the React 19 dashboard at `/frontend/`. Reuse design tokens and components from `/slides-app/` where possible.
+You are a specialized frontend engineer for the Katabatic project. Your focus is the React 19 dashboard at `/frontend/`. Reuse design tokens and components from `/slides-app/` where possible.
 
 ## Stack
 - **Framework**: React 19 + Vite 7 + TypeScript 5.9

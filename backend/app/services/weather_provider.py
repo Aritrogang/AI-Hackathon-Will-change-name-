@@ -18,7 +18,7 @@ OPENMETEO_ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 OPENMETEO_FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 NHC_ACTIVE_STORMS_URL = "https://www.nhc.noaa.gov/CurrentSurges.json"
 
-HEADERS = {"User-Agent": "Helicity/1.0 (stablecoin-risk-engine; contact@helicity.dev)"}
+HEADERS = {"User-Agent": "Katabatic/1.0 (stablecoin-risk-engine; contact@katabatic.dev)"}
 class WeatherProvider(DataProvider):
     """Fetches high-resolution deterministic weather forecasts, active alerts, and historical data."""
 
@@ -27,6 +27,15 @@ class WeatherProvider(DataProvider):
     def __init__(self, cache: Cache, ttl_seconds: int = 900) -> None:
         super().__init__(cache, ttl_seconds)  # 15-min TTL for weather
         self.client = httpx.AsyncClient(timeout=15.0, headers=HEADERS)
+
+    @property
+    def available(self) -> bool:
+        """Weather provider is keyless and always available."""
+        return True
+
+    def _is_available(self) -> bool:
+        """Required for standardized API availability checks."""
+        return self.available
 
     async def fetch_live(self, source_id: str) -> Optional[dict]:
         """Fetch weather data.

@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 
 // ---------------------------------------------------------------------------
-// Helicity — Blaxel Sandbox Setup
+// Katabatic — Blaxel Sandbox Setup
 // Creates (or retrieves) a sandboxed environment for the FastAPI backend.
 //
 // Required env vars (set in root .env):
@@ -15,7 +15,7 @@ import * as path from "path";
 //   PINATA_API_KEY, PINATA_SECRET_API_KEY
 // ---------------------------------------------------------------------------
 
-const SANDBOX_NAME = "helicity-backend";
+const SANDBOX_NAME = "katabatic-backend";
 const BACKEND_PORT = 8000;
 const BACKEND_DIR = path.resolve(__dirname, "../backend");
 
@@ -82,7 +82,7 @@ async function main() {
   console.log("[sandbox] Starting FastAPI server...");
 
   await sandbox.process.exec({
-    name: "helicity-api",
+    name: "katabatic-api",
     // cd into /app so relative imports resolve correctly
     command: `cd /app && uvicorn app.main:app --host 0.0.0.0 --port ${BACKEND_PORT}`,
     keepAlive: true, // keep the process alive (scale-to-zero disabled)
@@ -92,7 +92,7 @@ async function main() {
   // Give uvicorn a few seconds to start
   await sleep(3_000);
 
-  const startupLogs = await sandbox.process.logs("helicity-api");
+  const startupLogs = await sandbox.process.logs("katabatic-api");
   console.log("[sandbox] Startup logs:\n", startupLogs);
 
   // ------------------------------------------------------------------
