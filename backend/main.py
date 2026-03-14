@@ -21,11 +21,13 @@ app.add_middleware(
 from app.services.cache import Cache
 from app.services.knowledge_graph import KnowledgeGraphService
 from app.services.llm_jury import LLMJuryService
+from app.services.narratives import NarrativeService
 from app.services.weather_provider import WeatherProvider
 
 cache = Cache()
 graph_service = KnowledgeGraphService()
 llm_jury = LLMJuryService()
+narrative_service = NarrativeService()
 weather_provider = WeatherProvider(cache)
 scoring_engine = None  # Initialized on startup
 
@@ -39,13 +41,14 @@ def envelope(data=None, error=None):
 
 
 # --- Register routers ---
-from app.routers import scores, weather, graph, extraction, onchain, webhooks
+from app.routers import scores, weather, graph, extraction, onchain, narratives, webhooks
 
 app.include_router(scores.router)
 app.include_router(weather.router)
 app.include_router(graph.router)
 app.include_router(extraction.router)
 app.include_router(onchain.router)
+app.include_router(narratives.router)
 app.include_router(webhooks.router)
 
 
@@ -96,7 +99,7 @@ async def startup():
     global scoring_engine
     from app.services.scoring_engine import ScoringEngine
 
-    scoring_engine = ScoringEngine(cache, graph_service, llm_jury)
+    scoring_engine = ScoringEngine(cache, graph_service, llm_jury, narrative_service)
     print("  Scoring engine ready")
     print("Helicity API started successfully.")
 

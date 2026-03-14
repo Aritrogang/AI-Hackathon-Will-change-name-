@@ -1,4 +1,4 @@
-import type { ApiResponse, StressScore, WeatherData, GraphData, ProjectionRequest, ProjectionResult } from './types'
+import type { ApiResponse, StressScore, WeatherData, GraphData, ProjectionRequest, ProjectionResult, NarrativeResult } from './types'
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -40,4 +40,8 @@ export async function fetchGraph(): Promise<ApiResponse<GraphData>> {
 
 export async function projectScenario(params: ProjectionRequest): Promise<ApiResponse<ProjectionResult>> {
   return postApi<ProjectionResult>('/api/stress-scores/project', params)
+}
+
+export async function fetchNarrative(stressContext: string): Promise<ApiResponse<NarrativeResult>> {
+  return postApi<NarrativeResult>('/api/narratives/', { stress_context: stressContext })
 }

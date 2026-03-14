@@ -4,6 +4,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { usePolling } from '../hooks/usePolling'
 import { fetchStressScore } from '../lib/api'
 import { DataSourceBadge } from './DataSourceBadge'
+import { NarrativeCard } from './NarrativeCard'
 import type { StressScore } from '../lib/types'
 
 function scoreColor(score: number): string {
@@ -126,11 +127,10 @@ export function StressScoreDetail() {
               <span>Gemini: <strong>{score.jury.gemini_score.toFixed(0)}</strong></span>
               <span>Delta: <strong>{score.jury.delta.toFixed(0)}</strong></span>
             </div>
-            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${
-              score.jury.consensus
+            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${score.jury.consensus
                 ? 'bg-[#00b894]/10 text-[#00b894]'
                 : 'bg-[#e17055]/10 text-[#e17055]'
-            }`}>
+              }`}>
               {score.jury.consensus ? 'CONSENSUS' : 'DIVERGENCE'}
             </span>
           </div>
@@ -141,14 +141,7 @@ export function StressScoreDetail() {
       )}
 
       {/* Narrative */}
-      {score.narrative && (
-        <div className="bg-white rounded-xl border border-black/6 p-6">
-          <h3 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider mb-3">
-            Causal Narrative
-          </h3>
-          <p className="text-sm text-[#555] leading-relaxed">{score.narrative}</p>
-        </div>
-      )}
+      <NarrativeCard narrative={score.narrative} />
     </div>
   )
 }

@@ -15,6 +15,20 @@ export interface JuryResult {
   warning: string | null
 }
 
+export interface NarrativeClaim {
+  text: string
+  supported_by: string[]
+}
+
+export interface NarrativeResult {
+  narrative: string
+  claude_narrative: string | null
+  gemini_narrative: string | null
+  claims: NarrativeClaim[]
+  consensus: boolean
+  overlap_pct: number
+}
+
 export interface StressScore {
   stablecoin: string
   stress_score: number
@@ -23,7 +37,7 @@ export interface StressScore {
   stress_level: string
   dimensions: DimensionScore[]
   jury: JuryResult | null
-  narrative: string | null
+  narrative: NarrativeResult | string | null
   ipfs_cid: string | null
   resolution_source: string
   source_timestamp: string | null

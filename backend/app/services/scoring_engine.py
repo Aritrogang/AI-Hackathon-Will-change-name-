@@ -4,6 +4,8 @@ import asyncio
 from datetime import datetime, timezone
 from typing import Optional
 
+from app.services.narratives import NarrativeService
+
 from app.models.reserve import ReserveData
 from app.models.stress import DimensionScore, StressScoreResult
 from app.services.cache import Cache
@@ -23,10 +25,12 @@ class ScoringEngine:
         cache: Cache,
         graph: KnowledgeGraphService,
         llm_jury: LLMJuryService,
+        narrative_service: Optional[NarrativeService] = None,
     ) -> None:
         self.cache = cache
         self.graph = graph
         self.llm_jury = llm_jury
+        self.narrative_service = narrative_service
         self.fdic = FDICProvider(cache)
         self.weather = WeatherProvider(cache)
         self.etherscan = EtherscanProvider(cache)
@@ -62,15 +66,22 @@ class ScoringEngine:
                 sources.add("live")
         resolution = "fixture" if "fixture" in sources else ("cache" if "cache" in sources else "live")
 
-        # Generate narrative (async, non-blocking)
+        # Generate narrative + jury (async, non-blocking)
         narrative = None
         jury = None
+        context = _build_context(reserve, dims, composite)
         if self.llm_jury.available:
-            context = _build_context(reserve, dims, composite)
             jury_result = await self.llm_jury.evaluate_counterparty_health(context)
             if jury_result:
                 jury = jury_result
-            narrative = await self.llm_jury.generate_narrative(context)
+        if self.narrative_service and self.narrative_service.available:
+            narrative = await self.narrative_service.generate_narrative(context)
+        elif self.llm_jury.available:
+            # Fallback: wrap old single-model narrative in NarrativeResult
+            from app.models.stress import NarrativeResult as NR
+            old_narrative = await self.llm_jury.generate_narrative(context)
+            if old_narrative:
+                narrative = NR(narrative=old_narrative, consensus=False)
 
         result = StressScoreResult(
             stablecoin=symbol,

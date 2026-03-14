@@ -21,6 +21,22 @@ class JuryResult(BaseModel):
     warning: Optional[str] = None
 
 
+class NarrativeClaim(BaseModel):
+    """A single factual claim extracted from an LLM narrative."""
+    text: str
+    supported_by: list[str]  # ["claude", "gemini"] or subset
+
+
+class NarrativeResult(BaseModel):
+    """Multi-model narrative with claim-level consensus detection."""
+    narrative: str  # Final consensus or primary narrative text
+    claude_narrative: Optional[str] = None
+    gemini_narrative: Optional[str] = None
+    claims: list[NarrativeClaim] = []
+    consensus: bool = False
+    overlap_pct: float = 0.0
+
+
 class StressScoreResult(BaseModel):
     stablecoin: str
     stress_score: float = Field(ge=0, le=100)
@@ -29,7 +45,7 @@ class StressScoreResult(BaseModel):
     stress_level: str = Field(description="Low, Moderate, Elevated, or Critical")
     dimensions: list[DimensionScore]
     jury: Optional[JuryResult] = None
-    narrative: Optional[str] = None
+    narrative: Optional[NarrativeResult] = None
     ipfs_cid: Optional[str] = None
     resolution_source: str = Field(default="fixture", description="live | cache | fixture — how underlying data was resolved")
     source_timestamp: Optional[str] = Field(default=None, description="ISO timestamp of when source data was fetched")
