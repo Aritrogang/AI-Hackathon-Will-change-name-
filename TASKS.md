@@ -82,13 +82,13 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 - [ ] Graceful fallback: if Unsiloed unavailable, fall back to Claude-only extraction
 
 #### On-Chain Cross-Reference
-- [ ] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData`
-- [ ] Parse Transfer events from Etherscan to compute 7-day net burn/mint volume
-- [ ] Cross-reference divergence calculator (flag >5% as transparency anomaly)
+- [x] Write `app/services/onchain.py` — `get_mint_burn_7d(token_address: str) -> MintBurnData`
+- [x] Parse Transfer events from Etherscan to compute 7-day net burn/mint volume
+- [x] Cross-reference divergence calculator (flag >5% as transparency anomaly)
 
 #### Endpoints
-- [ ] `POST /api/extract` — accepts attestation source, returns structured ReserveData JSON
-- [ ] `GET /api/stablecoins` — returns list of all tracked stablecoins with latest reserve data
+- [x] `POST /api/extract` — accepts attestation source, returns structured ReserveData JSON
+- [x] `GET /api/stablecoins` — returns list of all tracked stablecoins with latest reserve data
 
 ---
 
@@ -155,17 +155,17 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 > **This is a core delivery channel, equal to REST API.** AI trading bots and agent frameworks query risk scores as MCP tool calls before executing stablecoin positions.
 
 #### MCP Server Implementation
-- [ ] Add `fastmcp` SDK to `requirements.txt`
-- [ ] Write `backend/mcp_server.py` — standalone MCP server module
-- [ ] Implement tool: `get_stress_scores` — returns all stablecoin stress scores
-- [ ] Implement tool: `get_stablecoin_detail(stablecoin)` — returns WAM, dimensions, narrative
-- [ ] Implement tool: `simulate_scenario(stablecoin, ...)` — scenario-based re-scoring
-- [ ] Implement tool: `get_active_alerts` — returns weather events + anomalies
-- [ ] Implement tool: `get_score_history(stablecoin)` — returns historical scores with IPFS CIDs
-- [ ] Support stdio transport for local AI agent integration
+- [x] Add `fastmcp` SDK to `requirements.txt`
+- [x] Write `backend/mcp_server.py` — standalone MCP server module
+- [x] Implement tool: `get_stress_scores` — returns all stablecoin stress scores
+- [x] Implement tool: `get_stablecoin_detail(stablecoin)` — returns WAM, dimensions, narrative
+- [x] Implement tool: `simulate_scenario(stablecoin, ...)` — scenario-based re-scoring
+- [x] Implement tool: `get_active_alerts` — returns weather events + anomalies
+- [x] Implement tool: `get_score_history(stablecoin)` — returns historical scores with IPFS CIDs
+- [x] Support stdio transport for local AI agent integration
 - [ ] Support streamable-http transport for Blaxel deployment
-- [ ] All tool outputs use standard response envelope
-- [ ] Write `backend/tests/test_mcp_server.py` — unit tests for all tools
+- [x] All tool outputs use standard response envelope
+- [x] Write `backend/tests/test_mcp_server.py` — unit tests for all tools
 
 #### Blaxel Deployment (Sponsor Integration)
 - [ ] Create `backend/blaxel.toml` — Blaxel config (`type = "function"`, runtime transport = `http-stream`)
@@ -385,9 +385,9 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 | Phase | Status | Notes |
 |-------|--------|-------|
 | Phase 1: Foundation | `[x]` | Scaffold, providers, fixtures, models done |
-| Phase 2: Pipeline & Knowledge Graph | `[~]` | Scoring engine, graph, registry, routers done. MCP + extraction pending. |
-| Phase 3: Data-Driven Risk Modeling Dashboard | `[~]` | Core components built. Narratives complete (17 tests passing). Polish pending. |
-| Phase 4: Backtests & Trust Layer | `[ ]` | |
+| Phase 2: Pipeline & Knowledge Graph | `[~]` | Scoring engine, graph, MCP server, registry, routers done. Blaxel deploy + extraction pending. |
+| Phase 3: Data-Driven Risk Modeling Dashboard | `[~]` | Core components + narratives done. Polish pending. |
+| Phase 4: Backtests & Trust Layer | `[~]` | SVB + Hurricane Ian backtests done. IPFS pinning + timeline UI pending. |
 | Phase 5: Ship | `[ ]` | |
 
 **Last updated:** 2026-03-14 (Hurricane Ian backtest + API portal route — issues #16 + #32)
