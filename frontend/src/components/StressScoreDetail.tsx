@@ -145,7 +145,7 @@ export function StressScoreDetail() {
       <NarrativeCard narrative={score.narrative} />
 
       {/* Trust & Verification */}
-      <TrustBadge ipfsCid={score.ipfs_cid} jury={score.jury} />
+      <TrustBadge ipfsCid={score.ipfs_cid} jury={score.jury} stablecoin={score.stablecoin} />
     </div>
   )
 }

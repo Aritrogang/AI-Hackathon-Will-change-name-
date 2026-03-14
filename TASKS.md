@@ -299,8 +299,9 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 
 ### feat/chainlink-mock — Oracle-Ready Output
 
-- [ ] Write `app/services/oracle.py` — Chainlink External Adapter compatible output
-- [ ] Endpoint: `GET /api/oracle/{stablecoin}` — oracle-formatted score with IPFS CID
+- [x] Write `app/services/oracle.py` — Chainlink External Adapter compatible output with IPFS CID + consensus
+- [x] Endpoint: `GET /api/oracle/{stablecoin}` — oracle-formatted score with IPFS CID
+- [x] TrustBadge updated with "Chainlink Ready" badge + oracle endpoint display
 
 ---
 

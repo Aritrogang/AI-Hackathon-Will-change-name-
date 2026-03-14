@@ -3,9 +3,10 @@ import type { JuryResult } from '../lib/types'
 interface Props {
   ipfsCid: string | null
   jury: JuryResult | null
+  stablecoin?: string
 }
 
-export function TrustBadge({ ipfsCid, jury }: Props) {
+export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
   if (!ipfsCid && !jury) return null
 
   const isMock = ipfsCid?.startsWith('QmMock') ?? false
@@ -62,13 +63,27 @@ export function TrustBadge({ ipfsCid, jury }: Props) {
         )}
 
         {/* Oracle-ready label */}
-        <div className="flex items-center gap-2 pt-1 border-t border-black/4">
-          <span className="text-[10px] text-[#bbb] uppercase tracking-wider">
-            TEE-ready for Chainlink
-          </span>
-          {isMock && (
-            <span className="text-[10px] text-[#e17055] font-medium">
-              Demo Mode — IPFS verification simulated
+        <div className="flex flex-col gap-1 pt-1 border-t border-black/4">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-[#bbb] uppercase tracking-wider">
+              TEE-ready for Chainlink
+            </span>
+            <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
+              ipfsCid && !isMock
+                ? 'bg-[#00b894]/10 text-[#00b894]'
+                : 'bg-black/4 text-[#888]'
+            }`}>
+              Chainlink Ready
+            </span>
+            {isMock && (
+              <span className="text-[10px] text-[#e17055] font-medium">
+                Demo Mode — IPFS verification simulated
+              </span>
+            )}
+          </div>
+          {stablecoin && (
+            <span className="font-mono text-[10px] bg-black/4 px-1.5 py-0.5 rounded text-[#555] w-fit">
+              /api/oracle/{stablecoin.toLowerCase()}
             </span>
           )}
         </div>
