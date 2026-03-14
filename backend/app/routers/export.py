@@ -72,7 +72,7 @@ async def export_scores(
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
 
-        filename = f"helicity_scores_{start}_{end}.csv"
+        filename = f"katabatic_scores_{start}_{end}.csv"
         return Response(
             content=csv_text,
             media_type="text/csv",

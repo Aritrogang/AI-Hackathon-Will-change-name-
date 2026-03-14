@@ -127,7 +127,7 @@ class TestGetStressScores:
     async def test_returns_envelope_with_list(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_stress_scores()
+            result = await mcp_server.get_stress_scores.fn()
 
         assert result["error"] is None
         assert "timestamp" in result
@@ -138,7 +138,7 @@ class TestGetStressScores:
     async def test_all_symbols_present(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_stress_scores()
+            result = await mcp_server.get_stress_scores.fn()
 
         symbols = [item["stablecoin"] for item in result["data"]]
         assert "USDC" in symbols
@@ -148,7 +148,7 @@ class TestGetStressScores:
     async def test_records_history(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            await mcp_server.get_stress_scores()
+            await mcp_server.get_stress_scores.fn()
 
         assert "USDC" in mcp_server._score_history
         assert len(mcp_server._score_history["USDC"]) == 1
@@ -158,7 +158,7 @@ class TestGetStressScores:
         import mcp_server
         mock_engine.compute_all_scores = AsyncMock(side_effect=RuntimeError("DB down"))
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_stress_scores()
+            result = await mcp_server.get_stress_scores.fn()
 
         assert result["data"] is None
         assert "DB down" in result["error"]
@@ -173,7 +173,7 @@ class TestGetStablecoinDetail:
     async def test_returns_single_result(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_stablecoin_detail("USDC")
+            result = await mcp_server.get_stablecoin_detail.fn("USDC")
 
         assert result["error"] is None
         assert result["data"]["stablecoin"] == "USDC"
@@ -182,7 +182,7 @@ class TestGetStablecoinDetail:
     async def test_uppercases_symbol(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            await mcp_server.get_stablecoin_detail("usdc")
+            await mcp_server.get_stablecoin_detail.fn("usdc")
 
         mock_engine.compute_stress_score.assert_called_once_with("USDC")
 
@@ -193,7 +193,7 @@ class TestGetStablecoinDetail:
             side_effect=ValueError("No fixture for FAKE")
         )
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_stablecoin_detail("FAKE")
+            result = await mcp_server.get_stablecoin_detail.fn("FAKE")
 
         assert result["data"] is None
         assert "FAKE" in result["error"]
@@ -202,7 +202,7 @@ class TestGetStablecoinDetail:
     async def test_records_history(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            await mcp_server.get_stablecoin_detail("USDC")
+            await mcp_server.get_stablecoin_detail.fn("USDC")
 
         assert "USDC" in mcp_server._score_history
 
@@ -216,7 +216,7 @@ class TestProjectScenario:
     async def test_rate_hike_scenario(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.project_scenario("USDC", rate_hike_bps=100)
+            result = await mcp_server.project_scenario.fn("USDC", rate_hike_bps=100)
 
         assert result["error"] is None
         assert result["data"]["baseline"]["stress_score"] == 42.5
@@ -227,7 +227,7 @@ class TestProjectScenario:
     async def test_hurricane_scenario(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.project_scenario(
+            result = await mcp_server.project_scenario.fn(
                 "USDC", hurricane_lat=25.8, hurricane_lng=-80.2, hurricane_category=4
             )
 
@@ -245,7 +245,7 @@ class TestProjectScenario:
     async def test_no_scenario_params_returns_error(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.project_scenario("USDC")
+            result = await mcp_server.project_scenario.fn("USDC")
 
         assert result["data"] is None
         assert "scenario parameter" in result["error"]
@@ -258,7 +258,7 @@ class TestProjectScenario:
             side_effect=FileNotFoundError("No fixture for FAKE")
         )
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.project_scenario("FAKE", rate_hike_bps=50)
+            result = await mcp_server.project_scenario.fn("FAKE", rate_hike_bps=50)
 
         assert result["data"] is None
         assert "FAKE" in result["error"]
@@ -288,7 +288,7 @@ class TestGetActiveAlerts:
                 {"corridor": "us-east-1", "stablecoin": "USDC"}
             ]),
         ):
-            result = await mcp_server.get_active_alerts()
+            result = await mcp_server.get_active_alerts.fn()
 
         assert result["error"] is None
         data = result["data"]
@@ -310,7 +310,7 @@ class TestGetActiveAlerts:
             patch.object(mcp_server, "get_all_states", return_value={"NY", "CA"}),
             patch.object(mcp_server._weather, "resolve", AsyncMock(return_value=weather_result)),
         ):
-            result = await mcp_server.get_active_alerts()
+            result = await mcp_server.get_active_alerts.fn()
 
         assert result["error"] is None
         assert result["data"]["weather_alerts"] == {}
@@ -326,7 +326,7 @@ class TestGetScoreHistory:
     async def test_seeds_history_on_first_call(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_score_history("USDC")
+            result = await mcp_server.get_score_history.fn("USDC")
 
         assert result["error"] is None
         data = result["data"]
@@ -345,7 +345,7 @@ class TestGetScoreHistory:
                                                   "resolution_source": "fixture"})
 
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_score_history("USDC", limit=5)
+            result = await mcp_server.get_score_history.fn("USDC", limit=5)
 
         assert len(result["data"]["history"]) == 5
         assert result["data"]["total_snapshots"] == 20
@@ -357,7 +357,7 @@ class TestGetScoreHistory:
             side_effect=ValueError("No fixture for FAKE")
         )
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            result = await mcp_server.get_score_history("FAKE")
+            result = await mcp_server.get_score_history.fn("FAKE")
 
         assert result["data"] is None
         assert "FAKE" in result["error"]
@@ -366,8 +366,8 @@ class TestGetScoreHistory:
     async def test_history_accumulates_across_calls(self, mock_engine):
         import mcp_server
         with patch.object(mcp_server, "_get_engine", AsyncMock(return_value=mock_engine)):
-            await mcp_server.get_stablecoin_detail("USDC")
-            await mcp_server.get_stablecoin_detail("USDC")
-            result = await mcp_server.get_score_history("USDC")
+            await mcp_server.get_stablecoin_detail.fn("USDC")
+            await mcp_server.get_stablecoin_detail.fn("USDC")
+            result = await mcp_server.get_score_history.fn("USDC")
 
         assert result["data"]["total_snapshots"] >= 2

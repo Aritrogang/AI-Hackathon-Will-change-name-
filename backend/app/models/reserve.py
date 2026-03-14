@@ -11,7 +11,7 @@ class Counterparty(BaseModel):
     lat: Optional[float] = None
     lng: Optional[float] = None
     percentage: float = Field(ge=0, le=100, description="% of reserves held")
-    asset_class: str = Field(description="t_bills, money_market, commercial_paper, sovereign_bonds, demand_deposits, mixed")
+    asset_class: str = Field(description="t_bills, repo, mmf, deposits, commercial_paper")
     maturity_days: int = Field(ge=0, description="Maturity in days for this tranche")
     fdic_cert: Optional[int] = None
     fdic_ltv_ratio: Optional[float] = None
@@ -29,7 +29,7 @@ class ReserveData(BaseModel):
     stablecoin: str
     issuer: str
     report_date: str
-    data_source: str = Field(description="genius_act_attestation or pdf_attestation")
+    data_source: str = Field(description="occ_xbrl or pdf_attestation")
     total_reserves: float
     weighted_avg_maturity_days: float
     counterparties: list[Counterparty]

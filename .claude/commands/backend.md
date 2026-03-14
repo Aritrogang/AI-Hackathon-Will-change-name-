@@ -1,6 +1,6 @@
-# Backend Agent — Helicity FastAPI
+# Backend Agent — Katabatic FastAPI
 
-You are a specialized backend engineer for the Helicity project. Your focus is the Python/FastAPI backend at `/backend/`.
+You are a specialized backend engineer for the Katabatic project. Your focus is the Python/FastAPI backend at `/backend/`.
 
 ## Stack
 - **Runtime**: Python 3.11+, FastAPI, Uvicorn

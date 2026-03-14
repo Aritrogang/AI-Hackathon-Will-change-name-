@@ -18,7 +18,20 @@ from app.services.registry import get_all_symbols, get_reserve_data, get_all_sta
 
 
 class ScoringEngine:
-    """Computes Liquidity Stress Scores across 6 dimensions using live data providers."""
+    """Computes Liquidity Stress Scores across 6 dimensions using live data providers.
+    
+    Katabatic is a stablecoin reserve risk scoring platform (Cornell AI Hackathon 2026).
+    
+    Core formula: Stress Score = Duration Risk (WAM) × Weather Multiplier × Concentration Factor
+    
+    6 Scoring Dimensions:
+    1. Duration Risk / WAM (30%)
+    2. Reserve Transparency (20%)
+    3. Geographic + Ops Concentration (15%)
+    4. Weather Tail-Risk (15%)
+    5. Counterparty Health (15%)
+    6. Peg Stability (5%)
+    """
 
     def __init__(
         self,
@@ -149,7 +162,7 @@ class ScoringEngine:
                     "latency_hours": result.redemption_latency_hours,
                     "coverage_ratio": result.liquidity_coverage_ratio,
                     "timestamp": result.source_timestamp,
-                    "version": "helicity-v1",
+                    "version": "katabatic-v1",
                 }
                 if result.jury:
                     snapshot["claude_score"] = result.jury.claude_score
@@ -188,7 +201,16 @@ class ScoringEngine:
     ) -> dict:
         """Project stress score under a scenario — grounded in real data with overrides.
 
-        Returns both baseline (current) and projected scores with per-dimension deltas.
+        Args:
+            symbol: Stablecoin ticker (e.g., 'USDC').
+            rate_hike_bps: Optional interest rate hike in basis points.
+            hurricane_lat: Optional latitude for projected hurricane.
+            hurricane_lng: Optional longitude for projected hurricane.
+            hurricane_category: Optional hurricane category (1-5).
+            bank_failure: Optional name of a bank to simulate failure for.
+
+        Returns:
+            Dict containing baseline and projected scores and dimension deltas.
         """
         reserve = get_reserve_data(symbol)
         baseline = await self.compute_stress_score(symbol)
@@ -274,6 +296,14 @@ class ScoringEngine:
     # --- Dimension 1: Duration Risk (30% weight) ---
 
     async def _duration_risk(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 1: Duration Risk / WAM.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 30% weight.
+        """
         wam = reserve.weighted_avg_maturity_days
         score = min(100.0, (wam / 365.0) * 100.0)
         return DimensionScore(
@@ -287,6 +317,16 @@ class ScoringEngine:
     # --- Dimension 2: Reserve Transparency (20% weight) ---
 
     async def _reserve_transparency(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 2: Reserve Transparency.
+
+        Assesses source quality, report freshness, and on-chain divergence.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 20% weight.
+        """
         score = 0.0
 
         # Data source quality
@@ -330,6 +370,16 @@ class ScoringEngine:
     # --- Dimension 3: Geographic + Operational Concentration (15% weight) ---
 
     async def _geographic_concentration(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 3: Geographic + Operational Concentration.
+
+        Uses HHI for bank concentration and data center corridor overlap.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 15% weight.
+        """
         # HHI of counterparty reserve shares
         hhi = self.graph.get_concentration_hhi(reserve.stablecoin)
         # Normalize HHI: 10000 = max (all in one bank), 0 = perfectly distributed
@@ -356,6 +406,16 @@ class ScoringEngine:
     # --- Dimension 4: Weather Tail-Risk Multiplier (15% weight) ---
 
     async def _weather_tail_risk(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 4: Weather Tail-Risk.
+
+        Integrates NHC storm tracks, NOAA forecasts, and GloFAS flood models.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 15% weight.
+        """
         cp_impacts = []
         source = "live"
         
@@ -557,6 +617,16 @@ class ScoringEngine:
     # --- Dimension 5: Counterparty Health (15% weight) ---
 
     async def _counterparty_health(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 5: Counterparty Health.
+
+        Evaluates FDIC data (LTV, ROA) and non-standard counterparty risk.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 15% weight.
+        """
         health_scores = []
         source = "live"
 
@@ -605,6 +675,16 @@ class ScoringEngine:
     # --- Dimension 6: Peg Stability (5% weight) ---
 
     async def _peg_stability(self, reserve: ReserveData) -> DimensionScore:
+        """Calculate score for Dimension 6: Peg Stability.
+
+        Analyzes on-chain divergence, burn rates, and mint/burn velocity.
+
+        Args:
+            reserve: The reserve data to analyze.
+
+        Returns:
+            DimensionScore with 5% weight.
+        """
         score = 0.0
         source = "fixture"
 
@@ -650,11 +730,11 @@ def _map_score(score: float) -> tuple[str, str, str]:
     if score <= 25:
         return ("Low Stress", "<4h", "100%+")
     elif score <= 50:
-        return ("Moderate Stress", "4-24h", "95-100%")
+        return ("Moderate", "4–24h", "95–100%")
     elif score <= 75:
-        return ("Elevated Stress", "24-72h", "85-95%")
+        return ("Elevated", "24–72h", "85–95%")
     else:
-        return ("Critical Stress", "72h+", "<85%")
+        return ("Critical", "72h+", "<85%")
 
 
 def _build_context(reserve: ReserveData, dims: tuple, composite: float) -> str:

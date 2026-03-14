@@ -33,9 +33,9 @@ _RESERVE_SCHEMA = json.dumps(
         "stablecoin": "USDC",
         "issuer": "Circle",
         "report_date": "2026-02-28",
-        "data_source": "genius_act_attestation",
+        "data_source": "occ_xbrl",
         "total_reserves": 42000000000,
-        "weighted_avg_maturity_days": 45.0,
+        "weighted_avg_maturity_days": 45,
         "counterparties": [
             {
                 "bank_name": "BNY Mellon",
@@ -95,6 +95,10 @@ class ExtractionService:
         self.anthropic_key = os.getenv("ANTHROPIC_API_KEY")
         self.available = bool(self.anthropic_key)
 
+    def _is_available(self) -> bool:
+        """Required for standardized API availability checks."""
+        return self.available
+
     # ------------------------------------------------------------------
     # Public extraction entry-points
     # ------------------------------------------------------------------
@@ -136,7 +140,7 @@ class ExtractionService:
         prompt = XBRL_PROMPT.format(schema=_RESERVE_SCHEMA, content=xbrl_content)
         raw = await self._call_claude(prompt)
         data = self._parse_json_from_response(raw)
-        return self._build_reserve_data(data, source_type="genius_act_attestation")
+        return self._build_reserve_data(data, source_type="occ_xbrl")
 
     async def extract_from_pdf(self, pdf_text: str) -> ReserveData:
         """Parse an attestation PDF into ReserveData using Claude."""

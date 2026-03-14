@@ -52,7 +52,7 @@ async def score_event_generator(
                 if stablecoins and update.get("stablecoin") not in stablecoins:
                     continue
 
-                yield f"data: {json.dumps(update)}\n\n"
+                yield f"data: {json.dumps({'data': update, 'error': None, 'timestamp': datetime.now(timezone.utc).isoformat()})}\n\n"
 
             except asyncio.TimeoutError:
                 # Send a heartbeat so the client knows the connection is alive
@@ -60,7 +60,7 @@ async def score_event_generator(
                     "type": "heartbeat",
                     "timestamp": datetime.now(timezone.utc).isoformat(),
                 }
-                yield f"data: {json.dumps(heartbeat)}\n\n"
+                yield f"data: {json.dumps({'data': heartbeat, 'error': None, 'timestamp': datetime.now(timezone.utc).isoformat()})}\n\n"
 
     finally:
         # Always clean up the subscriber queue on disconnect

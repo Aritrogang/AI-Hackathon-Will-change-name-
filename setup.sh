@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-echo "=== Helicity Dev Setup ==="
+echo "=== Katabatic Dev Setup ==="
 echo ""
 
 # --- Check prerequisites ---
@@ -75,7 +75,7 @@ if [ ! -f ".env" ]; then
     cp .env.example .env
     echo "" >> .env
     echo "# Hackathon Mock Keys & MCP Server" >> .env
-    echo "HELICITY_API_KEY=sk-heli-live-mock-hackathon-key" >> .env
+    echo "KATABATIC_API_KEY=sk-kata-live-mock-hackathon-key" >> .env
     echo "BL_WORKSPACE=" >> .env
     echo "BL_API_KEY=" >> .env
     echo "  Created .env from .env.example with mock API keys!"

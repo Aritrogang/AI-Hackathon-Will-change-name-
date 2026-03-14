@@ -16,6 +16,10 @@ class LLMJuryService:
         self.gemini_key = os.getenv("GEMINI_API_KEY")
         self.available = bool(self.anthropic_key and self.gemini_key)
 
+    def _is_available(self) -> bool:
+        """Required for standardized API availability checks."""
+        return self.available
+
     async def evaluate_counterparty_health(self, context: str) -> Optional[JuryResult]:
         """Score counterparty health using Claude + Gemini consensus.
 
