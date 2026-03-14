@@ -226,17 +226,17 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 ### feat/narratives
 
 #### Multi-Model Narrative Generation
-- [ ] Write `app/services/narratives.py` — `generate_narrative(stress_context) -> NarrativeResult`
-- [ ] Build narrative prompt with causal chain focus
-- [ ] Call Claude and Gemini concurrently, compare claim overlap
-- [ ] Consensus narrative if >70% claims match
+- [x] Write `app/services/narratives.py` — `generate_narrative(stress_context) -> NarrativeResult`
+- [x] Build narrative prompt with causal chain focus
+- [x] Call Claude and Gemini concurrently, compare claim overlap
+- [x] Consensus narrative if >70% claims match
 
 #### Endpoint
-- [ ] `POST /api/narratives` — accepts stress context, returns narrative + consensus
+- [x] `POST /api/narratives` — accepts stress context, returns narrative + consensus
 
 #### Frontend Integration
-- [ ] Create `NarrativeCard.tsx` with consensus badge
-- [ ] Integrate into StablecoinDetail page
+- [x] Create `NarrativeCard.tsx` with consensus badge
+- [x] Integrate into StablecoinDetail page
 
 - [ ] Tag `v0.3-dashboard`
 
@@ -289,7 +289,7 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 
 #### End-to-End Wiring
 - [ ] Wire dashboard end-to-end: live NOAA → scoring engine → scores update → dashboard reflects
-- [ ] Wire detail view: click stablecoin → all 6 dimensions rendered → narrative if LLM keys set
+- [x] Wire detail view: click stablecoin → all 6 dimensions rendered → narrative if LLM keys set
 - [ ] Wire map: graph data → bank markers + corridor overlays rendered correctly
 - [ ] Test all paths on local dev before deploy
 - [ ] Add loading states and error handling for all async operations
@@ -370,8 +370,8 @@ Helicity is an **API-first data infrastructure product** with a **data-driven ri
 |-------|--------|-------|
 | Phase 1: Foundation | `[x]` | Scaffold, providers, fixtures, models done |
 | Phase 2: Pipeline & Knowledge Graph | `[~]` | Scoring engine, graph, registry, routers done. MCP + extraction pending. |
-| Phase 3: Data-Driven Risk Modeling Dashboard | `[~]` | Core components built. Polish + narratives pending. |
+| Phase 3: Data-Driven Risk Modeling Dashboard | `[~]` | Core components built. Narratives complete (17 tests passing). Polish pending. |
 | Phase 4: Backtests & Trust Layer | `[ ]` | |
 | Phase 5: Ship | `[ ]` | |
 
-**Last updated:** 2026-03-12 (pivot to data-driven risk modeling sandbox + live monitoring)
+**Last updated:** 2026-03-14 (narrative generation service complete — issue #14 closed)
