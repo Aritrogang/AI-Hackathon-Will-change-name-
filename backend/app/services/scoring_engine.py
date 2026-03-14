@@ -105,6 +105,13 @@ class ScoringEngine:
                 fire_webhooks(symbol, previous_score, result.stress_score, result)
             )
 
+        # Persist to warehouse export table (non-blocking best-effort)
+        try:
+            from app.services.export import store_score
+            asyncio.create_task(store_score(result))
+        except Exception:
+            pass  # Never let persistence failure break a scoring run
+
         # Publish update to all SSE subscribers (non-blocking best-effort)
         try:
             from app.routers.streaming import publish_score_update
