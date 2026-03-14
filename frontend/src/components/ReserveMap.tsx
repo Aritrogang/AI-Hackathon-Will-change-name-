@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback } from 'react'
 import { MapContainer, TileLayer, CircleMarker, Popup, Rectangle } from 'react-leaflet'
 import { usePolling } from '../hooks/usePolling'
 import { fetchGraph } from '../lib/api'
-import type { GraphData, GraphNode, GraphEdge } from '../lib/types'
+import type { GraphData } from '../lib/types'
 import 'leaflet/dist/leaflet.css'
 
 const CORRIDOR_COLORS: Record<string, string> = {
