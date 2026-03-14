@@ -1,0 +1,19 @@
+{
+  "name": "helicity",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "sandbox": "dotenv -e .env -- tsx sandbox/index.ts",
+    "sandbox:delete": "node -e \"require('@blaxel/core').SandboxInstance.delete('helicity-backend').then(() => console.log('Sandbox deleted')).catch(console.error)\"",
+    "sandbox:list": "node -e \"require('@blaxel/core').SandboxInstance.list().then(s => s.forEach(x => console.log(x.metadata?.name, x.status))).catch(console.error)\""
+  },
+  "dependencies": {
+    "@blaxel/core": "^0.2.74"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "dotenv-cli": "^7.4.4",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}
