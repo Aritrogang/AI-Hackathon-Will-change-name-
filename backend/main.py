@@ -70,6 +70,7 @@ async def startup():
         "ETHERSCAN_API_KEY": os.getenv("ETHERSCAN_API_KEY"),
         "PINATA_API_KEY": os.getenv("PINATA_API_KEY"),
         "PINATA_SECRET_API_KEY": os.getenv("PINATA_SECRET_API_KEY"),
+        "UNSILOED_API_KEY": os.getenv("UNSILOED_API_KEY"),
     }
     for name, val in keys.items():
         if not val:
