@@ -39,11 +39,12 @@ def envelope(data=None, error=None):
 
 
 # --- Register routers ---
-from app.routers import scores, weather, graph
+from app.routers import scores, weather, graph, extraction
 
 app.include_router(scores.router)
 app.include_router(weather.router)
 app.include_router(graph.router)
+app.include_router(extraction.router)
 
 
 @app.get("/health")
