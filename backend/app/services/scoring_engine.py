@@ -524,12 +524,27 @@ class ScoringEngine:
         total_weather_score = sum(cp["impact"] for cp in cp_impacts)
         score = min(100.0, total_weather_score)
         
-        # Build detail string
-        significant_hits = [f"{cp['bank']} ({', '.join(cp['notes'])})" for cp in cp_impacts]
-        if significant_hits:
-            detail = f"Identified hazards: {'; '.join(significant_hits)} | Time Multiplier: {time_multiplier}x"
+        # Build a concise detail string so it fits on the frontend dashboard
+        if cp_impacts:
+            # Group by hazard note to avoid repeating "High forecast uncertainty" 4 times
+            note_counts = {}
+            for cp in cp_impacts:
+                for note in cp['notes']:
+                    if note not in note_counts:
+                        note_counts[note] = []
+                    note_counts[note].append(cp['bank'])
+            
+            summary_parts = []
+            for note, banks in note_counts.items():
+                if len(banks) > 2:
+                    summary_parts.append(f"{note} ({len(banks)} nodes)")
+                else:
+                    summary_parts.append(f"{note} ({', '.join(banks)})")
+            
+            detail_str = "; ".join(summary_parts)
+            detail = f"{detail_str} | Time: {time_multiplier}x"
         else:
-            detail = f"No severe hazards. Time Multiplier: {time_multiplier}x"
+            detail = f"No severe hazards | Time: {time_multiplier}x"
             
         return DimensionScore(
             name="Weather Tail-Risk",
