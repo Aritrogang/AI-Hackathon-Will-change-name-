@@ -153,7 +153,7 @@ export function LandingPage() {
               className="px-8 py-3.5 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-sm"
             >
               Get API Access
-              <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+              <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
             </Link>
             <Link
               to="/dashboard"
@@ -198,39 +198,33 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                ),
-                title: 'Duration Mismatch',
-                desc: 'Reserves locked in long maturity bonds while redemption demand can spike in hours. This is the SVB failure mode: the catalyst, not a credit event.',
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                ),
-                title: '30-Day PDF Lag',
-                desc: 'Before the GENIUS Act, reserve disclosures were quarterly PDFs. Even now, most data sits in compliance filings that no one ingests systematically.',
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e17055" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4"/><line x1="1.05" y1="12" x2="7" y2="12"/><line x1="17.01" y1="12" x2="22.96" y2="12"/><line x1="12" y1="1.05" x2="12" y2="7"/><line x1="12" y1="17.01" x2="12" y2="22.96"/></svg>
-                ),
-                title: 'No System of Record',
-                desc: 'Onchain platforms track wallet flows. Nobody structures the offchain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.',
-              },
-            ].map((c) => (
-              <div
-                key={c.title}
-                className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 hover:border-[#6c5ce7]/30 transition-colors group"
-              >
-                <div className="mb-4">{c.icon}</div>
-                <h3 className="text-lg font-semibold text-white mb-3 group-hover:text-[#a29bfe] transition-colors">{c.title}</h3>
-                <p className="text-sm text-[#888] leading-relaxed">{c.desc}</p>
+          <div className="grid md:grid-cols-3 items-start">
+            {/* Duration Mismatch */}
+            <div className="flex flex-col px-8 py-2">
+              <div className="w-10 h-10 rounded-lg bg-[#6c5ce7]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
               </div>
-            ))}
+              <h3 className="text-lg font-semibold text-white mb-3">Duration Mismatch</h3>
+              <p className="text-sm text-[#888] leading-relaxed">Reserves locked in long maturity bonds while redemption demand can spike in hours. This is the SVB failure mode: the catalyst, not a credit event.</p>
+            </div>
+
+            {/* 30-Day PDF Lag */}
+            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06]">
+              <div className="w-10 h-10 rounded-lg bg-[#a29bfe]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3">30-Day PDF Lag</h3>
+              <p className="text-sm text-[#888] leading-relaxed">Before the GENIUS Act, reserve disclosures were quarterly PDFs. Even now, most data sits in compliance filings that no one ingests systematically.</p>
+            </div>
+
+            {/* No System of Record */}
+            <div className="flex flex-col px-8 py-2">
+              <div className="w-10 h-10 rounded-lg bg-[#5b4cdb]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b4cdb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="4" /><line x1="1.05" y1="12" x2="7" y2="12" /><line x1="17.01" y1="12" x2="22.96" y2="12" /><line x1="12" y1="1.05" x2="12" y2="7" /><line x1="12" y1="17.01" x2="12" y2="22.96" /></svg>
+              </div>
+              <h3 className="text-lg font-semibold text-white mb-3">No System of Record</h3>
+              <p className="text-sm text-[#888] leading-relaxed">Onchain platforms track wallet flows. Nobody structures the offchain reserve composition, WAM durations, and custodian concentrations into a programmable risk score.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -275,7 +269,7 @@ export function LandingPage() {
 
             {/* Arrow */}
             <div className="hidden md:flex items-center justify-center px-4">
-              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
 
             {/* Engine */}
@@ -293,7 +287,7 @@ export function LandingPage() {
 
             {/* Arrow */}
             <div className="hidden md:flex items-center justify-center px-4">
-              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="48" height="24" viewBox="0 0 48 24" fill="none"><path d="M0 12h44m0 0l-8-8m8 8l-8 8" stroke="#6c5ce7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
             </div>
 
             {/* Output */}
@@ -328,53 +322,48 @@ export function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {[
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                ),
-                title: 'REST API',
-                audience: 'For Systems',
-                desc: 'JSON stress scores on demand. <2s rescore latency. Webhook alerts on threshold breaches. IPFS verified score snapshots.',
-                cta: 'View Docs',
-                link: '/developers',
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#e84393" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                ),
-                title: 'MCP Server',
-                audience: 'For AI Agents',
-                desc: 'Tool calls for trading bots and agent frameworks. Query risk scores before executing stablecoin positions via stdio or SSE transport.',
-                cta: 'MCP Setup',
-                link: '/developers#mcp-server',
-              },
-              {
-                icon: (
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00b894" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-                ),
-                title: 'Monitoring Dashboard',
-                audience: 'For Humans',
-                desc: 'Live risk modeling sandbox with geographic overlays, knowledge graph visualization, and scenario projection tools.',
-                cta: 'Open Dashboard',
-                link: '/dashboard',
-              },
-            ].map((m) => (
-              <div
-                key={m.title}
-                className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 flex flex-col hover:border-[#6c5ce7]/30 transition-colors group"
-              >
-                <div className="mb-5">{m.icon}</div>
-                <h3 className="text-xl font-semibold text-white mb-1">{m.title}</h3>
-                <span className="text-xs text-[#888] uppercase tracking-wider mb-4">{m.audience}</span>
-                <p className="text-sm text-[#888] leading-relaxed flex-1">{m.desc}</p>
-                <Link to={m.link} className="mt-6 text-sm font-medium text-[#a29bfe] hover:text-[#6c5ce7] transition-colors inline-flex items-center gap-1.5">
-                  {m.cta}
-                  <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-                </Link>
+          <div className="grid md:grid-cols-3 items-start">
+            {/* REST API */}
+            <div className="flex flex-col px-8 py-2 group">
+              <div className="w-10 h-10 rounded-lg bg-[#6c5ce7]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6c5ce7" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></svg>
               </div>
-            ))}
+              <h3 className="text-xl font-semibold text-white mb-1">REST API</h3>
+              <span className="text-xs text-[#6c5ce7]/70 uppercase tracking-wider mb-4 font-medium">For Systems</span>
+              <p className="text-sm text-[#888] leading-relaxed flex-1">JSON stress scores on demand. &lt;2s rescore latency. Webhook alerts on threshold breaches. IPFS verified score snapshots.</p>
+              <Link to="/developers" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+                View Docs
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
+
+            {/* MCP Server */}
+            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06] group">
+              <div className="w-10 h-10 rounded-lg bg-[#a29bfe]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a29bfe" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-1">MCP Server</h3>
+              <span className="text-xs text-[#a29bfe]/70 uppercase tracking-wider mb-4 font-medium">For AI Agents</span>
+              <p className="text-sm text-[#888] leading-relaxed flex-1">Tool calls for trading bots and agent frameworks. Query risk scores before executing stablecoin positions via stdio or SSE transport.</p>
+              <Link to="/developers#mcp-server" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+                MCP Setup
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
+
+            {/* Monitoring Dashboard */}
+            <div className="flex flex-col px-8 py-2 group">
+              <div className="w-10 h-10 rounded-lg bg-[#5b4cdb]/10 flex items-center justify-center mb-5">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5b4cdb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
+              </div>
+              <h3 className="text-xl font-semibold text-white mb-1">Monitoring Dashboard</h3>
+              <span className="text-xs text-[#5b4cdb]/70 uppercase tracking-wider mb-4 font-medium">For Humans</span>
+              <p className="text-sm text-[#888] leading-relaxed flex-1">Live risk modeling sandbox with geographic overlays, knowledge graph visualization, and scenario projection tools.</p>
+              <Link to="/dashboard" className="mt-6 text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
+                Open Dashboard
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
+              </Link>
+            </div>
           </div>
         </div>
       </section>
@@ -390,58 +379,64 @@ export function LandingPage() {
             <p className="text-lg text-[#888]">Not a consulting fee.</p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 items-start">
             {/* Starter */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 flex flex-col">
-              <h3 className="text-lg font-semibold text-white mb-1">Starter API</h3>
+            <div className="flex flex-col px-8 py-2 group">
+              <span className="text-5xl font-bold text-[#a29bfe]/20 mb-4">01</span>
+              <h3 className="text-xl font-semibold text-white mb-1">Starter API</h3>
               <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For builders & bots</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1">
+              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
                 {['REST API access', 'MCP for AI agents', '6 stablecoins', '<2s rescore latency', 'Webhook alerts'].map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <svg className="w-4 h-4 text-[#00b894] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <li key={f} className="flex items-center gap-2.5">
+                    <span className="w-1 h-1 rounded-full bg-[#a29bfe]/40 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Link to="/developers" className="mt-8 w-full py-3 border border-white/10 rounded-xl text-center text-sm font-medium text-white hover:bg-white/5 transition-colors block">
+              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
                 Get Started
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
 
-            {/* Enterprise */}
-            <div className="relative bg-gradient-to-b from-[#6c5ce7]/10 to-transparent border-2 border-[#6c5ce7]/40 rounded-2xl p-8 flex flex-col shadow-lg shadow-[#6c5ce7]/10">
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-[#6c5ce7] text-white text-[10px] font-bold uppercase tracking-widest px-4 py-1 rounded-full">
-                Popular
+            {/* Enterprise — center column with dividers */}
+            <div className="flex flex-col px-8 py-2 border-x border-white/[0.06] group">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-5xl font-bold text-[#6c5ce7]/30">02</span>
+                <span className="bg-[#6c5ce7] text-white text-[10px] font-bold uppercase tracking-widest px-3 py-0.5 rounded-full">Popular</span>
               </div>
-              <h3 className="text-lg font-semibold text-white mb-1">Enterprise</h3>
-              <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For protocols & desks</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1">
+              <h3 className="text-xl font-semibold text-white mb-1">Enterprise</h3>
+              <p className="text-xs text-[#6c5ce7]/50 uppercase tracking-wider mb-6">For protocols & desks</p>
+              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
                 {['Realtime streaming', 'IPFS verified scores', 'Multi model consensus', 'Enterprise SLA', 'Warehouse delivery'].map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <svg className="w-4 h-4 text-[#6c5ce7] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <li key={f} className="flex items-center gap-2.5">
+                    <span className="w-1 h-1 rounded-full bg-[#6c5ce7] shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Link to="/developers" className="mt-8 w-full py-3 bg-[#6c5ce7] hover:bg-[#5b4cdb] rounded-xl text-center text-sm font-semibold text-white transition-colors block shadow-lg shadow-[#6c5ce7]/25">
+              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
                 Contact Sales
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
 
             {/* Institutional */}
-            <div className="bg-white/[0.03] border border-white/[0.06] rounded-2xl p-8 flex flex-col">
-              <h3 className="text-lg font-semibold text-white mb-1">Institutional</h3>
+            <div className="flex flex-col px-8 py-2 group">
+              <span className="text-5xl font-bold text-[#5b4cdb]/20 mb-4">03</span>
+              <h3 className="text-xl font-semibold text-white mb-1">Institutional</h3>
               <p className="text-xs text-[#888] uppercase tracking-wider mb-6">For compliance & risk</p>
-              <ul className="space-y-3 text-sm text-[#aaa] flex-1">
+              <ul className="space-y-3 text-sm text-[#aaa] flex-1 mb-8">
                 {['FDIC Call Report mining', 'Oracle feed integration', 'GENIUS Act compliance', 'Dedicated scoring pipeline', 'Custom SLA'].map((f) => (
-                  <li key={f} className="flex items-start gap-2.5">
-                    <svg className="w-4 h-4 text-[#00b894] mt-0.5 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>
+                  <li key={f} className="flex items-center gap-2.5">
+                    <span className="w-1 h-1 rounded-full bg-[#5b4cdb]/40 shrink-0" />
                     {f}
                   </li>
                 ))}
               </ul>
-              <Link to="/developers" className="mt-8 w-full py-3 border border-white/10 rounded-xl text-center text-sm font-medium text-white hover:bg-white/5 transition-colors block">
+              <Link to="/developers" className="text-sm font-medium text-[#a29bfe]/70 hover:text-[#a29bfe] transition-colors inline-flex items-center gap-1.5 group-hover:gap-2.5">
                 Contact Sales
+                <svg className="w-3.5 h-3.5 transition-all" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
               </Link>
             </div>
           </div>
@@ -471,7 +466,7 @@ export function LandingPage() {
             className="inline-block px-10 py-4 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white font-semibold rounded-xl transition-all shadow-xl shadow-[#6c5ce7]/25 text-base"
           >
             Get API Access
-            <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
+            <svg className="inline-block ml-1.5 w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14" /><path d="M12 5l7 7-7 7" /></svg>
           </Link>
         </div>
       </section>
