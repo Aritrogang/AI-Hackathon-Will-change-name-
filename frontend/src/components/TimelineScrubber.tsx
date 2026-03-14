@@ -30,12 +30,12 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
   return (
     <div className="space-y-4">
       {/* Slider */}
-      <div className="bg-white rounded-xl border border-black/6 p-4">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-[#888] uppercase tracking-wider font-semibold">
             Timeline Scrubber
           </span>
-          <span className="text-xs text-[#555] font-medium">{event.date}</span>
+          <span className="text-xs text-[#aaa] font-medium">{event.date}</span>
         </div>
         <input
           type="range"
@@ -43,7 +43,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
           max={timeline.length - 1}
           value={selectedIndex}
           onChange={e => onSelectIndex(Number(e.target.value))}
-          className="w-full h-1.5 bg-[#f3f2f7] rounded-full appearance-none cursor-pointer
+          className="w-full h-1.5 bg-white/[0.04] rounded-full appearance-none cursor-pointer
             [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4
             [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#6c5ce7]
             [&::-webkit-slider-thumb]:shadow-md [&::-webkit-slider-thumb]:cursor-pointer"
@@ -55,7 +55,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
       </div>
 
       {/* Summary card */}
-      <div className="bg-white rounded-xl border border-black/6 p-6">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
         <div className="flex items-start justify-between mb-4">
           <div>
             <p className="text-xs text-[#888] uppercase tracking-wider font-semibold">
@@ -68,11 +68,11 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
           </div>
           <div className="text-right space-y-2">
             <div>
-              <div className="text-lg font-bold text-[#0f0f0f]">{event.latency_hours}</div>
+              <div className="text-lg font-bold text-white">{event.latency_hours}</div>
               <p className="text-[10px] text-[#888] uppercase tracking-wider">Latency</p>
             </div>
             <div>
-              <div className="text-lg font-bold text-[#0f0f0f]">{event.coverage_ratio}</div>
+              <div className="text-lg font-bold text-white">{event.coverage_ratio}</div>
               <p className="text-[10px] text-[#888] uppercase tracking-wider">Coverage</p>
             </div>
           </div>
@@ -81,7 +81,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
         {/* Event annotation */}
         {event.event && (
           <div className="bg-[#6c5ce7]/5 border border-[#6c5ce7]/15 rounded-lg px-3 py-2 mb-4">
-            <p className="text-xs text-[#555]">{event.event}</p>
+            <p className="text-xs text-[#aaa]">{event.event}</p>
           </div>
         )}
 
@@ -126,7 +126,7 @@ export function TimelineScrubber({ timeline, selectedIndex, onSelectIndex }: Pro
         </div>
 
         {/* 6-Dimension Breakdown */}
-        <h4 className="text-xs font-semibold text-[#0f0f0f] uppercase tracking-wider mb-3">
+        <h4 className="text-xs font-semibold text-white uppercase tracking-wider mb-3">
           Dimension Breakdown
         </h4>
         <ResponsiveContainer width="100%" height={220}>
@@ -173,9 +173,9 @@ function MetricPill({
   alert?: boolean
 }) {
   return (
-    <div className="bg-[#f3f2f7] rounded-lg px-3 py-2">
+    <div className="bg-white/[0.04] rounded-lg px-3 py-2">
       <p className="text-[10px] text-[#888] uppercase tracking-wider">{label}</p>
-      <p className={`text-sm font-semibold ${alert ? 'text-[#e84393]' : 'text-[#0f0f0f]'}`}>{value}</p>
+      <p className={`text-sm font-semibold ${alert ? 'text-[#e84393]' : 'text-white'}`}>{value}</p>
     </div>
   )
 }

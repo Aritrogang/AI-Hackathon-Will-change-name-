@@ -36,11 +36,11 @@ export function RiskModeling() {
   const [expandedId, setExpandedId] = useState<string | null>(null)
 
   return (
-    <div className="bg-white rounded-xl border border-black/6 overflow-hidden">
+    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
       {/* Header */}
-      <div className="px-6 py-4 border-b border-black/4 flex items-center justify-between">
+      <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider">
+          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
             System-Detected Risk Scenarios
           </h2>
           <p className="text-xs text-[#888] mt-1">
@@ -74,7 +74,7 @@ export function RiskModeling() {
                 <div
                   key={scenario.id}
                   className={`border rounded-lg transition-colors cursor-pointer ${
-                    isExpanded ? 'border-[#6c5ce7]/30 bg-[#f3f2f7]/50' : 'border-black/6 hover:border-black/12'
+                    isExpanded ? 'border-[#6c5ce7]/30 bg-[#6c5ce7]/5' : 'border-white/[0.06] hover:border-white/[0.12]'
                   }`}
                   onClick={() => setExpandedId(isExpanded ? null : scenario.id)}
                 >
@@ -83,14 +83,14 @@ export function RiskModeling() {
                     <span className="text-lg">{scenarioIcon(scenario.type)}</span>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm font-semibold text-[#0f0f0f] truncate">{scenario.title}</span>
+                        <span className="text-sm font-semibold text-white truncate">{scenario.title}</span>
                         <span
                           className="text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded"
                           style={{ color: severityColor(scenario.severity), backgroundColor: severityColor(scenario.severity) + '15' }}
                         >
                           {severityLabel(scenario.severity)}
                         </span>
-                        <span className="text-[10px] font-medium text-[#888] uppercase tracking-wider px-1.5 py-0.5 rounded bg-black/4">
+                        <span className="text-[10px] font-medium text-[#888] uppercase tracking-wider px-1.5 py-0.5 rounded bg-white/[0.04]">
                           {scenario.source}
                         </span>
                       </div>
@@ -111,26 +111,26 @@ export function RiskModeling() {
 
                   {/* Expanded detail */}
                   {isExpanded && proj && (
-                    <div className="px-4 pb-4 border-t border-black/4 pt-4">
-                      <p className="text-xs text-[#555] mb-4">{scenario.description}</p>
+                    <div className="px-4 pb-4 border-t border-white/[0.06] pt-4">
+                      <p className="text-xs text-[#aaa] mb-4">{scenario.description}</p>
 
                       {/* Score comparison */}
                       <div className="grid grid-cols-3 gap-4 mb-4">
-                        <div className="bg-white rounded-lg p-3 border border-black/6">
+                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
                           <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Current</p>
                           <p className="text-2xl font-bold" style={{ color: scoreColor(proj.baseline.stress_score) }}>
                             {proj.baseline.stress_score}
                           </p>
                           <p className="text-[10px] text-[#888] mt-0.5">{proj.baseline.stress_level}</p>
                         </div>
-                        <div className="bg-white rounded-lg p-3 border border-black/6">
+                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
                           <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Projected</p>
                           <p className="text-2xl font-bold" style={{ color: scoreColor(proj.projected.stress_score) }}>
                             {proj.projected.stress_score}
                           </p>
                           <p className="text-[10px] text-[#888] mt-0.5">{proj.projected.stress_level}</p>
                         </div>
-                        <div className="bg-white rounded-lg p-3 border border-black/6">
+                        <div className="bg-white/[0.04] rounded-lg p-3 border border-white/[0.06]">
                           <p className="text-[10px] text-[#888] uppercase tracking-wider mb-1">Impact</p>
                           <p className={`text-2xl font-bold ${proj.delta > 0 ? 'text-[#e84393]' : 'text-[#00b894]'}`}>
                             {proj.delta > 0 ? '+' : ''}{proj.delta}
@@ -144,7 +144,7 @@ export function RiskModeling() {
                       {/* Dimension chart */}
                       {proj.dimensions && proj.dimensions.length > 0 && (
                         <div>
-                          <h3 className="text-[10px] font-semibold text-[#0f0f0f] uppercase tracking-wider mb-2">
+                          <h3 className="text-[10px] font-semibold text-white uppercase tracking-wider mb-2">
                             Per-Dimension Impact
                           </h3>
                           <ResponsiveContainer width="100%" height={180}>
@@ -158,11 +158,11 @@ export function RiskModeling() {
                               layout="vertical"
                               margin={{ left: 120 }}
                             >
-                              <CartesianGrid strokeDasharray="3 3" stroke="#f3f2f7" />
+                              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                               <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 10, fill: '#888' }} />
-                              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#555' }} width={110} />
+                              <YAxis dataKey="name" type="category" tick={{ fontSize: 10, fill: '#aaa' }} width={110} />
                               <Tooltip
-                                contentStyle={{ borderRadius: 8, border: '1px solid #eee', fontSize: 11 }}
+                                contentStyle={{ borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)', fontSize: 11, backgroundColor: '#1a1825', color: '#e2e8f0' }}
                                 formatter={(value: number, name: string) => [
                                   value.toFixed(1),
                                   name === 'baseline' ? 'Current' : 'Projected',
@@ -184,7 +184,7 @@ export function RiskModeling() {
                         <div className="mt-3 flex items-center gap-2">
                           <span className="text-[10px] text-[#888] uppercase tracking-wider">Affected:</span>
                           {scenario.affected_stablecoins.map(s => (
-                            <span key={s} className="text-xs font-medium text-[#6c5ce7] bg-[#6c5ce7]/10 px-2 py-0.5 rounded">
+                            <span key={s} className="text-xs font-medium text-[#a29bfe] bg-[#6c5ce7]/10 px-2 py-0.5 rounded">
                               {s}
                             </span>
                           ))}

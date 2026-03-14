@@ -16,16 +16,16 @@ export function BacktestDetailPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="animate-pulse h-10 w-48 bg-[#f3f2f7] rounded-lg" />
-        <div className="animate-pulse h-80 bg-[#f3f2f7] rounded-xl" />
-        <div className="animate-pulse h-96 bg-[#f3f2f7] rounded-xl" />
+        <div className="animate-pulse h-10 w-48 bg-white/[0.04] rounded-lg" />
+        <div className="animate-pulse h-80 bg-white/[0.04] rounded-xl" />
+        <div className="animate-pulse h-96 bg-white/[0.04] rounded-xl" />
       </div>
     )
   }
 
   if (error || !backtest) {
     return (
-      <div className="bg-white rounded-xl border border-black/6 p-8 text-center">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8 text-center">
         <p className="text-[#e84393] font-medium mb-2">Failed to load backtest</p>
         <p className="text-sm text-[#888]">{error}</p>
         <Link to="/backtests" className="text-sm text-[#6c5ce7] hover:underline mt-4 inline-block">
@@ -44,8 +44,8 @@ export function BacktestDetailPage() {
 
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-[#0f0f0f]">{backtest.name}</h2>
-        <p className="text-sm text-[#555] mt-1">{backtest.description}</p>
+        <h2 className="text-xl font-bold text-white">{backtest.name}</h2>
+        <p className="text-sm text-[#aaa] mt-1">{backtest.description}</p>
       </div>
 
       {/* Key insight banner */}
@@ -54,7 +54,7 @@ export function BacktestDetailPage() {
           <p className="text-xs font-semibold text-[#6c5ce7] uppercase tracking-wider mb-1">
             Key Insight
           </p>
-          <p className="text-sm text-[#555] leading-relaxed">{backtest.key_insight}</p>
+          <p className="text-sm text-[#aaa] leading-relaxed">{backtest.key_insight}</p>
         </div>
       )}
 

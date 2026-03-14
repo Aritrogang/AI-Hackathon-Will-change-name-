@@ -8,7 +8,7 @@ export function Header({ lastUpdated }: Props) {
   const location = useLocation()
 
   const navItems = [
-    { path: '/', label: 'Dashboard' },
+    { path: '/dashboard', label: 'Dashboard' },
     { path: '/map', label: 'Map' },
     { path: '/backtests', label: 'Backtests' },
     { path: '/developers', label: 'Developers' },
@@ -20,13 +20,16 @@ export function Header({ lastUpdated }: Props) {
     : null
 
   return (
-    <header className="border-b border-black/6 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+    <header className="border-b border-white/[0.06] bg-[#0c0a14]/80 backdrop-blur-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-8">
-          <Link to="/" className="flex items-center gap-2">
-            <h1 className="text-lg font-bold tracking-tight">
-              <span className="text-[#6c5ce7]">helicity</span>
-            </h1>
+          <Link to="/" className="flex items-center gap-2.5">
+            <svg width="18" height="26" viewBox="0 0 30 44" fill="none" className="overflow-visible">
+              <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.3)" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
+            </svg>
+            <span className="text-lg font-bold tracking-[-0.04em] text-white">helicity</span>
           </Link>
           <nav className="flex gap-1">
             {navItems.map(item => (
@@ -35,8 +38,8 @@ export function Header({ lastUpdated }: Props) {
                 to={item.path}
                 className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                   location.pathname === item.path
-                    ? 'bg-[#6c5ce7]/10 text-[#6c5ce7]'
-                    : 'text-[#555] hover:text-[#0f0f0f] hover:bg-black/4'
+                    ? 'bg-[#6c5ce7]/15 text-[#a29bfe]'
+                    : 'text-[#888] hover:text-white hover:bg-white/5'
                 }`}
               >
                 {item.label}

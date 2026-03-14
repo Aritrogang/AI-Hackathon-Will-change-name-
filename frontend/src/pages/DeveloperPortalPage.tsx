@@ -4,8 +4,8 @@ const BACKEND_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000'
 
 const CODE_COLORS = 'bg-[#0c0a14] text-[#a29bfe] font-mono text-sm rounded-xl p-4 overflow-x-auto'
 const LABEL = 'text-xs uppercase tracking-widest text-[#888] font-semibold mb-1'
-const SECTION_TITLE = 'text-lg font-bold text-[#0f0f0f] mb-1'
-const SECTION_DESC = 'text-sm text-[#555] mb-4'
+const SECTION_TITLE = 'text-lg font-bold text-white mb-1'
+const SECTION_DESC = 'text-sm text-[#aaa] mb-4'
 
 type Tab = 'stdio' | 'sse' | 'example' | 'tools'
 
@@ -17,10 +17,10 @@ export function DeveloperPortalPage() {
       {/* Header */}
       <div>
         <div className={LABEL}>Developer Portal</div>
-        <h2 className="text-3xl font-bold text-[#0f0f0f] mb-2">
+        <h2 className="text-3xl font-bold text-white mb-2">
           MCP Server — AI Agent Integration
         </h2>
-        <p className="text-[#555] text-base max-w-2xl">
+        <p className="text-[#aaa] text-base max-w-2xl">
           Helicity exposes reserve risk scores as{' '}
           <a
             href="https://modelcontextprotocol.io"
@@ -42,16 +42,16 @@ export function DeveloperPortalPage() {
           { label: 'Transports', value: 'stdio · SSE' },
           { label: 'Stablecoins', value: 'USDC · USDT · DAI · FRAX · PYUSD · TUSD' },
         ].map(({ label, value }) => (
-          <div key={label} className="bg-white border border-black/7 rounded-xl p-4">
+          <div key={label} className="bg-white/[0.03] border border-white/[0.06] rounded-xl p-4">
             <div className={LABEL}>{label}</div>
-            <div className="text-[#0f0f0f] font-semibold text-sm">{value}</div>
+            <div className="text-white font-semibold text-sm">{value}</div>
           </div>
         ))}
       </div>
 
       {/* Tab selector */}
       <div>
-        <div className="flex gap-1 border-b border-black/7 mb-6">
+        <div className="flex gap-1 border-b border-white/[0.06] mb-6">
           {([
             { id: 'stdio', label: 'Claude Desktop (stdio)' },
             { id: 'sse', label: 'Remote Agent (SSE)' },
@@ -64,7 +64,7 @@ export function DeveloperPortalPage() {
               className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
                 tab === id
                   ? 'border-[#6c5ce7] text-[#6c5ce7]'
-                  : 'border-transparent text-[#888] hover:text-[#0f0f0f]'
+                  : 'border-transparent text-[#888] hover:text-white'
               }`}
             >
               {label}
@@ -108,7 +108,7 @@ function StdioTab() {
         <div className={SECTION_TITLE}>Claude Desktop — stdio transport</div>
         <p className={SECTION_DESC}>
           For local agent use. Add the following block to{' '}
-          <code className="bg-black/5 px-1 rounded text-xs">
+          <code className="bg-white/[0.06] px-1 rounded text-xs">
             ~/Library/Application Support/Claude/claude_desktop_config.json
           </code>
           .
@@ -119,7 +119,7 @@ function StdioTab() {
       <div>
         <div className={SECTION_TITLE}>Run manually</div>
         <p className={SECTION_DESC}>
-          From the <code className="bg-black/5 px-1 rounded text-xs">backend/</code> directory with
+          From the <code className="bg-white/[0.06] px-1 rounded text-xs">backend/</code> directory with
           Python 3.11+:
         </p>
         <pre className={CODE_COLORS}>{`# Install deps (first time)
@@ -129,8 +129,8 @@ pip install -r requirements.txt
 python mcp_server.py`}</pre>
       </div>
 
-      <div className="bg-[#f3f2f7] border border-black/7 rounded-xl p-4 text-sm text-[#555]">
-        <strong className="text-[#0f0f0f]">Requires Python 3.11+</strong> — fastmcp does not
+      <div className="bg-white/[0.04] border border-white/[0.06] rounded-xl p-4 text-sm text-[#aaa]">
+        <strong className="text-white">Requires Python 3.11+</strong> — fastmcp does not
         support Python 3.9. The project ships a <code>.venv</code> at{' '}
         <code>backend/.venv</code> with all dependencies pre-installed.
       </div>
@@ -177,8 +177,8 @@ TRANSPORT=sse MCP_PORT=8001 python mcp_server.py`}</pre>
       <div>
         <div className={SECTION_TITLE}>Deployed endpoint</div>
         <p className={SECTION_DESC}>
-          On Railway/Render, set <code className="bg-black/5 px-1 rounded text-xs">TRANSPORT=sse</code>{' '}
-          and <code className="bg-black/5 px-1 rounded text-xs">MCP_PORT=8001</code> as environment
+          On Railway/Render, set <code className="bg-white/[0.06] px-1 rounded text-xs">TRANSPORT=sse</code>{' '}
+          and <code className="bg-white/[0.06] px-1 rounded text-xs">MCP_PORT=8001</code> as environment
           variables. The SSE endpoint will be available at:
         </p>
         <pre className={CODE_COLORS}>{`https://your-backend.railway.app/sse`}</pre>
@@ -195,7 +195,7 @@ function ExampleTab({ backendUrl: _ }: { backendUrl: string }) {
       <div>
         <div className={SECTION_TITLE}>Python agent — fastmcp client</div>
         <p className={SECTION_DESC}>
-          Use the <code className="bg-black/5 px-1 rounded text-xs">fastmcp</code> client SDK to
+          Use the <code className="bg-white/[0.06] px-1 rounded text-xs">fastmcp</code> client SDK to
           call Helicity tools from any Python agent.
         </p>
         <pre className={CODE_COLORS}>{`import asyncio
@@ -390,18 +390,18 @@ function ToolsTab() {
     <div className="space-y-3">
       <p className={SECTION_DESC}>
         All tools return a standard envelope:{' '}
-        <code className="bg-black/5 px-1 rounded text-xs">
+        <code className="bg-white/[0.06] px-1 rounded text-xs">
           {'{ "data": ..., "error": null, "timestamp": "ISO8601" }'}
         </code>
       </p>
       {tools.map(tool => (
         <div
           key={tool.name}
-          className="border border-black/7 rounded-xl overflow-hidden"
+          className="border border-white/[0.06] rounded-xl overflow-hidden"
         >
           <button
             onClick={() => setOpen(open === tool.name ? null : tool.name)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-black/2 transition-colors"
+            className="w-full flex items-center justify-between px-5 py-4 text-left hover:bg-white/[0.03] transition-colors"
           >
             <div className="flex items-center gap-3">
               <code className="text-[#6c5ce7] font-mono font-semibold text-sm">{tool.name}</code>
@@ -418,8 +418,8 @@ function ToolsTab() {
           </button>
 
           {open === tool.name && (
-            <div className="px-5 pb-5 border-t border-black/5 space-y-4 pt-4">
-              <p className="text-sm text-[#555]">{tool.description}</p>
+            <div className="px-5 pb-5 border-t border-white/[0.06] space-y-4 pt-4">
+              <p className="text-sm text-[#aaa]">{tool.description}</p>
 
               {tool.params.length > 0 && (
                 <div>
@@ -435,7 +435,7 @@ function ToolsTab() {
                     </thead>
                     <tbody>
                       {tool.params.map(p => (
-                        <tr key={p.name} className="border-t border-black/5">
+                        <tr key={p.name} className="border-t border-white/[0.06]">
                           <td className="py-1.5 pr-4">
                             <code className="text-[#6c5ce7] text-xs">{p.name}</code>
                           </td>
@@ -447,7 +447,7 @@ function ToolsTab() {
                               <span className="text-[#888]">optional</span>
                             )}
                           </td>
-                          <td className="py-1.5 text-[#555] text-xs">{p.desc}</td>
+                          <td className="py-1.5 text-[#aaa] text-xs">{p.desc}</td>
                         </tr>
                       ))}
                     </tbody>

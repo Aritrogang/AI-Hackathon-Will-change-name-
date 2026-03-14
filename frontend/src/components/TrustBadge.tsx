@@ -16,8 +16,8 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
     : null
 
   return (
-    <div className="bg-white rounded-xl border border-black/6 p-6">
-      <h3 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider mb-4">
+    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+      <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
         Verification &amp; Trust
       </h3>
 
@@ -27,7 +27,7 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <span className={`inline-block w-2 h-2 rounded-full ${isMock ? 'bg-[#e17055]' : 'bg-[#00b894]'}`} />
-              <span className="text-sm text-[#555]">
+              <span className="text-sm text-[#aaa]">
                 {isMock ? 'IPFS Verification (Demo)' : 'Verified on IPFS'}
               </span>
             </div>
@@ -47,10 +47,10 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
         {/* Model consensus row */}
         {jury && (
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4 text-xs text-[#555]">
-              <span>Claude: <strong className="text-[#0f0f0f]">{jury.claude_score.toFixed(0)}</strong></span>
-              <span>Gemini: <strong className="text-[#0f0f0f]">{jury.gemini_score.toFixed(0)}</strong></span>
-              <span>Delta: <strong className="text-[#0f0f0f]">{jury.delta.toFixed(0)}</strong></span>
+            <div className="flex items-center gap-4 text-xs text-[#aaa]">
+              <span>Claude: <strong className="text-white">{jury.claude_score.toFixed(0)}</strong></span>
+              <span>Gemini: <strong className="text-white">{jury.gemini_score.toFixed(0)}</strong></span>
+              <span>Delta: <strong className="text-white">{jury.delta.toFixed(0)}</strong></span>
             </div>
             <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
               jury.consensus
@@ -82,7 +82,7 @@ export function TrustBadge({ ipfsCid, jury, stablecoin }: Props) {
             )}
           </div>
           {stablecoin && (
-            <span className="font-mono text-[10px] bg-black/4 px-1.5 py-0.5 rounded text-[#555] w-fit">
+            <span className="font-mono text-[10px] bg-black/4 px-1.5 py-0.5 rounded text-[#aaa] w-fit">
               /api/oracle/{stablecoin.toLowerCase()}
             </span>
           )}

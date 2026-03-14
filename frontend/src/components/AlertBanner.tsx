@@ -31,8 +31,8 @@ export function AlertBanner() {
           </p>
           <div className="space-y-1">
             {severeAlerts.slice(0, 3).map((alert, i) => (
-              <p key={i} className="text-xs text-[#555]">
-                <span className="font-medium">{alert.event}</span> in {alert.state} — {alert.headline}
+              <p key={i} className="text-xs text-[#aaa]">
+                <span className="font-medium text-[#ccc]">{alert.event}</span> in {alert.state} — {alert.headline}
               </p>
             ))}
             {data.ops_impact.length > 0 && (

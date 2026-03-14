@@ -26,10 +26,10 @@ export function StressScoreTable({ scores, loading }: Props) {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-xl border border-black/6 p-8">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8">
         <div className="animate-pulse space-y-4">
           {[1, 2].map(i => (
-            <div key={i} className="h-16 bg-[#f3f2f7] rounded-lg" />
+            <div key={i} className="h-16 bg-white/[0.04] rounded-lg" />
           ))}
         </div>
       </div>
@@ -37,15 +37,15 @@ export function StressScoreTable({ scores, loading }: Props) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-black/6 overflow-hidden">
-      <div className="px-6 py-4 border-b border-black/4">
-        <h2 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider">
+    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
+      <div className="px-6 py-4 border-b border-white/[0.06]">
+        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
           Liquidity Stress Scores
         </h2>
       </div>
       <table className="w-full">
         <thead>
-          <tr className="text-xs text-[#888] uppercase tracking-wider border-b border-black/4">
+          <tr className="text-xs text-[#888] uppercase tracking-wider border-b border-white/[0.06]">
             <th className="px-6 py-3 text-left font-medium">Stablecoin</th>
             <th className="px-6 py-3 text-left font-medium">Score</th>
             <th className="px-6 py-3 text-left font-medium">Level</th>
@@ -59,17 +59,17 @@ export function StressScoreTable({ scores, loading }: Props) {
             <tr
               key={score.stablecoin}
               onClick={() => navigate(`/stablecoin/${score.stablecoin}`)}
-              className="border-b border-black/3 hover:bg-[#f3f2f7]/50 cursor-pointer transition-colors"
+              className="border-b border-white/[0.04] hover:bg-white/[0.04] cursor-pointer transition-colors"
             >
               <td className="px-6 py-4">
-                <span className="font-semibold text-[#0f0f0f]">{score.stablecoin}</span>
+                <span className="font-semibold text-white">{score.stablecoin}</span>
               </td>
               <td className="px-6 py-4">
                 <div className="flex items-center gap-3">
                   <span className="text-lg font-bold" style={{ color: scoreColor(score.stress_score) }}>
                     {score.stress_score}
                   </span>
-                  <div className="w-24 h-2 bg-[#f3f2f7] rounded-full overflow-hidden">
+                  <div className="w-24 h-2 bg-white/[0.06] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all"
                       style={{
@@ -85,8 +85,8 @@ export function StressScoreTable({ scores, loading }: Props) {
                   {score.stress_level}
                 </span>
               </td>
-              <td className="px-6 py-4 text-sm text-[#555]">{score.redemption_latency_hours}</td>
-              <td className="px-6 py-4 text-sm text-[#555]">{score.liquidity_coverage_ratio}</td>
+              <td className="px-6 py-4 text-sm text-[#aaa]">{score.redemption_latency_hours}</td>
+              <td className="px-6 py-4 text-sm text-[#aaa]">{score.liquidity_coverage_ratio}</td>
               <td className="px-6 py-4">
                 <DataSourceBadge source={score.resolution_source} />
               </td>

@@ -23,15 +23,15 @@ export function StressScoreDetail() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="animate-pulse h-48 bg-[#f3f2f7] rounded-xl" />
-        <div className="animate-pulse h-64 bg-[#f3f2f7] rounded-xl" />
+        <div className="animate-pulse h-48 bg-white/[0.04] rounded-xl" />
+        <div className="animate-pulse h-64 bg-white/[0.04] rounded-xl" />
       </div>
     )
   }
 
   if (error || !score) {
     return (
-      <div className="bg-white rounded-xl border border-black/6 p-8 text-center">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8 text-center">
         <p className="text-[#e84393] font-medium mb-2">Failed to load {symbol}</p>
         <p className="text-sm text-[#888]">{error}</p>
         <Link to="/" className="text-sm text-[#6c5ce7] hover:underline mt-4 inline-block">
@@ -56,10 +56,10 @@ export function StressScoreDetail() {
       </Link>
 
       {/* Hero score card */}
-      <div className="bg-white rounded-xl border border-black/6 p-8">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-8">
         <div className="flex items-start justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-bold text-[#0f0f0f]">{score.stablecoin}</h2>
+            <h2 className="text-2xl font-bold text-white">{score.stablecoin}</h2>
             <p className="text-sm text-[#888] mt-1">Liquidity Stress Score</p>
           </div>
           <DataSourceBadge source={score.resolution_source} />
@@ -72,19 +72,19 @@ export function StressScoreDetail() {
             <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">{score.stress_level}</p>
           </div>
           <div>
-            <div className="text-3xl font-bold text-[#0f0f0f]">{score.redemption_latency_hours}</div>
+            <div className="text-3xl font-bold text-white">{score.redemption_latency_hours}</div>
             <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">Redemption Latency</p>
           </div>
           <div>
-            <div className="text-3xl font-bold text-[#0f0f0f]">{score.liquidity_coverage_ratio}</div>
+            <div className="text-3xl font-bold text-white">{score.liquidity_coverage_ratio}</div>
             <p className="text-xs text-[#888] mt-2 uppercase tracking-wider">Liquidity Coverage</p>
           </div>
         </div>
       </div>
 
       {/* 6-Dimension Breakdown */}
-      <div className="bg-white rounded-xl border border-black/6 p-6">
-        <h3 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider mb-4">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+        <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
           6-Dimension Breakdown
         </h3>
         <ResponsiveContainer width="100%" height={280}>
@@ -110,7 +110,7 @@ export function StressScoreDetail() {
           {score.dimensions.map((d, i) => (
             <div key={i} className="flex items-center justify-between text-xs text-[#888] px-2">
               <span>{d.name} ({(d.weight * 100).toFixed(0)}% weight)</span>
-              <span className="text-[#555]">{d.detail}</span>
+              <span className="text-[#aaa]">{d.detail}</span>
             </div>
           ))}
         </div>
@@ -118,8 +118,8 @@ export function StressScoreDetail() {
 
       {/* Consensus Panel */}
       {score.jury && (
-        <div className="bg-white rounded-xl border border-black/6 p-6">
-          <h3 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider mb-4">
+        <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] p-6">
+          <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
             Model Consensus
           </h3>
           <div className="flex items-center gap-4">

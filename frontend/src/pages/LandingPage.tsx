@@ -32,7 +32,7 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 /* ────────────────────────── component ────────────────────────── */
 export function LandingPage() {
   return (
-    <div className="font-['Sora',sans-serif] text-[#e2e8f0] bg-[#0c0a14] overflow-x-hidden">
+    <div className="text-[#e2e8f0] bg-[#0c0a14] overflow-x-hidden">
 
       {/* ═══════════════════ 1. HERO ═══════════════════ */}
       <section className="relative min-h-[92vh] flex flex-col">
@@ -47,10 +47,12 @@ export function LandingPage() {
         {/* Nav */}
         <nav className="relative z-20 flex items-center justify-between px-8 md:px-16 py-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#6c5ce7] to-[#a29bfe] flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-            </div>
-            <span className="text-xl font-semibold text-white tracking-tight">helicity</span>
+            <svg width="20" height="28" viewBox="0 0 30 44" fill="none" className="overflow-visible">
+              <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.3)" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
+              <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
+            </svg>
+            <span className="text-xl font-bold text-white tracking-[-0.04em]">helicity</span>
           </div>
           <div className="hidden md:flex items-center gap-8 text-sm text-[#aaa]">
             <a href="#problem" className="hover:text-white transition-colors">Problem</a>

@@ -7,7 +7,7 @@ interface Props {
 
 export function DashboardLayout({ lastUpdated }: Props) {
   return (
-    <div className="min-h-screen bg-[#fafafa] text-[#555] font-sans">
+    <div className="min-h-screen bg-[#0c0a14] text-[#e2e8f0] font-sans">
       <Header lastUpdated={lastUpdated} />
       <main className="max-w-7xl mx-auto px-6 py-8">
         <Outlet />

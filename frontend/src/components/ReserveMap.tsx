@@ -34,7 +34,7 @@ export function ReserveMap() {
 
   if (loading || !data) {
     return (
-      <div className="bg-white rounded-xl border border-black/6 h-[500px] flex items-center justify-center">
+      <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] h-[500px] flex items-center justify-center">
         <p className="text-sm text-[#888]">Loading map...</p>
       </div>
     )
@@ -58,9 +58,9 @@ export function ReserveMap() {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-black/6 overflow-hidden">
-      <div className="px-6 py-4 border-b border-black/4">
-        <h2 className="text-sm font-semibold text-[#0f0f0f] uppercase tracking-wider">
+    <div className="bg-white/[0.03] rounded-xl border border-white/[0.06] overflow-hidden">
+      <div className="px-6 py-4 border-b border-white/[0.06]">
+        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
           Reserve Network Map
         </h2>
       </div>
@@ -71,8 +71,8 @@ export function ReserveMap() {
         className="h-[500px] w-full"
       >
         <TileLayer
-          attribution='&copy; OpenStreetMap'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; CartoDB'
+          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
         />
 
         {/* Data center corridor overlays */}
