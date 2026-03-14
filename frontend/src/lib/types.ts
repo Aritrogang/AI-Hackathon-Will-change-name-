@@ -118,3 +118,16 @@ export interface ApiResponse<T> {
   error: string | null
   timestamp: string
 }
+
+/** A single event received from the GET /api/stream/scores SSE endpoint. */
+export interface ScoreStreamEvent {
+  /** Present on score events; absent on heartbeats. */
+  stablecoin: string
+  score: number
+  level: string
+  latency_hours: string
+  coverage_ratio: string
+  timestamp: string
+  /** "heartbeat" on keepalive pings — filter these out in consumers. */
+  type?: string
+}
