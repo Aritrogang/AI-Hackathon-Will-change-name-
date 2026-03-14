@@ -21,7 +21,7 @@ export function DeveloperPortalPage() {
           MCP Server: AI Agent Integration
         </h2>
         <p className="text-[#aaa] text-base max-w-2xl">
-          Katabatic exposes reserve risk scores as{' '}
+          Helicity exposes reserve risk scores as{' '}
           <a
             href="https://modelcontextprotocol.io"
             target="_blank"
@@ -87,9 +87,9 @@ function StdioTab() {
   const configJson = JSON.stringify(
     {
       mcpServers: {
-        katabatic: {
+        helicity: {
           command: 'python3',
-          args: ['/path/to/katabatic/backend/mcp_server.py'],
+          args: ['/path/to/helicity/backend/mcp_server.py'],
           env: {
             ANTHROPIC_API_KEY: 'your-key',
             GEMINI_API_KEY: 'your-key',
@@ -160,7 +160,7 @@ TRANSPORT=sse MCP_PORT=8001 python mcp_server.py`}</pre>
         <pre className={CODE_COLORS}>{JSON.stringify(
           {
             mcpServers: {
-              katabatic: {
+              helicity: {
                 url: `${sseUrl}/sse`,
                 transport: 'sse',
                 headers: {
@@ -196,7 +196,7 @@ function ExampleTab({ backendUrl: _ }: { backendUrl: string }) {
         <div className={SECTION_TITLE}>Python agent / fastmcp client</div>
         <p className={SECTION_DESC}>
           Use the <code className="bg-white/[0.06] px-1 rounded text-xs">fastmcp</code> client SDK to
-          call Katabatic tools from any Python agent.
+          call Helicity tools from any Python agent.
         </p>
         <pre className={CODE_COLORS}>{`import asyncio
 from fastmcp import Client
@@ -229,13 +229,13 @@ asyncio.run(main())`}</pre>
       <div>
         <div className={SECTION_TITLE}>Claude agent (tool use)</div>
         <p className={SECTION_DESC}>
-          An AI trading agent can declare Katabatic tools and let Claude decide when to invoke them.
+          An AI trading agent can declare Helicity tools and let Claude decide when to invoke them.
         </p>
         <pre className={CODE_COLORS}>{`import anthropic
 
 client = anthropic.Anthropic()
 
-# Describe Katabatic MCP tools as Claude tool definitions
+# Describe Helicity MCP tools as Claude tool definitions
 tools = [
     {
         "name": "get_stress_scores",

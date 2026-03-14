@@ -1,4 +1,4 @@
-# Katabatic
+# Helicity
 
 **The system of record for stablecoin reserve risk.**
 
@@ -116,10 +116,10 @@ If both health check and frontend dev server start without errors, you're good t
 
 ## Live MCP Endpoint
 
-The Katabatic MCP server is deployed on Blaxel and accessible as a hosted function:
+The Helicity MCP server is deployed on Blaxel and accessible as a hosted function:
 
 ```
-https://run.blaxel.ai/{workspace}/functions/katabatic-mcp/mcp
+https://run.blaxel.ai/{workspace}/functions/helicity-mcp/mcp
 ```
 
 This endpoint uses the `streamable-http` transport and exposes all 5 MCP tools:

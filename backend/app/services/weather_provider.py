@@ -18,7 +18,7 @@ OPENMETEO_ENSEMBLE_URL = "https://ensemble-api.open-meteo.com/v1/ensemble"
 OPENMETEO_FLOOD_URL = "https://flood-api.open-meteo.com/v1/flood"
 NHC_ACTIVE_STORMS_URL = "https://www.nhc.noaa.gov/CurrentSurges.json"
 
-HEADERS = {"User-Agent": "Katabatic/1.0 (stablecoin-risk-engine; contact@katabatic.dev)"}
+HEADERS = {"User-Agent": "Helicity/1.0 (stablecoin-risk-engine; contact@helicity.dev)"}
 class WeatherProvider(DataProvider):
     """Fetches high-resolution deterministic weather forecasts, active alerts, and historical data."""
 

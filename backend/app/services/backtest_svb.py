@@ -1,6 +1,6 @@
 """SVB March 2023 backtest — replays the Silicon Valley Bank collapse day-by-day.
 
-Demonstrates that Katabatic's WAM-first scoring model would have flagged
+Demonstrates that Helicity's WAM-first scoring model would have flagged
 USDC at Critical stress ~48 hours before the actual depeg event.
 """
 

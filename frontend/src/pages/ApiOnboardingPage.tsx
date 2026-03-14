@@ -134,8 +134,8 @@ export function ApiOnboardingPage() {
           <div className="p-5">
             {activeLang === 'curl' && (
               <pre className="text-sm text-[#e2e8f0] font-mono leading-relaxed overflow-x-auto">
-<span className="text-[#a29bfe]">curl</span> -X GET https://api.katabatic.network/v1/stress-scores \
-  -H <span className="text-[#00b894]">"Authorization: Bearer sk-kata-live-..."</span>
+<span className="text-[#a29bfe]">curl</span> -X GET https://api.helicity.network/v1/stress-scores \
+  -H <span className="text-[#00b894]">"Authorization: Bearer sk-heli-live-..."</span>
               </pre>
             )}
             {activeLang === 'python' && (
@@ -143,20 +143,20 @@ export function ApiOnboardingPage() {
 <span className="text-[#e84393]">import</span> httpx
 
 headers = &#123;
-    <span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-kata-live-..."</span>
+    <span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-heli-live-..."</span>
 &#125;
 
 <span className="text-[#e84393]">with</span> httpx.Client() <span className="text-[#e84393]">as</span> client:
-    response = client.get(<span className="text-[#00b894]">"https://api.katabatic.network/v1/stress-scores"</span>, headers=headers)
+    response = client.get(<span className="text-[#00b894]">"https://api.helicity.network/v1/stress-scores"</span>, headers=headers)
     data = response.json()
     <span className="text-[#888]"># &#123;"data": [&#123;"symbol": "USDC", "score": 12, ...&#125;], ...&#125;</span>
               </pre>
             )}
             {activeLang === 'ts' && (
               <pre className="text-sm text-[#e2e8f0] font-mono leading-relaxed overflow-x-auto">
-<span className="text-[#e84393]">const</span> response = <span className="text-[#e84393]">await</span> fetch(<span className="text-[#00b894]">'https://api.katabatic.network/v1/stress-scores'</span>, &#123;
+<span className="text-[#e84393]">const</span> response = <span className="text-[#e84393]">await</span> fetch(<span className="text-[#00b894]">'https://api.helicity.network/v1/stress-scores'</span>, &#123;
   headers: &#123;
-    <span className="text-[#00b894]">'Authorization'</span>: <span className="text-[#00b894]">'Bearer sk-kata-live-...'</span>
+    <span className="text-[#00b894]">'Authorization'</span>: <span className="text-[#00b894]">'Bearer sk-heli-live-...'</span>
   &#125;
 &#125;);
 
@@ -352,7 +352,7 @@ headers = &#123;
             <pre className="text-sm text-white font-mono overflow-x-auto whitespace-pre">
 &#123;
   <span className="text-[#6c5ce7]">"mcpServers"</span>: &#123;
-    <span className="text-[#6c5ce7]">"katabatic"</span>: &#123;
+    <span className="text-[#6c5ce7]">"helicity"</span>: &#123;
       "command": "python",
       "args": ["-m", "helicity.mcp_server"],
       "env": &#123;
@@ -371,10 +371,10 @@ headers = &#123;
             <pre className="text-sm text-white font-mono overflow-x-auto whitespace-pre">
 <span className="text-[#e84393]">from</span> fastmcp <span className="text-[#e84393]">import</span> FastMCPClient
 
-<span className="text-[#888]"># Connect to Katabatic via SSE</span>
+<span className="text-[#888]"># Connect to Helicity via SSE</span>
 client = FastMCPClient(
-    url=<span className="text-[#00b894]">"https://api.katabatic.network/mcp/sse"</span>,
-    headers=&#123;<span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-kata-live-..."</span>&#125;
+    url=<span className="text-[#00b894]">"https://api.helicity.network/mcp/sse"</span>,
+    headers=&#123;<span className="text-[#00b894]">"Authorization"</span>: <span className="text-[#00b894]">"Bearer sk-heli-live-..."</span>&#125;
 )
 
 <span className="text-[#888]"># Use tools in your agent loop</span>

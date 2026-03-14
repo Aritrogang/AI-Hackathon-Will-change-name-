@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
-const LETTERS = "katabatic".split("")
+const LETTERS = "helicity".split("")
 const LINE_DATA = [
   { x1: 3, x2: 9, color: "rgba(108,92,231,0.3)", delay: 0 },
   { x1: 13, x2: 19, color: "rgba(108,92,231,0.6)", delay: 0.1 },
@@ -10,7 +10,7 @@ const LINE_DATA = [
 const LETTER_STAGGER = 0.055
 const LETTER_START = 0.32
 
-export function KatabaticLogo({ size = "lg", dark = false }: { size?: "sm" | "md" | "lg"; dark?: boolean } = {}) {
+export function HelicityLogo({ size = "lg", dark = false }: { size?: "sm" | "md" | "lg"; dark?: boolean } = {}) {
   const [revealKey, setRevealKey] = useState(0)
 
   // Replay animation on every fullscreen enter

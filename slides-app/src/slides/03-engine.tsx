@@ -10,7 +10,7 @@ const fadeUp = (delay = 0) => ({
   transition: { delay, duration: 0.4 },
 })
 
-// Inline SVG icons in Katabatic accent style
+// Inline SVG icons in Helicity accent style
 const IconPdf = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
     <rect x="2" y="1" width="10" height="12" rx="1.5" stroke="var(--color-accent)" strokeWidth="1.2" />

@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Eyebrow } from "@/components/ui/eyebrow"
 import { AnimatedNumber } from "@/components/ui/animated-number"
-import { KatabaticLogo } from "@/components/katabatic-logo"
+import { HelicityLogo } from "@/components/helicity-logo"
 
 const fadeUp = (delay = 0) => ({
   initial: { opacity: 0, y: 12 },
@@ -125,7 +125,7 @@ export function SlideProblem(_props: { subStep?: number }) {
           </div>
         </div>
         <div className="shrink-0 text-right border-l border-black/7 pl-4">
-          <div className="font-semibold text-accent"><KatabaticLogo size="sm" /></div>
+          <div className="font-semibold text-accent"><HelicityLogo size="sm" /></div>
           <div className="text-[0.78rem] text-text-tertiary">flags critical</div>
           <div className="text-[0.78rem] text-text-primary font-semibold">48h prior</div>
         </div>

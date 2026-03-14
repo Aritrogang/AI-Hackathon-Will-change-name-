@@ -20,7 +20,7 @@ from app.services.registry import get_all_symbols, get_reserve_data, get_all_sta
 class ScoringEngine:
     """Computes Liquidity Stress Scores across 6 dimensions using live data providers.
     
-    Katabatic is a stablecoin reserve risk scoring platform (Cornell AI Hackathon 2026).
+    Helicity is a stablecoin reserve risk scoring platform (Cornell AI Hackathon 2026).
     
     Core formula: Stress Score = Duration Risk (WAM) × Weather Multiplier × Concentration Factor
     
@@ -162,7 +162,7 @@ class ScoringEngine:
                     "latency_hours": result.redemption_latency_hours,
                     "coverage_ratio": result.liquidity_coverage_ratio,
                     "timestamp": result.source_timestamp,
-                    "version": "katabatic-v1",
+                    "version": "helicity-v1",
                 }
                 if result.jury:
                     snapshot["claude_score"] = result.jury.claude_score

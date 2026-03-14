@@ -1,7 +1,7 @@
 // Add global property to window for cursor timer
 declare global {
   interface Window {
-    __katabaticCursorTimer?: {
+    __helicityCursorTimer?: {
       timer: ReturnType<typeof setTimeout> | null;
       resetTimer: () => void;
       hideCursor: () => void;
@@ -23,7 +23,7 @@ export function SlideLayout({ children, variant = "default", className }: SlideL
       // Cursor auto-hide logic: global singleton
       useEffect(() => {
         const root = document.documentElement;
-        if (!window.__katabaticCursorTimer) {
+        if (!window.__helicityCursorTimer) {
           let timer: ReturnType<typeof setTimeout> | null = null;
           const hideCursor = () => root.style.cursor = "none";
           const showCursor = () => root.style.cursor = "";
@@ -34,7 +34,7 @@ export function SlideLayout({ children, variant = "default", className }: SlideL
           };
           window.addEventListener("mousemove", resetTimer);
           resetTimer();
-          window.__katabaticCursorTimer = { timer, resetTimer, hideCursor, showCursor };
+          window.__helicityCursorTimer = { timer, resetTimer, hideCursor, showCursor };
         }
         return () => {
           // Do not remove handler or clear timer on unmount

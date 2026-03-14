@@ -1,16 +1,16 @@
-# Katabatic — The System of Record for Stablecoin Reserve Risk
+# Helicity — The System of Record for Stablecoin Reserve Risk
 
 > Cornell AI Hackathon 2026 · Programmable Capital Track · 36 Hours · Mar 13–15
 
 ## Product Summary
 
-Katabatic is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
+Helicity is **the system of record for stablecoin reserve risk** — a reserve risk data platform that continuously scores the structural fragility of stablecoin reserve portfolios and exposes that data via API. Not a rating agency (NRSRO liability avoided) and not a dashboard product — an **infrastructure layer** whose risk scores are consumed by DAO governance systems, DeFi protocol rebalancing logic, institutional risk desks, and (aspirationally) Chainlink oracle feeds.
 
-The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Katabatic what blockchain growth was to on-chain data platforms — the regulatory catalyst that forced stablecoin issuers to disclose reserve composition, asset maturities, and custodian identities for the first time via XBRL-formatted filings and OCC API feeds mandated for all PPSIs.
+The business model mirrors on-chain data infrastructure platforms: API-first, enterprise contracts, multi-modal delivery (REST API scores, warehouse delivery, real-time streaming). The GENIUS Act (Jul 2025) is to Helicity what blockchain growth was to on-chain data platforms — the regulatory catalyst that forced stablecoin issuers to disclose reserve composition, asset maturities, and custodian identities for the first time via XBRL-formatted filings and OCC API feeds mandated for all PPSIs.
 
 ### Why "System of Record" Framing
 
-On-chain data platforms became the authoritative source for on-chain behavioral data — the single source of truth that Visa, a16z, and Grayscale integrate into their own systems. Katabatic occupies the equivalent position for **off-chain reserve risk**: when a DAO treasury, DeFi protocol, or institutional risk desk needs to know the structural fragility of a stablecoin reserve, Katabatic is the authoritative score they integrate — not one of many dashboards they view.
+On-chain data platforms became the authoritative source for on-chain behavioral data — the single source of truth that Visa, a16z, and Grayscale integrate into their own systems. Helicity occupies the equivalent position for **off-chain reserve risk**: when a DAO treasury, DeFi protocol, or institutional risk desk needs to know the structural fragility of a stablecoin reserve, Helicity is the authoritative score they integrate — not one of many dashboards they view.
 
 **Output is consumed by systems, not just viewed by humans:**
 - DAO governance contracts that auto-rebalance stablecoin exposure
@@ -21,18 +21,18 @@ On-chain data platforms became the authoritative source for on-chain behavioral 
 
 ### Stack Positioning
 
-Katabatic is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that forced standardized reserve disclosure for the first time — XBRL + OCC API feeds mandated for all PPSIs, with monthly attestation reports covering reserve composition, maturity data, and custodian identities. We structure that mandated data into programmable risk intelligence.
+Helicity is to stablecoin reserve risk what on-chain data infrastructure platforms are to on-chain behavioral data — the authoritative, API-first data layer that systems integrate rather than humans browse. The business model is identical: API subscriptions, enterprise data contracts, warehouse delivery, real-time streaming. The GENIUS Act (Jul 2025) is the regulatory catalyst that forced standardized reserve disclosure for the first time — XBRL + OCC API feeds mandated for all PPSIs, with monthly attestation reports covering reserve composition, maturity data, and custodian identities. We structure that mandated data into programmable risk intelligence.
 
 | Layer | What it does |
 |-------|--------------|
 | On-chain data (Dune, Nansen, Chainalysis) | Mint/burn flows, wallet balances, transaction history |
 | Off-chain regulatory (GENIUS Act attestations, FDIC) | WAM, LTV ratios, bank health, reserve composition |
-| **Reserve Risk — Katabatic** | **Stress Score = WAM × weather multiplier × concentration. API + streaming.** |
+| **Reserve Risk — Helicity** | **Stress Score = WAM × weather multiplier × concentration. API + streaming.** |
 | Downstream consumers | DAO governance · DeFi protocols · Risk desks · Oracle feeds · AI agents (MCP) |
 
-On-chain data platforms have no WAM duration engine, no FDIC Call Report mining, no weather tail-risk model, no reserve stress scoring. Katabatic ingests on-chain mint/burn data as *one input* into a multi-signal scoring engine combining off-chain regulatory filings + macroeconomic signals. **Complementary, not competing.**
+On-chain data platforms have no WAM duration engine, no FDIC Call Report mining, no weather tail-risk model, no reserve stress scoring. Helicity ingests on-chain mint/burn data as *one input* into a multi-signal scoring engine combining off-chain regulatory filings + macroeconomic signals. **Complementary, not competing.**
 
-**The key analogy (use this in pitches):** On-chain data platforms became the single source of truth for on-chain behavior — the data layer that Visa, a16z, and Grayscale integrate into their own systems. Katabatic is building the equivalent layer for off-chain reserve risk. When a DAO treasury or DeFi protocol needs to know the structural fragility of a stablecoin reserve, Katabatic is the score they integrate — not one of many dashboards they view.
+**The key analogy (use this in pitches):** On-chain data platforms became the single source of truth for on-chain behavior — the data layer that Visa, a16z, and Grayscale integrate into their own systems. Helicity is building the equivalent layer for off-chain reserve risk. When a DAO treasury or DeFi protocol needs to know the structural fragility of a stablecoin reserve, Helicity is the score they integrate — not one of many dashboards they view.
 
 ### Core Insight
 
@@ -224,7 +224,7 @@ Stress Score 76–100 → "Critical Stress. Latency: 72h+. Coverage: <85%"
 
 ## Competitive Positioning (Slide 6)
 
-> **Key pitch line:** "Onchain shows the flows. Katabatic shows what's about to break."
+> **Key pitch line:** "Onchain shows the flows. Helicity shows what's about to break."
 
 ```
 ┌──────────────────────────────────────────────────────────────┐
@@ -232,7 +232,7 @@ Stress Score 76–100 → "Critical Stress. Latency: 72h+. Coverage: <85%"
 │  Dune · Nansen · Chainalysis · Glassnode                     │
 │  (Mint/burn flows, wallet balances, transaction history)     │
 ├───────────────────────── ▼ ──────────────────────────────────┤
-│  Layer 2 — Reserve Risk Infrastructure  ★ KATABATIC ★        │
+│  Layer 2 — Reserve Risk Infrastructure  ★ HELICITY ★         │
 │  WAM duration engine · FDIC Call Report mining                │
 │  Weather tail-risk model · Reserve stress scoring              │
 │  What onchain can't see:                                     │
@@ -456,7 +456,7 @@ main                               ← Production-ready, deploy target
   - Display the returned IPFS CID: `ipfs://Qm...` (clickable, resolves to the pinned score data)
   - Endpoint: `POST /api/publish-score` — pins score to Pinata, returns `{ "cid": "Qm...", "ipfs_url": "https://gateway.pinata.cloud/ipfs/Qm...", "timestamp": "..." }`
   - Display alongside: "TEE-ready for Chainlink · Score verified on IPFS"
-  - This positions Katabatic as oracle-grade infrastructure with verifiable, immutable score provenance
+  - This positions Helicity as oracle-grade infrastructure with verifiable, immutable score provenance
 - [ ] Wire up all 3 demo scenarios end-to-end:
   - Scenario A: Hurricane → Northern Virginia data center corridor → ops risk + FL bank LTV stress → stress score spike (primary demo)
   - Scenario B: SVB collapse backtest — duration mismatch as root cause
@@ -489,11 +489,11 @@ main                               ← Production-ready, deploy target
 | 03 | **The Engine** | 20s | "From opaque PDF to realtime liquidity stress score." (4 inputs → 6-step pipeline → 68/100 score, 72h latency, 88% coverage, consensus badge) |
 | 04 | **Six Dimensions** | 20s | "Duration risk is primary. Weather is the force multiplier." (formula + 6 weighted bars, SVB 2,040-day WAM) |
 | 05 | **Why Now** | 20s | "The GENIUS Act just created this market." (timeline: Before 2025 → Jul 2025 GENIUS Act → Today. Market $150B→$700B+) |
-| 06 | **Positioning** | 20s | "Onchain shows the flows. Katabatic shows what's about to break." (3-layer diagram + "What Onchain Can't See" panel) |
+| 06 | **Positioning** | 20s | "Onchain shows the flows. Helicity shows what's about to break." (3-layer diagram + "What Onchain Can't See" panel) |
 | 07 | **Live Demo** | 10s + **60s demo** | Three scenarios: hurricane ops freeze, SVB backtest, rate hike sensitivity |
 | 08 | **Vision** | 20s | "Bloomberg started with terminals. We start with stress simulations." (3-phase roadmap + WAM comparison bars) |
 | 09 | **Go to Market** | 15s | "API-first infrastructure. Not a consulting fee." (3 tiers + logo conveyor) |
-| 10 | **The Close** | 20s | "Weather proves the engine." (72h latency, 88% coverage hero metrics + Katabatic logo) |
+| 10 | **The Close** | 20s | "Weather proves the engine." (72h latency, 88% coverage hero metrics + Helicity logo) |
 
 ### Live Demo (Slide 7, ~60 seconds)
 

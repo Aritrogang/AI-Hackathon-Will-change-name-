@@ -2,7 +2,7 @@ import { motion } from "framer-motion"
 import { SlideLayout } from "./slide-layout"
 import { Badge } from "@/components/ui/badge"
 import { HurricaneRings } from "@/components/ui/hurricane-rings"
-import { KatabaticLogo } from "@/components/katabatic-logo"
+import { HelicityLogo } from "@/components/helicity-logo"
 
 export function SlideHero(_props: { subStep?: number }) {
   return (
@@ -24,7 +24,7 @@ export function SlideHero(_props: { subStep?: number }) {
           <Badge dot>Cornell AI Hackathon 2026 &middot; Programmable Capital Track</Badge>
         </motion.div>
 
-        <KatabaticLogo />
+        <HelicityLogo />
 
         <motion.h1
           className="text-[clamp(1.1rem,2.2vw,1.5rem)] font-normal text-text-secondary leading-relaxed max-w-[520px] mx-auto mb-0"

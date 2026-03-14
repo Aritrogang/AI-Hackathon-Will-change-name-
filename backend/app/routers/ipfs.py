@@ -37,7 +37,7 @@ async def publish_score(body: PublishRequest):
         "coverage_ratio": result.liquidity_coverage_ratio,
         "dimensions": [d.model_dump() for d in result.dimensions],
         "timestamp": timestamp,
-        "version": "katabatic-v1",
+        "version": "helicity-v1",
     }
 
     # Add jury data if available

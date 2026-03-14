@@ -1,4 +1,4 @@
-# Katabatic — Master Task List
+# Helicity — Master Task List
 
 > **IMPORTANT:** This file is the source of truth for all project work. Update task status (`[ ]` → `[x]`) immediately when completed. Claude must edit this file every time a task is finished.
 
@@ -6,7 +6,7 @@
 
 ### Product Positioning — API-First Infrastructure + Data-Driven Risk Modeling
 
-Katabatic is an **API-first data infrastructure product** with a **data-driven risk modeling sandbox** for humans. The dashboard surfaces real-world data (live NOAA weather, FDIC bank health, on-chain flows) and projects how current events will impact stablecoin reserve liquidity. AI agents handle deeper modeling via API/MCP.
+Helicity is an **API-first data infrastructure product** with a **data-driven risk modeling sandbox** for humans. The dashboard surfaces real-world data (live NOAA weather, FDIC bank health, on-chain flows) and projects how current events will impact stablecoin reserve liquidity. AI agents handle deeper modeling via API/MCP.
 
 **Three delivery modes:**
 1. **Risk Modeling Dashboard** — Data-driven sandbox for humans to see how real-world events impact reserve risk
@@ -40,7 +40,7 @@ Katabatic is an **API-first data infrastructure product** with a **data-driven r
 
 ### Frontend Bootstrap
 - [x] Install dependencies: `tailwindcss`, `recharts`, `leaflet`, `react-leaflet`, `react-router-dom`
-- [x] Configure Tailwind CSS with Katabatic color palette (see Design System in CLAUDE.md)
+- [x] Configure Tailwind CSS with Helicity color palette (see Design System in CLAUDE.md)
 - [x] Create layout shell with header nav + main content area
 - [x] Create route structure: `/` (dashboard), `/stablecoin/:symbol` (detail view), `/map` (full map)
 - [x] Create `src/lib/api.ts` — typed fetch wrapper pointing to backend base URL
@@ -174,7 +174,7 @@ Katabatic is an **API-first data infrastructure product** with a **data-driven r
 - [ ] Install Blaxel CLI (`brew tap blaxel-ai/blaxel && brew install blaxel`)
 - [ ] Authenticate with `bl login`
 - [ ] Deploy MCP server to Blaxel with `bl deploy`
-- [ ] Verify live endpoint: `https://run.blaxel.ai/{workspace}/functions/katabatic-mcp/mcp`
+- [ ] Verify live endpoint: `https://run.blaxel.ai/{workspace}/functions/helicity-mcp/mcp`
 - [ ] Add Blaxel API keys to `.env` if needed (`BL_WORKSPACE`, `BL_API_KEY`)
 
 ---

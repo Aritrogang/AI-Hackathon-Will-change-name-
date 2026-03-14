@@ -12,7 +12,7 @@ router = APIRouter(prefix="/api/oracle", tags=["oracle"])
 async def get_oracle_payload(stablecoin: str):
     """Return a Chainlink External Adapter-compatible payload for a stablecoin.
 
-    The response is NOT wrapped in the standard Katabatic envelope because
+    The response is NOT wrapped in the standard Helicity envelope because
     Chainlink EA nodes expect the EA response schema directly.
     """
     from main import scoring_engine
