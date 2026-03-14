@@ -8,12 +8,14 @@ Exposes 5 tools via the Model Context Protocol (MCP):
   - get_score_history        → recent score history for a stablecoin
 
 Transports:
-  - stdio (default)  → local agent integration (Claude Desktop, etc.)
-  - SSE              → remote agent integration (set TRANSPORT=sse)
+  - streamable-http (default) → Blaxel-hosted / remote agent integration
+  - stdio                     → local agent integration (set TRANSPORT=stdio)
+  - sse                       → SSE remote transport (set TRANSPORT=sse)
 
 Usage:
-  python mcp_server.py                   # stdio
-  TRANSPORT=sse python mcp_server.py     # SSE on port 8001
+  python mcp_server.py                     # streamable-http on PORT (default 8000)
+  TRANSPORT=stdio python mcp_server.py     # stdio (local)
+  TRANSPORT=sse python mcp_server.py       # SSE on MCP_PORT (default 8001)
 """
 
 import os
@@ -109,6 +111,9 @@ mcp = FastMCP(
         "All scores are derived from GENIUS Act attestation data, FDIC Call Reports, "
         "NOAA weather feeds, and on-chain Etherscan mint/burn flows."
     ),
+    stateless_http=True,
+    host=os.getenv("HOST", "0.0.0.0"),
+    port=int(os.getenv("PORT", "8000")),
 )
 
 
@@ -300,10 +305,12 @@ async def get_score_history(symbol: str, limit: int = 10) -> dict:
 # ---------------------------------------------------------------------------
 
 if __name__ == "__main__":
-    transport = os.getenv("TRANSPORT", "stdio")
-    if transport == "sse":
+    transport = os.getenv("TRANSPORT", "streamable-http")
+    if transport == "stdio":
+        mcp.run(transport="stdio")
+    elif transport == "sse":
         port = int(os.getenv("MCP_PORT", "8001"))
         print(f"Starting Katabatic MCP server on SSE transport (port {port})")
         mcp.run(transport="sse", host="0.0.0.0", port=port)
     else:
-        mcp.run(transport="stdio")
+        mcp.run(transport="streamable-http")

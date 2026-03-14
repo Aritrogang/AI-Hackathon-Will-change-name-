@@ -114,6 +114,21 @@ If both health check and frontend dev server start without errors, you're good t
 └── TASKS.md          ← Master task list
 ```
 
+## Live MCP Endpoint
+
+The Katabatic MCP server is deployed on Blaxel and accessible as a hosted function:
+
+```
+https://run.blaxel.ai/{workspace}/functions/helicity-mcp/mcp
+```
+
+This endpoint uses the `streamable-http` transport and exposes all 5 MCP tools:
+`get_stress_scores`, `get_stablecoin_detail`, `project_scenario`, `get_active_alerts`, `get_score_history`.
+
+AI agents can connect directly to this URL using any MCP-compatible client.
+
+---
+
 ## Collaborators
 
 - Adi Prathapa
