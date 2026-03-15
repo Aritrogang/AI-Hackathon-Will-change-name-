@@ -24,6 +24,7 @@ from app.services.llm_jury import LLMJuryService
 from app.services.narratives import NarrativeService
 from app.services.weather_provider import WeatherProvider
 from app.services.etherscan_provider import EtherscanProvider
+from app.services.extraction import ExtractionService
 
 cache = Cache()
 graph_service = KnowledgeGraphService()
@@ -31,6 +32,7 @@ llm_jury = LLMJuryService()
 narrative_service = NarrativeService()
 weather_provider = WeatherProvider(cache)
 etherscan_provider = EtherscanProvider(cache)
+extraction_service = ExtractionService()
 scoring_engine = None  # Initialized on startup
 
 # --- Global Availability Flags ---
@@ -127,11 +129,18 @@ async def startup():
         graph_service.build_from_reserves(reserves)
         print(f"  Knowledge graph built: {graph_service.graph.number_of_nodes()} nodes, {graph_service.graph.number_of_edges()} edges")
 
-        # Initialize scoring engine
+        # Seed extraction DB with fixture baselines
+        seeded = await extraction_service.seed_from_fixtures()
+        print(f"  Extraction DB seeded: {seeded} stablecoins (fixture baseline)")
+
+        # Initialize scoring engine (wired to ExtractionService for live data)
         global scoring_engine
         from app.services.scoring_engine import ScoringEngine
 
-        scoring_engine = ScoringEngine(cache, graph_service, llm_jury, narrative_service)
+        scoring_engine = ScoringEngine(
+            cache, graph_service, llm_jury, narrative_service,
+            extraction_service=extraction_service,
+        )
         print("  Scoring engine ready")
         print("Helicity API started successfully.")
     except Exception as e:

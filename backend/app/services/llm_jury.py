@@ -2,10 +2,13 @@
 
 import asyncio
 import json
+import logging
 import os
 from typing import Optional
 
 from app.models.stress import JuryResult
+
+logger = logging.getLogger(__name__)
 
 
 class LLMJuryService:
@@ -23,7 +26,8 @@ class LLMJuryService:
     async def evaluate_counterparty_health(self, context: str) -> Optional[JuryResult]:
         """Score counterparty health using Claude + Gemini consensus.
 
-        Returns None if API keys are not configured (caller should fall back to heuristics).
+        Returns None if API keys are not configured or both calls fail.
+        When one model fails, uses the successful model's score for both and adds a warning.
         """
         if not self.available:
             return None
@@ -44,21 +48,57 @@ class LLMJuryService:
                 claude_task, gemini_task, return_exceptions=True
             )
 
-            claude_score = self._parse_score(claude_result) if not isinstance(claude_result, Exception) else 50.0
-            gemini_score = self._parse_score(gemini_result) if not isinstance(gemini_result, Exception) else 50.0
+            claude_ok = not isinstance(claude_result, Exception)
+            gemini_ok = not isinstance(gemini_result, Exception)
 
-            delta = abs(claude_score - gemini_score)
-            averaged = (claude_score + gemini_score) / 2.0
+            if not claude_ok:
+                logger.warning("Claude jury call failed: %s", claude_result)
+            if not gemini_ok:
+                logger.warning("Gemini jury call failed: %s", gemini_result)
+
+            # Both failed — return None so frontend hides the section
+            if not claude_ok and not gemini_ok:
+                return None
+
+            claude_score: Optional[float] = None
+            gemini_score: Optional[float] = None
+
+            if claude_ok:
+                claude_score = self._parse_score(claude_result)
+            if gemini_ok:
+                gemini_score = self._parse_score(gemini_result)
+
+            warning = None
+
+            if claude_score is not None and gemini_score is not None:
+                # Both succeeded — real consensus
+                delta = abs(claude_score - gemini_score)
+                averaged = (claude_score + gemini_score) / 2.0
+                if delta > 15:
+                    warning = "Models disagree — review manually"
+            elif claude_score is not None:
+                # Only Claude succeeded
+                gemini_score = claude_score
+                delta = 0.0
+                averaged = claude_score
+                warning = "Gemini unavailable — single-model score"
+            else:
+                # Only Gemini succeeded
+                claude_score = gemini_score  # type: ignore[assignment]
+                delta = 0.0
+                averaged = gemini_score  # type: ignore[assignment]
+                warning = "Claude unavailable — single-model score"
 
             return JuryResult(
-                claude_score=claude_score,
-                gemini_score=gemini_score,
+                claude_score=claude_score,  # type: ignore[arg-type]
+                gemini_score=gemini_score,  # type: ignore[arg-type]
                 delta=delta,
                 consensus=delta <= 15,
                 averaged_score=averaged,
-                warning="Models disagree — review manually" if delta > 15 else None,
+                warning=warning,
             )
-        except Exception:
+        except Exception as e:
+            logger.warning("Jury evaluation failed: %s", e)
             return None
 
     async def generate_narrative(self, context: str) -> Optional[str]:
@@ -88,7 +128,7 @@ class LLMJuryService:
 
         client = anthropic.AsyncAnthropic(api_key=self.anthropic_key)
         response = await client.messages.create(
-            model="claude-3-5-sonnet-20241022",
+            model="claude-sonnet-4-20250514",
             max_tokens=300,
             messages=[{"role": "user", "content": prompt}],
         )
@@ -106,14 +146,17 @@ class LLMJuryService:
         )
         return response.text
 
-    def _parse_score(self, text: str) -> float:
-        """Extract numeric score from LLM response."""
+    def _parse_score(self, text: str) -> Optional[float]:
+        """Extract numeric score from LLM response. Returns None if parsing fails."""
         if not isinstance(text, str):
-            return 50.0
+            return None
         try:
             # Try JSON parse first
             data = json.loads(text.strip().strip("```json").strip("```"))
-            return float(data.get("score", 50))
+            score = data.get("score")
+            if score is not None:
+                return float(score)
+            return None
         except (json.JSONDecodeError, ValueError):
             pass
         # Fallback: look for a number
@@ -123,4 +166,4 @@ class LLMJuryService:
             val = int(n)
             if 0 <= val <= 100:
                 return float(val)
-        return 50.0
+        return None

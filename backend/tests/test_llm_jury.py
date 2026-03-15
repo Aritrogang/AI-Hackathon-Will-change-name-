@@ -13,20 +13,20 @@ def test_parse_score(jury):
     # JSON format
     assert jury._parse_score('{"score": 85, "reasoning": "bad"}') == 85.0
     assert jury._parse_score('```json\n{"score": 42}\n```') == 42.0
-    
+
     # Text fallback
     assert jury._parse_score("The score is 75 because...") == 75.0
     assert jury._parse_score("Risk level: 10/100") == 10.0
-    
-    # Garbage fallback
-    assert jury._parse_score("I don't know") == 50.0
+
+    # Unparseable returns None
+    assert jury._parse_score("I don't know") is None
 
 @pytest.mark.asyncio
 async def test_consensus_logic(jury):
     """Verify that consensus is True only when models disagree by <= 15 points."""
     with patch.object(jury, "_call_claude", new_callable=AsyncMock) as mock_claude, \
          patch.object(jury, "_call_gemini", new_callable=AsyncMock) as mock_gemini:
-        
+
         # Test Case 1: Close agreement (Delta = 10)
         mock_claude.return_value = '{"score": 70}'
         mock_gemini.return_value = '{"score": 80}'
@@ -54,15 +54,28 @@ async def test_graceful_degradation_missing_keys():
 
 @pytest.mark.asyncio
 async def test_partial_failure_handling(jury):
-    """One model fails, other succeeds."""
+    """One model fails — uses successful model's score with warning."""
     with patch.object(jury, "_call_claude", new_callable=AsyncMock) as mock_claude, \
          patch.object(jury, "_call_gemini", new_callable=AsyncMock) as mock_gemini:
-        
+
         mock_claude.return_value = '{"score": 90}'
         mock_gemini.side_effect = Exception("API Down")
-        
+
         result = await jury.evaluate_counterparty_health("context")
         assert result is not None
         assert result.claude_score == 90.0
-        assert result.gemini_score == 50.0 # Default fallback for exception
-        assert result.consensus is False
+        assert result.gemini_score == 90.0  # Mirrors successful model
+        assert result.consensus is True  # Delta is 0
+        assert "Gemini unavailable" in result.warning
+
+@pytest.mark.asyncio
+async def test_both_fail_returns_none(jury):
+    """Both models fail — returns None."""
+    with patch.object(jury, "_call_claude", new_callable=AsyncMock) as mock_claude, \
+         patch.object(jury, "_call_gemini", new_callable=AsyncMock) as mock_gemini:
+
+        mock_claude.side_effect = Exception("API Down")
+        mock_gemini.side_effect = Exception("API Down")
+
+        result = await jury.evaluate_counterparty_health("context")
+        assert result is None

@@ -99,7 +99,32 @@ function AnimatedCounter({ target, suffix = '' }: { target: number; suffix?: str
 /* ────────────────────────── component ────────────────────────── */
 export function LandingPage() {
   return (
-    <div className="text-[#e2e8f0] bg-[#0c0a14] overflow-x-hidden">
+    <div className="text-[#e2e8f0] bg-[#0c0a14]" style={{ overflowX: 'clip' }}>
+
+      {/* Sticky Nav */}
+      <nav className="sticky top-0 z-50 flex items-center justify-between px-8 md:px-16 py-6 bg-[#0c0a14]/80 backdrop-blur-md border-b border-white/[0.06]">
+        <div className="flex items-center gap-2.5">
+          <svg width="20" height="28" viewBox="0 0 30 44" fill="none" className="overflow-visible">
+            <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.3)" strokeWidth="3.5" strokeLinecap="round" />
+            <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
+            <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
+          </svg>
+          <span className="text-xl font-bold text-white tracking-[-0.04em]">helicity</span>
+        </div>
+        <div className="hidden md:flex items-center gap-8 text-sm text-[#aaa]">
+          <a href="#problem" className="hover:text-white transition-colors">Problem</a>
+          <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
+          <a href="#delivery" className="hover:text-white transition-colors">Delivery</a>
+          <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
+          <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
+        </div>
+        <Link
+          to="/developers"
+          className="px-5 py-2 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-[#6c5ce7]/20"
+        >
+          Get API Access
+        </Link>
+      </nav>
 
       {/* ═══════════════════ 1. HERO ═══════════════════ */}
       <section className="relative min-h-[92vh] flex flex-col">
@@ -110,31 +135,6 @@ export function LandingPage() {
         }} />
         {/* Radial accent glow */}
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#6c5ce7]/8 rounded-full blur-[120px] pointer-events-none" />
-
-        {/* Nav */}
-        <nav className="relative z-20 flex items-center justify-between px-8 md:px-16 py-6">
-          <div className="flex items-center gap-2.5">
-            <svg width="20" height="28" viewBox="0 0 30 44" fill="none" className="overflow-visible">
-              <line x1="3" y1="2" x2="9" y2="42" stroke="rgba(108,92,231,0.3)" strokeWidth="3.5" strokeLinecap="round" />
-              <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.6)" strokeWidth="3.5" strokeLinecap="round" />
-              <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
-            </svg>
-            <span className="text-xl font-bold text-white tracking-[-0.04em]">helicity</span>
-          </div>
-          <div className="hidden md:flex items-center gap-8 text-sm text-[#aaa]">
-            <a href="#problem" className="hover:text-white transition-colors">Problem</a>
-            <a href="#how-it-works" className="hover:text-white transition-colors">How it Works</a>
-            <a href="#delivery" className="hover:text-white transition-colors">Delivery</a>
-            <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
-            <Link to="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-          </div>
-          <Link
-            to="/developers"
-            className="px-5 py-2 bg-[#6c5ce7] hover:bg-[#5b4cdb] text-white text-sm font-medium rounded-lg transition-colors shadow-lg shadow-[#6c5ce7]/20"
-          >
-            Get API Access
-          </Link>
-        </nav>
 
         {/* Hero content */}
         <div className="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 pb-20">

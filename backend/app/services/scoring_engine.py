@@ -15,15 +15,16 @@ from app.services.etherscan_provider import EtherscanProvider
 from app.services.knowledge_graph import KnowledgeGraphService
 from app.services.llm_jury import LLMJuryService
 from app.services.registry import get_all_symbols, get_reserve_data, get_all_states
+from app.services.extraction import ExtractionService
 
 
 class ScoringEngine:
     """Computes Liquidity Stress Scores across 6 dimensions using live data providers.
-    
+
     Helicity is a stablecoin reserve risk scoring platform (Cornell AI Hackathon 2026).
-    
+
     Core formula: Stress Score = Duration Risk (WAM) × Weather Multiplier × Concentration Factor
-    
+
     6 Scoring Dimensions:
     1. Duration Risk / WAM (30%)
     2. Reserve Transparency (20%)
@@ -39,20 +40,30 @@ class ScoringEngine:
         graph: KnowledgeGraphService,
         llm_jury: LLMJuryService,
         narrative_service: Optional[NarrativeService] = None,
+        extraction_service: Optional[ExtractionService] = None,
     ) -> None:
         self.cache = cache
         self.graph = graph
         self.llm_jury = llm_jury
         self.narrative_service = narrative_service
+        self.extraction_service = extraction_service
         self.fdic = FDICProvider(cache)
         self.weather = WeatherProvider(cache)
         self.etherscan = EtherscanProvider(cache)
         # In-memory store of the last known score per symbol for webhook delta checks
         self._last_scores: dict[str, float] = {}
 
+    async def _resolve_reserve(self, symbol: str) -> ReserveData:
+        """Resolve reserve data: ExtractionService (SQLite/Unsiloed) first, registry fallback."""
+        if self.extraction_service:
+            result = await self.extraction_service.get_reserve_by_stablecoin(symbol)
+            if result:
+                return result
+        return get_reserve_data(symbol)
+
     async def compute_stress_score(self, symbol: str) -> StressScoreResult:
         """Compute the full 6-dimension stress score for a stablecoin."""
-        reserve = get_reserve_data(symbol)
+        reserve = await self._resolve_reserve(symbol)
 
         # Compute all 6 dimensions in parallel
         dims = await asyncio.gather(
@@ -212,7 +223,7 @@ class ScoringEngine:
         Returns:
             Dict containing baseline and projected scores and dimension deltas.
         """
-        reserve = get_reserve_data(symbol)
+        reserve = await self._resolve_reserve(symbol)
         baseline = await self.compute_stress_score(symbol)
 
         # Build scenario-adjusted dimensions
