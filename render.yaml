@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: katabatic-backend
+    name: helicity-backend
     env: python
     region: oregon
     plan: free

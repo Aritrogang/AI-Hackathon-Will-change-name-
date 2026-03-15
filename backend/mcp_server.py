@@ -1,4 +1,4 @@
-"""Katabatic MCP Server — AI-agent-native delivery of reserve risk scores.
+"""Helicity MCP Server — AI-agent-native delivery of reserve risk scores.
 
 Exposes 5 tools via the Model Context Protocol (MCP):
   - get_stress_scores        → all stablecoin stress scores
@@ -102,9 +102,9 @@ def _record_history(symbol: str, score_data: dict) -> None:
 # ---------------------------------------------------------------------------
 
 mcp = FastMCP(
-    "Katabatic",
+    "Helicity",
     instructions=(
-        "Katabatic is the system of record for stablecoin reserve risk. "
+        "Helicity is the system of record for stablecoin reserve risk. "
         "Use these tools to query Liquidity Stress Scores (0–100), redemption "
         "latency estimates, liquidity coverage ratios, and weather-driven operational "
         "risk alerts for USDC, USDT, DAI, FRAX, PYUSD, and TUSD. "
@@ -310,7 +310,7 @@ if __name__ == "__main__":
         mcp.run(transport="stdio")
     elif transport == "sse":
         port = int(os.getenv("MCP_PORT", "8001"))
-        print(f"Starting Katabatic MCP server on SSE transport (port {port})")
+        print(f"Starting Helicity MCP server on SSE transport (port {port})")
         mcp.run(transport="sse", host="0.0.0.0", port=port)
     else:
         mcp.run(transport="streamable-http")

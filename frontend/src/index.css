@@ -19,6 +19,11 @@
   --color-text-muted: #bbbbbb;
 }
 
+html {
+  background: #0c0a14;
+  overscroll-behavior: none;
+}
+
 body {
   background: var(--color-bg);
   color: var(--color-text-secondary);

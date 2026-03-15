@@ -116,7 +116,7 @@ If both health check and frontend dev server start without errors, you're good t
 
 ## Live MCP Endpoint
 
-The Katabatic MCP server is deployed on Blaxel and accessible as a hosted function:
+The Helicity MCP server is deployed on Blaxel and accessible as a hosted function:
 
 ```
 https://run.blaxel.ai/{workspace}/functions/katabatic-mcp/mcp

@@ -11,6 +11,7 @@ import { BacktestListPage } from './pages/BacktestListPage'
 import { BacktestDetailPage } from './pages/BacktestDetailPage'
 import { StressScoreDetail } from './components/StressScoreDetail'
 import { LandingPage } from './pages/LandingPage'
+import { ScrollToTop } from './components/ScrollToTop'
 import type { StressScore } from './lib/types'
 
 export default function App() {
@@ -18,7 +19,9 @@ export default function App() {
   const { data: scores, loading, lastUpdated } = usePolling<StressScore[]>(fetcher, 60000)
 
   return (
-    <Routes>
+    <>
+      <ScrollToTop />
+      <Routes>
       {/* Public landing page — outside dashboard layout */}
       <Route path="/" element={<LandingPage />} />
 
@@ -32,7 +35,8 @@ export default function App() {
         <Route path="/developers" element={<DeveloperPortalPage />} />
         <Route path="/portal" element={<ApiOnboardingPage />} />
       </Route>
-    </Routes>
+      </Routes>
+    </>
   )
 }
 

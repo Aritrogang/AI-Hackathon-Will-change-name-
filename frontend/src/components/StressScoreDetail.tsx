@@ -96,6 +96,7 @@ export function StressScoreDetail() {
             <XAxis type="number" domain={[0, 100]} tick={{ fontSize: 11, fill: '#555' }} />
             <YAxis dataKey="name" type="category" tick={{ fontSize: 11, fill: '#666' }} width={130} />
             <Tooltip
+              cursor={{ fill: 'rgba(255, 255, 255, 0.04)' }}
               formatter={(value: number, name: string) => [
                 `${value.toFixed(1)}`,
                 name === 'weighted' ? 'Weighted Score' : 'Raw Score'

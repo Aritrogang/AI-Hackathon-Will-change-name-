@@ -366,6 +366,26 @@ class ExtractionService:
         return self._load_fixture(stablecoin)
 
     # ------------------------------------------------------------------
+    # Startup seeding
+    # ------------------------------------------------------------------
+
+    async def seed_from_fixtures(self) -> int:
+        """Seed the extraction SQLite DB with all fixture data on startup.
+
+        Returns the number of stablecoins seeded.
+        """
+        await self._init_db()
+        fixtures = self._load_all_fixtures()
+        count = 0
+        for reserve in fixtures:
+            try:
+                await self.store_reserve_data(reserve, reserve.data_source or "fixture")
+                count += 1
+            except Exception:
+                continue
+        return count
+
+    # ------------------------------------------------------------------
     # Fixture fallback helpers
     # ------------------------------------------------------------------
 

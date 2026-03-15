@@ -1,4 +1,4 @@
-"""Unit tests for the Katabatic MCP server tools.
+"""Unit tests for the Helicity MCP server tools.
 
 Tests use unittest.mock to patch the scoring engine and weather provider so
 they run without network access or live API keys. All assertions focus on:

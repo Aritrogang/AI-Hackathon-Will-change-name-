@@ -1,10 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
 
-interface Props {
-  lastUpdated: Date | null
-}
-
-export function Header({ lastUpdated }: Props) {
+export function Header() {
   const location = useLocation()
 
   const navItems = [
@@ -14,10 +10,6 @@ export function Header({ lastUpdated }: Props) {
     { path: '/developers', label: 'Developers' },
     { path: '/portal', label: 'API Portal' },
   ]
-
-  const secondsAgo = lastUpdated
-    ? Math.floor((Date.now() - lastUpdated.getTime()) / 1000)
-    : null
 
   return (
     <header className="border-b border-white/[0.06] bg-[#0c0a14]/80 backdrop-blur-md sticky top-0 z-50">
@@ -36,23 +28,17 @@ export function Header({ lastUpdated }: Props) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
-                  location.pathname === item.path
-                    ? 'bg-[#6c5ce7]/15 text-[#a29bfe]'
-                    : 'text-[#888] hover:text-white hover:bg-white/5'
-                }`}
+                className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${location.pathname === item.path
+                  ? 'bg-[#6c5ce7]/15 text-[#a29bfe]'
+                  : 'text-[#888] hover:text-white hover:bg-white/5'
+                  }`}
               >
                 {item.label}
               </Link>
             ))}
           </nav>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#888]">
-          <span className="inline-block w-2 h-2 rounded-full bg-[#00b894] animate-pulse" />
-          <span>
-            {secondsAgo !== null ? `Updated ${secondsAgo}s ago` : 'Connecting...'}
-          </span>
-        </div>
+
       </div>
     </header>
   )
