@@ -10,11 +10,11 @@ const LINE_DATA = [
   { x1: 23, x2: 29, color: "#6c5ce7", delay: 0.2 },
 ]
 
-const KATABATIC_LETTERS = "katabatic".split("")
+const KATABATIC_LETTERS = "helicity".split("")
 const LETTER_STAGGER = 0.055
 const LETTER_START = 0.32
 
-/* Animated "katabatic" — wind mark + letter-by-letter reveal, inline in text */
+/* Animated "helicity" — wind mark + letter-by-letter reveal, inline in text */
 const AnimatedKatabatic = () => (
   <>
     <AnimatedWindMark />
@@ -158,7 +158,7 @@ export function SlidePositioning(_props: { subStep?: number }) {
                       <line x1="13" y1="2" x2="19" y2="42" stroke="rgba(108,92,231,0.65)" strokeWidth="3.5" strokeLinecap="round" />
                       <line x1="23" y1="2" x2="29" y2="42" stroke="#6c5ce7" strokeWidth="3.5" strokeLinecap="round" />
                     </svg>
-                    <span className="text-[1.5rem] font-semibold text-accent tracking-[-0.02em]">katabatic</span>
+                    <span className="text-[1.5rem] font-semibold text-accent tracking-[-0.02em]">helicity</span>
                   </div>
                 ) : (
                   <div className={`${layer.logos.length > 3 ? "grid grid-cols-2 gap-x-4 gap-y-2" : "flex items-center gap-4"}`}>

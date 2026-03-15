@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 
-const LETTERS = "katabatic".split("")
+const LETTERS = "helicity".split("")
 const LINE_DATA = [
   { x1: 3, x2: 9, color: "rgba(108,92,231,0.3)", delay: 0 },
   { x1: 13, x2: 19, color: "rgba(108,92,231,0.6)", delay: 0.1 },
